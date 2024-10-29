@@ -1,4 +1,4 @@
-import { useState } from "react"; 
+import { useEffect, useState } from "react"; 
 import {
   Box,
   Flex,
@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { signInUser } from "../../redux/actions/authAction"; 
-import { Redirect } from "react-router-dom"; // Use Redirect for v5
+import { Redirect } from "react-router-dom"; 
 import signInImage from "../../assets/img/signInImage.png";
 
 function SignIn() {
@@ -28,10 +28,25 @@ function SignIn() {
   const dispatch = useDispatch();
   const { loading, error, user } = useSelector((state) => state.auth); 
 
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("rememberedEmail");
+    const storedPassword = localStorage.getItem("rememberedPassword");
+    if (storedEmail) setEmail(storedEmail);
+    if (storedPassword) setPassword(storedPassword);
+  }, []);
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     console.log("Signing in with:", email, password);
     await dispatch(signInUser(email, password));
+    
+    if (rememberMe) {
+      localStorage.setItem("rememberedEmail", email);
+      localStorage.setItem("rememberedPassword", password);
+    } else {
+      localStorage.removeItem("rememberedEmail");
+      localStorage.removeItem("rememberedPassword");
+    }
   };
 
   if (user) {
