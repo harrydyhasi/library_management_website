@@ -4,7 +4,7 @@ import {
   FETCH_USER_SUCCESS,
   FETCH_USER_FAILURE,
 } from './types';
-import { fetchUserById } from '../../services/user'; // Import the fetchUserProfile function
+import { fetchUserById } from '../../services/user_service'; // Import the fetchUserProfile function
 
 export const fetchUserRequest = () => ({
   type: FETCH_USER_REQUEST,

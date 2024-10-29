@@ -30,7 +30,7 @@ import { useHistory } from "react-router-dom";
 import routes from "../../routes";
 
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../../redux/actions/authAction'; 
+import { logoutUser } from '../../redux/actions/auth_action'; 
 import { Redirect } from "react-router-dom/cjs/react-router-dom";
 
 export default function HeaderLinks(props) {

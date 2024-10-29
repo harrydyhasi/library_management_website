@@ -13,8 +13,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { signInUser } from "../../redux/actions/authAction"; 
-import { Redirect } from "react-router-dom"; 
+import { signInUser } from "../../redux/actions/auth_action"; 
+import { Redirect, useHistory } from "react-router-dom"; // Import useHistory here
 import signInImage from "../../assets/img/signInImage.png";
 
 function SignIn() {
@@ -26,7 +26,8 @@ function SignIn() {
   const textColor = useColorModeValue("gray.400", "white");
 
   const dispatch = useDispatch();
-  const { loading, error, user } = useSelector((state) => state.auth); 
+  const history = useHistory(); 
+  const { loading, signin_error, user } = useSelector((state) => state.auth); 
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("rememberedEmail");
@@ -34,6 +35,7 @@ function SignIn() {
     if (storedEmail) setEmail(storedEmail);
     if (storedPassword) setPassword(storedPassword);
   }, []);
+
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -52,6 +54,10 @@ function SignIn() {
   if (user) {
     return <Redirect to="/admin/profile" />;
   }
+
+  const handleRedirectToSignUp = () => {
+    history.push("/auth/signup"); 
+  };
 
   return (
     <Flex position="relative" mb="40px">
@@ -148,7 +154,7 @@ function SignIn() {
               >
                 SIGN IN
               </Button>
-              {error && <Text color="red.500">{error}</Text>} 
+              {signin_error && <Text color="red.500">{signin_error}</Text>} 
             </FormControl>
             <Flex
               flexDirection="column"
@@ -159,7 +165,14 @@ function SignIn() {
             >
               <Text color={textColor} fontWeight="medium">
                 Don&apos;t have an account?
-                <Link color={titleColor} as="span" ms="5px" fontWeight="bold">
+                <Link
+                  color={titleColor}
+                  as="span"
+                  ms="5px"
+                  fontWeight="bold"
+                  onClick={handleRedirectToSignUp} // Add click handler
+                  style={{ cursor: 'pointer' }} // Optional: to indicate it's clickable
+                >
                   Sign Up
                 </Link>
               </Text>
