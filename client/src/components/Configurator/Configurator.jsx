@@ -137,7 +137,7 @@ export default function Configurator(props) {
               </Flex>
 
               <Separator />
-              <Box mt="24px">
+              {/* <Box mt="24px">
                 <Text fontSize="md" fontWeight="600">
                   Sidenav Type
                 </Text>
@@ -223,7 +223,7 @@ export default function Configurator(props) {
                     </Link>
                   </Flex>
                 </Box>
-              </Box>
+              </Box> */}
             </Flex>
           </DrawerBody>
         </DrawerContent>
