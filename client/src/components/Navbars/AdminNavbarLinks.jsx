@@ -25,16 +25,18 @@ import { ProfileIcon, SettingsIcon } from "components/Icons/Icons";
 import { ItemContent } from "components/Menu/ItemContent";
 import SidebarResponsive from "components/Sidebar/SidebarResponsive";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState }  from "react";
 import { useHistory } from "react-router-dom"; 
 import routes from "../../routes";
 
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/actions/authAction'; 
+import { Redirect } from "react-router-dom/cjs/react-router-dom";
 
 export default function HeaderLinks(props) {
   // eslint-disable-next-line no-unused-vars, react/prop-types
   const { variant, children, fixed, secondary, onOpen, ...rest } = props;
+  const [isLogout, setIsLogout] = useState(false); 
 
   // Chakra Color Mode
   let mainTeal = useColorModeValue("teal.300", "teal.300");
@@ -49,13 +51,22 @@ export default function HeaderLinks(props) {
   }
   const settingsRef = React.useRef();
 
-  const dispatch = useDispatch(); // Initialize the dispatch
-  const history = useHistory(); // Initialize history
+  const dispatch = useDispatch(); 
+  const history = useHistory(); 
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    history.push("/auth/signin"); // Redirect after logout
+    setIsLogout(true); 
   };
+
+  const navigateToProfile = () => { 
+    history.push("/admin/profile");
+  }
+
+  if (isLogout) { 
+    return <Redirect to="/" />;
+  }
+
   return (
     <Flex
       pe={{ sm: "0px", md: "16px" }}
@@ -106,21 +117,20 @@ export default function HeaderLinks(props) {
           borderRadius="inherit"
         />
       </InputGroup>
-      {/* <NavLink to="/auth/signin"> */}
         <Button
-          onClick={handleLogout}
+          onClick={navigateToProfile}
           ms="0px"
           px="0px"
           me={{ sm: "2px", md: "16px" }}
           color={navbarIcon}
           variant="transparent-with-icon"
-          rightIcon={
-            document.documentElement.dir ? (
-              ""
-            ) : (
-              <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-            )
-          }
+          // rightIcon={
+          //   document.documentElement.dir ? (
+          //     ""
+          //   ) : (
+          //     <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
+          //   )
+          // }
           leftIcon={
             document.documentElement.dir ? (
               <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
@@ -128,6 +138,16 @@ export default function HeaderLinks(props) {
               ""
             )
           }
+        >
+          {/* <Text display={{ sm: "none", md: "flex" }}>Sign out</Text> */}
+      </Button>
+      <Button
+          onClick={handleLogout}
+          ms="0px"
+          px="0px"
+          me={{ sm: "2px", md: "16px" }}
+          color={navbarIcon}
+          variant="transparent-with-icon"
         >
           <Text display={{ sm: "none", md: "flex" }}>Sign out</Text>
         </Button>
