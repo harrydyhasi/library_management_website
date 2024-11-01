@@ -50,9 +50,9 @@ function SignIn() {
       localStorage.removeItem("rememberedPassword");
     }
   };
-
+/////////////
   if (user) {
-    return <Redirect to="/admin/profile" />;
+    return <Redirect to="/admin/dashboard" />;
   }
 
   const handleRedirectToSignUp = () => {

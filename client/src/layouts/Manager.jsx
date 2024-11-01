@@ -2,11 +2,11 @@
 import { ChakraProvider, Portal, useDisclosure  } from '@chakra-ui/react';
 import Configurator from 'components/Configurator/Configurator';
 // Layout components
-import AdminNavbar from '../components/Navbars/AdminNavbar';
 import Sidebar from '../components/Sidebar';
+import SidebarManager from '../components/Sidebar/Manager';
 import { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import routes from '../Routes/adminRoutes';
+import routes from '../Routes/managerRoutes';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
@@ -17,7 +17,7 @@ import FixedPlugin from '../components/FixedPlugin/FixedPlugin';
 import MainPanel from '../components/Layout/MainPanel';
 import PanelContainer from '../components/Layout/PanelContainer';
 import PanelContent from '../components/Layout/PanelContent';
-
+import ManagerNavbar from '../components/Navbars/ManagerNavbar';
 
 
 export default function Dashboard(props) {
@@ -86,7 +86,7 @@ export default function Dashboard(props) {
 			if (prop.category === 'account') {
 				return getRoutes(prop.views);
 			}
-			if (prop.layout === '/admin') {
+			if (prop.layout === '/manager') {
 				return <Route path={prop.layout + prop.path} component={prop.component} key={key} />;
 			} else {
 				return null;
@@ -111,7 +111,7 @@ export default function Dashboard(props) {
 					xl: 'calc(100% - 275px)'
 				}}>
 				<Portal>
-					<AdminNavbar
+					<ManagerNavbar
 						onOpen={onOpen}
 						logoText={'PURITY UI DASHBOARD'}
 						brandText={getActiveRoute(routes)}
