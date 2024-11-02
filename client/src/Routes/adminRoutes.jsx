@@ -1,20 +1,12 @@
 // import
 import Dashboard from "../views/Dashboard/Dashboard";
 import Tables from "../views/Dashboard/Tables";
-import Billing from "../views/Dashboard/Billing";
-import History from "../views/Dashboard/History";
 import Profile from "../views/Dashboard/Profile";
 import { FaCogs } from "react-icons/fa";
 
 import {
   HomeIcon,
-  StatsIcon,
-  CreditIcon,
   PersonIcon,
-  DocumentIcon,
-  RocketIcon,
-  ClockIcon,
-  SettingsIcon
   // SupportIcon,
 } from "../components/Icons/Icons";
 
