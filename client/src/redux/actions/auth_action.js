@@ -30,11 +30,11 @@ export const signInUser = (email, password) => {
   };
 };
 
-export const signUpUser = ({ fullName, email, password }) => {
+export const signUpUser = ({ email, password }) => {
   return async (dispatch) => {
     dispatch(signUpRequest());
     try {
-      const response = await signUpUserService({ fullName, email, password });
+      const response = await signUpUserService({ email, password });
       dispatch(signUpSuccess(response.data.user));
     } catch (error) {
       const errorMessage = error.response ? error.response.data.message : error.message; 

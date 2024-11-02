@@ -1,4 +1,3 @@
-// controllers/userController.js
 const User = require('../models/user'); 
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
@@ -19,7 +18,7 @@ const getUserById = async (req, res) => {
     const { id } = req.params; 
 
     try {
-        const user = await User.findById(id).select('-password');
+        const user = await User.findOne({ id }).select('-password');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -30,40 +29,49 @@ const getUserById = async (req, res) => {
     }
 };
 
-
-
-
 // Register a new user
-const register = async (req, res) => {
-    const { full_name, email, password, username } = req.body; 
+const createUser = async (req, res) => {
+    const { email, password, fullName, role, phone } = req.body;
     const saltRounds = 10;
 
     try {
-        if (!full_name || !email || !password || !username) {
-            return res.status(400).json({ message: 'All fields are required' });
+        if (!email || !password || !role) {
+            return res.status(400).json({ message: 'Email, password, and role are required' });
         }
 
         const existingUserByEmail = await User.findOne({ email });
-        const existingUserByUsername = await User.findOne({ username }); 
-        if (existingUserByEmail || existingUserByUsername) {
+        if (existingUserByEmail) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        const rolePrefix = role === 'student' ? 'SV' : role === 'manager' ? 'QL' : 'AD';
+
+        // Find the latest user ID for the specific role
+        const lastUser = await User.findOne({ id: new RegExp(`^${rolePrefix}`) }).sort({ id: -1 });
+        const lastIdNumber = lastUser ? parseInt(lastUser.id.slice(2), 10) : 0; // Extract number from last ID
+        const newIdNumber = lastIdNumber + 1; // Increment for new ID
+        const formattedId = `${rolePrefix}${newIdNumber}`;
+
         const newUser = await User.create({
-            username,
+            id: formattedId,
+            username: formattedId,
             email,
             password: hashedPassword,
-            full_name 
+            fullName,
+            phone, // Store phone number
+            role // Store role
         });
 
         res.status(201).json({
             message: 'User registered successfully',
             user: {
-                id: newUser._id,
-                full_name: newUser.full_name,
+                id: newUser.id,
                 email: newUser.email,
-                username: newUser.username 
+                phone: newUser.phone,
+                role: newUser.role,
+                fullName: newUser.fullName // Include full name in the response
             }
         });
     } catch (error) {
@@ -73,6 +81,7 @@ const register = async (req, res) => {
 };
 
 
+
 // User login
 const login = async (req, res) => {
     const { email, password } = req.body;
@@ -80,18 +89,21 @@ const login = async (req, res) => {
     try {
         const user = await User.findOne({ email }); 
         if (!user) {
-            return res.status(401).json({ message: 'Email is incorrect' });
+            return res.status(401).json({ message: 'Invalid user email' });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Password is incorrect' });
+            return res.status(401).json({ message: 'Incorrect password' });
         }
 
         const userResponse = {
-            id: user._id, 
-            full_name: user.name,
+            id: user.id, 
             email: user.email,
+            fullName: user.fullName,
+            phone: user.phone,
+            role: user.role,
+            status: user.status
         };
 
         res.json({ message: 'Login successful', user: userResponse });
@@ -104,26 +116,28 @@ const login = async (req, res) => {
 // Update user information
 const updateUser = async (req, res) => {
     const { id } = req.params;  
-    const { full_name, email, password } = req.body;
+    const { email, password, phone, fullName, status, role } = req.body;
     const saltRounds = 10;
 
     try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: 'Invalid user ID format' });
-        }
-
-        const user = await User.findById(id);
+        const user = await User.findOne({ id: id }); // Assuming you're using _id as the identifier
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        user.full_name = full_name ?? user.full_name;
+        // Update user fields only if new values are provided
+        user.fullName = fullName?? user.fullName;  
         user.email = email ?? user.email;
+        user.phone = phone ?? user.phone;
+        user.status = status ?? user.status;
+        user.role = role ?? user.role;
 
+        // Update the password if provided
         if (password) {
             user.password = await bcrypt.hash(password, saltRounds);
         }
 
+        // Save the updated user
         await user.save();
 
         res.json({ message: 'User updated successfully', user });
@@ -136,14 +150,10 @@ const updateUser = async (req, res) => {
 
 // Delete a user
 const deleteUser = async (req, res) => {
-    const { id } = req.params;  
+    const { id } = req.params;
 
     try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: 'Invalid user ID format' });
-        }
-
-        const user = await User.findByIdAndDelete(id); 
+        const user = await User.findOneAndDelete({id: id});
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -155,11 +165,10 @@ const deleteUser = async (req, res) => {
     }
 };
 
-
 module.exports = {
     getAllUsers,
     getUserById,  
-    register,
+    createUser,
     login,
     updateUser,
     deleteUser,

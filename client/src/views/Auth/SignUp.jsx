@@ -25,7 +25,7 @@ function SignUp() {
   const bgColor = useColorModeValue("white", "gray.700");
   const bgIcons = useColorModeValue("teal.200", "rgba(255, 255, 255, 0.5)");
 
-  const [fullName, setFullName] = useState("");
+  // const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -35,7 +35,7 @@ function SignUp() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    await dispatch(signUpUser({ fullName, email, password }));
+    await dispatch(signUpUser({ email, password }));
   };
 
   if (new_user) {
@@ -88,18 +88,7 @@ function SignUp() {
           </HStack>
           <Text fontSize='lg' color='gray.400' fontWeight='bold' textAlign='center' mb='22px'>or</Text>
           <FormControl onSubmit={handleSignUp}>
-            <FormLabel ms='4px' fontSize='sm' fontWeight='normal'>Name</FormLabel>
-            <Input
-              fontSize='sm'
-              ms='4px'
-              borderRadius='15px'
-              type='text'
-              placeholder='Your full name'
-              mb='24px'
-              size='lg'
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
+            
             <FormLabel ms='4px' fontSize='sm' fontWeight='normal'>Email</FormLabel>
             <Input
               fontSize='sm'

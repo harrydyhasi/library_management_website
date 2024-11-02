@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
@@ -15,7 +15,7 @@ const root = createRoot(rootElement);
 root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <HashRouter>
+      <Router> {/* Changed HashRouter to BrowserRouter */}
           <Switch>
             <Route path={`/auth`} component={AuthLayout} />
             <Route path={`/admin`} component={AdminLayout} />
@@ -23,10 +23,7 @@ root.render(
             <Route path={`/student`} component={StudentLayout} />
             <Redirect from={`/`} to="/auth/signin" />
           </Switch>
-        </HashRouter>
+      </Router>
     </PersistGate>
   </Provider>
-  
 );
-
-

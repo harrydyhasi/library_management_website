@@ -1,4 +1,3 @@
-// src/redux/reducers/authReducer.js
 import {
   SIGN_IN_REQUEST,
   SIGN_IN_SUCCESS,
@@ -29,11 +28,11 @@ const authReducer = (state = initialState, action) => {
     case SIGN_UP_REQUEST:
       return { ...state, loading: true, signup_error: null }; 
     case SIGN_UP_SUCCESS:
-      return { ...state, loading: false, new_user: action.payload }; 
+      return { ...state, loading: false, new_user: action.payload  }; 
     case SIGN_UP_FAILURE:
       return { ...state, loading: false, signup_error: action.payload }; 
     case LOGOUT:
-      return { ...state, loading: false, user: null, signup_error: null }; 
+      return { ...state, loading: false, user: null, signup_error: null, new_user: null }; 
     default:
       return state;
   }

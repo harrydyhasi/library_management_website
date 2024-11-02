@@ -22,7 +22,7 @@ function Profile() {
     if (loggedInUser && loggedInUser.id) {
       dispatch(fetchUser(loggedInUser.id));
     }
-  }, [dispatch, loggedInUser]);
+  }, [dispatch, loggedInUser, user.fullName]);
 
   const bgProfile = useColorModeValue(
     'hsla(0,0%,100%,.8)',
@@ -35,7 +35,7 @@ function Profile() {
         backgroundHeader={ProfileBgImage}
         backgroundProfile={bgProfile}
         avatarImage={avatar4}
-        name={loading ? 'Loading...' : user?.full_name || 'Unknown'}
+        name={loading ? 'Loading...' : user?.fullName || 'Unknown username'}
         email={loading ? 'Loading...' : user?.email || 'unknown@example.com'}
         tabs={[
           { name: 'OVERVIEW', icon: <FaCube w="100%" h="100%" /> },
