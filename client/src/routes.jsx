@@ -6,6 +6,7 @@ import History from "./views/Dashboard/History";
 import Profile from "./views/Dashboard/Profile";
 import SignIn from "./views/Auth/SignIn.jsx";
 import SignUp from "./views/Auth/SignUp.jsx";
+import UserManagement from "./views/Dashboard/UserManagement";
 
 import {
   HomeIcon,
@@ -15,7 +16,7 @@ import {
   DocumentIcon,
   RocketIcon,
   ClockIcon,
-  // SupportIcon,
+  UserIcon,
 } from "components/Icons/Icons";
 
 var dashRoutes = [
@@ -31,6 +32,13 @@ var dashRoutes = [
     name: "Tables",
     icon: <StatsIcon color="inherit" />,
     component: Tables,
+    layout: "/admin",
+  },
+  {
+    path: "/users",
+    name: "Quản lý người dùng",
+    icon: <UserIcon color="inherit" />,
+    component: UserManagement,
     layout: "/admin",
   },
   {

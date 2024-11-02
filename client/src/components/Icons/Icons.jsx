@@ -1,5 +1,16 @@
 import { createIcon } from "@chakra-ui/icons";
 
+export const UserIcon = createIcon({
+  displayName: "UserIcon",
+  viewBox: "0 0 24 24",
+  path: (
+    <path
+      fill="currentColor"
+      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-2.01 4-3.1 6-3.1s5.97 1.09 6 3.1c-1.29 1.94-3.5 3.22-6 3.22z"
+    />
+  ),
+});
+
 export const AdobexdLogo = createIcon({
   displayName: "AdobexdLogo",
   viewBox: "0 0 24 24",
@@ -137,6 +148,7 @@ export const DashboardLogo = createIcon({
   displayName: "DashboardLogo",
   viewBox: "0 0 1000 257",
   path: (
+    // eslint-disable-next-line react/no-unknown-property
     <g width="998" height="257" viewBox="0 0 998 257" fill="none">
       <g clipPath="url(#clip0)">
         <path

@@ -6,7 +6,7 @@ const controller = require('../controllers/userController')
 router.post('/login', controller.login);
 
 // Register route
-router.post('/register', controller.register);
+router.post('/users', controller.createUser);
 
 //Get route
 router.get('/users', controller.getAllUsers);

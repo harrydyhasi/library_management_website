@@ -1,6 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
@@ -10,12 +13,7 @@ export default defineConfig({
       'components': path.resolve(__dirname, './src/components'),
     },
   },
-  // Optional: If you want to treat .js files as .jsx
-  // esbuild: {
-  //   loader: {
-  //     '.js': 'jsx', // Change this to a string
-  //     // If you want to treat .ts files as .tsx as well, add:
-  //     '.ts': 'tsx',
-  //   },
-  // },
+  server: {
+    historyApiFallback: true, 
+  },
 });
