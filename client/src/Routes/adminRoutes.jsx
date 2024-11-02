@@ -4,6 +4,7 @@ import Tables from "../views/Dashboard/Tables";
 import Billing from "../views/Dashboard/Billing";
 import History from "../views/Dashboard/History";
 import Profile from "../views/Dashboard/Profile";
+import { FaCogs } from "react-icons/fa";
 
 import {
   HomeIcon,
@@ -28,7 +29,7 @@ var dashRoutes = [
   {
     path: "/tables",
     name: "Thời gian mượn/trả sách",
-    icon: <SettingsIcon color="inherit" />,
+    icon: <FaCogs color="inherit" />,
     component: Tables,
     layout: "/admin",
   },

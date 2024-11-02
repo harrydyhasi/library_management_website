@@ -4,7 +4,7 @@ import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import Card from "components/Card/Card";
 import CardBody from "components/Card/CardBody";
 import CardHeader from "components/Card/CardHeader";
-import BillingRow from "components/Tables/BillingRow";
+import BillingRow from "../../../../components/Tables/BillingRow";
 import React from "react";
 
 const BillingInformation = ({ title, data }) => {
