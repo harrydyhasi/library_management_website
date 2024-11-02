@@ -19,6 +19,7 @@ import {
   UserIcon,
 } from "components/Icons/Icons";
 
+
 var dashRoutes = [
   {
     path: "/dashboard",
@@ -55,6 +56,36 @@ var dashRoutes = [
     component: History,
     layout: "/admin",
   },
+//manager
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: <HomeIcon color="inherit" />,
+    component: Dashboard,
+    layout: "/manager",
+  },
+  {
+    path: "/tables",
+    name: "Tables",
+    icon: <StatsIcon color="inherit" />,
+    component: Tables,
+    layout: "/manager",
+  },
+  {
+    path: "/billing",
+    name: "Billing",
+    icon: <CreditIcon color="inherit" />,
+    component: Billing,
+    layout: "/manager",
+  },
+  {
+    path: "/history",
+    name: "History",
+    icon: <ClockIcon color="inherit" />,
+    component: History,
+    layout: "/manager",
+  },
+
   {
     name: "ACCOUNT PAGES",
     category: "account",
@@ -68,6 +99,15 @@ var dashRoutes = [
         secondaryNavbar: true,
         component: Profile,
         layout: "/admin",
+      },
+      {
+        path: "/profile",
+        name: "Profile",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: Profile,
+        layout: "/manager",
       },
       {
         path: "/signin",
