@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import ManagerNavbarLinks from "./ManagerNavbarLinks";
 
+
 export default function ManagerNavbar(props) {
   const [scrolled, setScrolled] = useState(false);
   const {
@@ -127,7 +128,7 @@ export default function ManagerNavbar(props) {
             </BreadcrumbItem>
           </Breadcrumb>
           {/* Here we create navbar brand, based on route name */}
-          <Link
+          {/* <Link
             color={mainText}
             href="#"
             bg="inherit"
@@ -144,7 +145,7 @@ export default function ManagerNavbar(props) {
             }}
           >
             {brandText}
-          </Link>
+          </Link> */}
         </Box>
         <Box ms="auto" w={{ sm: "100%", md: "unset" }}>
           <ManagerNavbarLinks

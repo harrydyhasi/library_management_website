@@ -1,49 +1,43 @@
 // import
 import Dashboard from "../views/Manager/Dashboard";
-import Tables from "../views/Manager/categoryManagement";
+import category_management from "../views/Manager/category_management";
 import Billing from "../views/Manager/Billing";
 import History from "../views/Manager/History";
 import Profile from "../views/Manager/Profile";
+import { LuBookCopy } from "react-icons/lu";
+import { TbCategory } from "react-icons/tb";
+import { AiOutlineReconciliation } from "react-icons/ai";
+import { TbHome } from "react-icons/tb";
+import { FaRegUser } from "react-icons/fa6";
 
-import {
-  HomeIcon,
-  StatsIcon,
-  CreditIcon,
-  PersonIcon,
-  DocumentIcon,
-  RocketIcon,
-  ClockIcon,
-  // SupportIcon,
-} from "../components/Icons/Icons";
-import { HamburgerIcon, EditIcon } from '@chakra-ui/icons'
 var dashRoutes = [
  
 //manager
   {
     path: "/history",
     name: "Trang chủ",
-    icon: <HomeIcon color="inherit" />,
+    icon: <TbHome color="inherit" />,
     component: History,
     layout: "/manager",
   },
   {
-    path: "/tables",
+    path: "/category_management",
     name: "Quản lý danh mục",
-    icon: <HamburgerIcon color="inherit" />,
-    component: Tables,
+    icon: <TbCategory color="inherit" />,
+    component: category_management,
     layout: "/manager",
   },
   {
     path: "/billing",
     name: "Quản lý sách",
-    icon: <DocumentIcon color="inherit" />,
+    icon: <LuBookCopy color="inherit" />,
     component: Billing,
     layout: "/manager",
   },
   {
     path: "/dashboard",
     name: "Quản lý phiếu mượn",
-    icon: <EditIcon color="inherit" />,
+    icon: <AiOutlineReconciliation color="inherit" />,
     component: Dashboard,
     layout: "/manager",
   },
@@ -57,7 +51,7 @@ var dashRoutes = [
         path: "/profile",
         name: "Profile",
         rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
+        icon: <FaRegUser color="inherit" />,
         secondaryNavbar: true,
         component: Profile,
         layout: "/manager",
