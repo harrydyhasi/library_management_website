@@ -1,9 +1,17 @@
-// src/reducers/categoryReducer.js
 import {
   FETCH_CATEGORIES_REQUEST,
   FETCH_CATEGORIES_SUCCESS,
   FETCH_CATEGORIES_FAILURE,
-} from '../actions/category_action';
+  CREATE_CATEGORY_REQUEST,
+  CREATE_CATEGORY_SUCCESS,
+  CREATE_CATEGORY_FAILURE,
+  UPDATE_CATEGORY_REQUEST,
+  UPDATE_CATEGORY_SUCCESS,
+  UPDATE_CATEGORY_FAILURE,
+  DELETE_CATEGORY_REQUEST,
+  DELETE_CATEGORY_SUCCESS,
+  DELETE_CATEGORY_FAILURE
+} from '../actions/types';
 
 const initialState = {
   loading: false,
@@ -15,30 +23,55 @@ const categoryReducer = (state = initialState, action) => {
   console.log("Action received:", action);
   switch (action.type) {
     case FETCH_CATEGORIES_REQUEST:
+    case CREATE_CATEGORY_REQUEST:
+    case UPDATE_CATEGORY_REQUEST:
+    case DELETE_CATEGORY_REQUEST:
       return {
         ...state,
         loading: true,
       };
     case FETCH_CATEGORIES_SUCCESS:
-      console.log("Fetched categories:", action.payload);
       return {
         ...state,
         loading: false,
         categories: action.payload,
         error: '',
       };
-    case FETCH_CATEGORIES_FAILURE:
-      console.error("Fetch categories failed:", action.payload);
+    case CREATE_CATEGORY_SUCCESS:
       return {
         ...state,
         loading: false,
-        categories: [],
+        categories: [...state.categories, action.payload], 
+        error: '',
+      };
+    case UPDATE_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        categories: state.categories.map((category) =>
+          category.id === action.payload.id ? action.payload : category
+        ),
+        error: '',
+      };
+    case DELETE_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        categories: state.categories.filter((category) => category.id !== action.payload),
+        error: '',
+      };
+    case FETCH_CATEGORIES_FAILURE:
+    case CREATE_CATEGORY_FAILURE:
+    case UPDATE_CATEGORY_FAILURE:
+    case DELETE_CATEGORY_FAILURE:
+      return {
+        ...state,
+        loading: false,
         error: action.payload,
       };
     default:
       return state;
   }
 };
-
 
 export default categoryReducer;

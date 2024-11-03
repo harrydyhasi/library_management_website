@@ -17,9 +17,7 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, message = "" }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
-            Xác nhận
-            </ModalHeader>
+        <ModalHeader>Xác nhận</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text>{message}</Text>
