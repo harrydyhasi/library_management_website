@@ -11,7 +11,6 @@ export const fetchCategories = () => {
       const response = await axios.get('http://localhost:3000/api/category');
       console.log("Dữ liệu trả về từ API:", response.data);
 console.log("Categories:", response.data.categories);
-
       dispatch({
         type: FETCH_CATEGORIES_SUCCESS,
         payload: response.data.categories, // Truyền categories thay vì toàn bộ response.data

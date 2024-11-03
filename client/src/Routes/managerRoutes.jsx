@@ -1,9 +1,11 @@
 // import
 import Dashboard from "../views/Manager/Dashboard";
+
 import category_management from "../views/Manager/category_management";
 import Billing from "../views/Manager/Billing";
 import History from "../views/Manager/History";
 import Profile from "../views/Manager/Profile";
+import BorrowSlipManagement from "../views/Manager/BorrowSlipManagement";
 import { LuBookCopy } from "react-icons/lu";
 import { TbCategory } from "react-icons/tb";
 import { AiOutlineReconciliation } from "react-icons/ai";
@@ -38,7 +40,7 @@ var dashRoutes = [
     path: "/dashboard",
     name: "Quản lý phiếu mượn",
     icon: <AiOutlineReconciliation color="inherit" />,
-    component: Dashboard,
+    component: BorrowSlipManagement,
     layout: "/manager",
   },
 

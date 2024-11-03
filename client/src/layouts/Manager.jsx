@@ -93,7 +93,7 @@ export default function Dashboard(props) {
 			}
 		});
 	};
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {isOpen, onOpen, onClose } = useDisclosure();
 	document.documentElement.dir = 'ltr';
 	// Chakra Color Mode
 	return (
@@ -124,7 +124,6 @@ export default function Dashboard(props) {
 					<PanelContent>
 						<PanelContainer>
 							{/* Logout Button */}
-							
 							<Switch>
 								{getRoutes(routes)}
 								<Redirect from='/manager' to='/manager/dashboard' />
@@ -135,7 +134,6 @@ export default function Dashboard(props) {
 				{/* <Footer /> */}
 				<Portal>
 					<FixedPlugin secondary={getActiveNavbar(routes)} fixed={fixed} onOpen={onOpen} />
-					
 				</Portal>
 				<Configurator
 					secondary={getActiveNavbar(routes)}
