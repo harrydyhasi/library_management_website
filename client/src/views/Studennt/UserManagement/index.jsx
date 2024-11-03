@@ -3,7 +3,9 @@ import { Flex } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserList from "./components/UserList";
+import Projects from "./components/Projects";
 import { fetchAllUsers } from "../../../redux/actions/user_action";
+import { dashboardTableData } from "../../../variables/general";
 
 function UserManagement() {
   const dispatch = useDispatch();
@@ -29,6 +31,11 @@ function UserManagement() {
           data={users} 
         />
       )}
+      <Projects
+        title={"Projects Table"}
+        captions={["Companies", "Budget", "Status", "Completion"]}
+        data={dashboardTableData}
+      />
     </Flex>
   );
 }
