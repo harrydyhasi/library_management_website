@@ -90,7 +90,7 @@ export default function HeaderLinks(props) {
           borderColor: { mainTeal },
         }}
       >
-        <InputLeftElement
+        {/* <InputLeftElement
           // eslint-disable-next-line react/no-children-prop
           children={
             <IconButton
@@ -115,7 +115,7 @@ export default function HeaderLinks(props) {
           color={mainText}
           placeholder="Type here..."
           borderRadius="inherit"
-        />
+        /> */}
       </InputGroup>
         <Button
           onClick={navigateToProfile}

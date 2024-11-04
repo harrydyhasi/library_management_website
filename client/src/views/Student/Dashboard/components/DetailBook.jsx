@@ -18,7 +18,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { createBook, updateBook } from '../../../../redux/actions/book_action';
 import CustomToast from '../../../../components/Toast/CustomToast';
-import defaultImage from '/images/image.png';
+import defaultImage from '/images/image.png?url';
 
 const DetailBook = ({ isOpen, onClose, currentBook }) => {
     const dispatch = useDispatch();

@@ -1,4 +1,3 @@
-// Books.js
 import React, { useEffect, useState } from 'react';
 import {
   Table,
@@ -14,16 +13,16 @@ import {
   InputLeftElement,
   IconButton,
   Input,
-  Alert,
   Spinner,
   VStack,
+  Select,
   useDisclosure,
 } from "@chakra-ui/react";
 import Card from "../../../../components/Card/Card";
 import CardBody from "../../../../components/Card/CardBody";
 import CardHeader from "../../../../components/Card/CardHeader";
 import { BiSearchAlt } from "react-icons/bi";
-import { fetchAllBooks } from '../../../../redux/actions/book_action'; // Ensure correct path
+import { fetchAllBooks } from '../../../../redux/actions/book_action';
 import { useDispatch, useSelector } from 'react-redux';
 import TableBook from './TableBook';
 import AddBook from './AddBook'; 
@@ -41,8 +40,13 @@ const Books = () => {
   const mainTeal = useColorModeValue("teal.300", "teal.300");
   const searchIconColor = useColorModeValue("gray.700", "gray.200");
   const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentBook, setCurrentBook] = useState(null); 
+
+  // Thêm trạng thái phân trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const booksPerPage = 10; // Số lượng sách mỗi trang
 
   useEffect(() => {
     dispatch(fetchAllBooks());
@@ -61,14 +65,49 @@ const Books = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  const filteredBooks = books.filter(book => 
-    book?.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleEditBook = (book) => {
     setCurrentBook(book);
-    console.log('ID danh mục:', book.category._id);
     onOpen(); 
+  };
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+
+  const handleCategoryChange = (event) => {
+    setCategoryFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const filteredBooks = books.filter((book) => {
+    const matchesSearch = 
+      book.name.toLowerCase().includes(searchQuery) ||
+      book.id.toLowerCase().includes(searchQuery) ||
+      book.author.toLowerCase().includes(searchQuery) ||
+      book.quantity.toString().includes(searchQuery) ||
+      book.position.toLowerCase().includes(searchQuery);
+  
+    const matchesCategory = categoryFilter ? 
+      (book.category_id && book.category_id.id === categoryFilter) : true;
+    
+    return matchesSearch && matchesCategory;
+  });
+
+  const indexOfLastBook = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
+
+  const nextPage = () => {
+    if (currentPage < Math.ceil(filteredBooks.length / booksPerPage)) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
   };
 
   return (
@@ -79,6 +118,20 @@ const Books = () => {
             <Text fontSize='xl' color={textColor} fontWeight='bold' pl='8px'>
               Tất cả sách
             </Text>
+          </Flex>
+          <Flex mt={4}>
+            <Select
+              placeholder="Tất cả"
+              onChange={handleCategoryChange}
+              value={categoryFilter}
+              w="200px"
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </Select>
           </Flex>
           <Flex justify='space-between' align='center' w='100%' mb="10px" p='0px' my='20px'>
             <InputGroup
@@ -101,18 +154,20 @@ const Books = () => {
               <Input
                 fontSize="xs"
                 py="11px"
-                placeholder="Nhập tên sách"
+                placeholder="Tìm kiếm theo tên sách, mã sách, tác giả, số lượng, vị trí"
                 borderRadius="inherit"
+                onChange={handleSearch}
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </InputGroup>
+            
             <Button
               colorScheme="teal" background="teal.300" p='16px 20px' onClick={() => { setCurrentBook(null); onOpen(); }} ml={4}
             >
               Thêm sách mới
             </Button>
           </Flex>
+          
         </Flex>
       </CardHeader>
       <CardBody>
@@ -132,7 +187,7 @@ const Books = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {filteredBooks.map((book) => (
+              {currentBooks.map((book) => (
                 <TableBook
                   key={book._id}
                   id={book.id}
@@ -149,6 +204,10 @@ const Books = () => {
               ))}
             </Tbody>
           </Table>
+          <Flex justify="space-between" mt={4}>
+            <Button onClick={prevPage} disabled={currentPage === 1}>Trang trước</Button>
+            <Button onClick={nextPage} disabled={currentPage >= Math.ceil(filteredBooks.length / booksPerPage)}>Trang sau</Button>
+          </Flex>
         </Flex>
       </CardBody>
 
