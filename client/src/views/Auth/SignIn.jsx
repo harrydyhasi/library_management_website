@@ -69,8 +69,6 @@ function SignIn() {
       } else if (user.role === 'student') {
         return <Redirect to="/student/dashboard" />;
     }
-    
-  }
 
   const handleRedirectToSignUp = () => {
     history.push("/auth/signup"); 

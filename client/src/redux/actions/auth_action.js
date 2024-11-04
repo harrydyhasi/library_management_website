@@ -7,7 +7,7 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
 } from './types';
-import { signInUserService, signUpUserService } from '../../services/auth_service'; // Import your authentication service
+import { signInUserService, signUpUserService } from '../../services/auth_service'; 
 
 export const signInRequest = () => ({ type: SIGN_IN_REQUEST });
 export const signInSuccess = (user) => ({ type: SIGN_IN_SUCCESS, payload: user });

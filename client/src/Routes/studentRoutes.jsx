@@ -1,4 +1,3 @@
-// import
 import Profile from "../views/Studennt/Profile";
 import UserManagement from "../views/Studennt/UserManagement";
 import { LuSettings2 } from "react-icons/lu";
@@ -15,6 +14,7 @@ import {
   // SupportIcon,
 } from "../components/Icons/Icons";
 
+
 var dashRoutes = [
   {
     path: "/dashboard",
@@ -26,8 +26,8 @@ var dashRoutes = [
   {
     path: "/tables",
     name: "Lịch sử mượn/ trả sách",
-    icon: <StatsIcon color="inherit" />,
-    component: UserManagement,
+    icon: <MdOutlineHistory color="inherit" />,
+    component: Tables,
     layout: "/student",
   },
 
@@ -39,7 +39,7 @@ var dashRoutes = [
       {
         path: "/profile",
         name: "Profile",
-        icon: <PersonIcon color="inherit" />,
+        icon: <IoMdPerson color="inherit" />,
         secondaryNavbar: true,
         component: Profile,
         layout: "/student",

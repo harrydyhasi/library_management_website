@@ -1,10 +1,12 @@
 // import
+
 import Tables from "../views/Admin/Tables";
 import Profile from "../views/Admin/Profile";
 import UserManagement from "../views/Admin/UserManagement";
 import { LuSettings2 } from "react-icons/lu";
 import { IoMdPerson } from "react-icons/io";
 import { BsPersonFillGear } from "react-icons/bs";
+
 
 var dashRoutes = [
   {
