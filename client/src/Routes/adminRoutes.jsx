@@ -1,23 +1,23 @@
 // import
-import Dashboard from "../views/Admin/Dashboard";
-import Tables from "../views/Admin/Tables";
-import Profile from "../views/Admin/Profile";
-import UserManagement from "../views/Admin/UserManagement";
+import Dashboard from "../views/Dashboard/Dashboard";
+import Tables from "../views/Dashboard/Tables";
+import Profile from "../views/Dashboard/Profile";
 import { FaCogs } from "react-icons/fa";
 import { TbHome } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa6";
-
+import { BsPersonFillGear } from "react-icons/bs";
+import UserManagement from "../views/Admin/UserManagement";
 import {
   HomeIcon,
   PersonIcon,
-  UserIcon,
+  // SupportIcon,
 } from "../components/Icons/Icons";
 
 var dashRoutes = [
   {
     path: "/dashboard",
     name: "Quản lý người dùng",
-    icon: <UserIcon color="inherit" />,
+    icon: <BsPersonFillGear color="inherit" />,
     component: UserManagement,
     layout: "/admin",
   },

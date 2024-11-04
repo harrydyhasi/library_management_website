@@ -1,3 +1,5 @@
+// Books.js
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   Thead,
@@ -20,30 +22,30 @@ import {
 import Card from "../../../../components/Card/Card";
 import CardBody from "../../../../components/Card/CardBody";
 import CardHeader from "../../../../components/Card/CardHeader";
-import TableCategory from './TableCategory';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '../../../../redux/actions/category_action';
 import { BiSearchAlt } from "react-icons/bi";
+import { fetchAllBooks } from '../../../../redux/actions/book_action'; // Ensure correct path
+import { useDispatch, useSelector } from 'react-redux';
+import TableBook from './TableBook';
+import AddBook from './AddBook'; 
 import ErrorAlert from '../../../../components/Alert/CustomAlert';
-import AddCategoryDialog from './add_category';
-import { IoAdd } from "react-icons/io5";
+import { fetchCategories } from "../../../../redux/actions/category_action";
 
-const Categories = () => {
+const Books = () => {
   const dispatch = useDispatch();
+  const books = useSelector((state) => state.book.books);
   const categories = useSelector((state) => state.category.categories);
-  const loading = useSelector((state) => state.category.loading);
-  const error = useSelector((state) => state.category.error);
+  const loading = useSelector((state) => state.book.loading);
+  const error = useSelector((state) => state.book.error);
   const textColor = useColorModeValue("gray.700", "white");
   const inputBg = useColorModeValue("white", "gray.800");
   const mainTeal = useColorModeValue("teal.300", "teal.300");
   const searchIconColor = useColorModeValue("gray.700", "gray.200");
-
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentCategory, setCurrentCategory] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [currentBook, setCurrentBook] = useState(null); 
 
   useEffect(() => {
+    dispatch(fetchAllBooks());
     dispatch(fetchCategories());
   }, [dispatch]);
 
@@ -59,20 +61,14 @@ const Categories = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-
-  const filteredCategories = categories.filter(category =>
-    category.id.toString().includes(searchQuery) ||
-    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredBooks = books.filter(book => 
+    book?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleAddCategory = () => {
-    setCurrentCategory(null); 
-    onOpen();
-  };
-
-  const handleEditCategory = (category) => {
-    setCurrentCategory(category); 
-    onOpen();
+  const handleEditBook = (book) => {
+    setCurrentBook(book);
+    console.log('ID danh mục:', book.category._id);
+    onOpen(); 
   };
 
   return (
@@ -81,7 +77,7 @@ const Categories = () => {
         <Flex direction="column" w='100%' p='12px 0px 22px 20px'>
           <Flex>
             <Text fontSize='xl' color={textColor} fontWeight='bold' pl='8px'>
-              Danh mục sách
+              Tất cả sách
             </Text>
           </Flex>
           <Flex justify='space-between' align='center' w='100%' mb="10px" p='0px' my='20px'>
@@ -89,68 +85,66 @@ const Categories = () => {
               bg={inputBg}
               borderRadius="15px"
               w="300px"
-              _focus={{
-                borderColor: mainTeal,
-              }}
-              _active={{
-                borderColor: mainTeal,
-              }}
+              _focus={{ borderColor: mainTeal }}
+              _active={{ borderColor: mainTeal }}
             >
               <InputLeftElement>
                 <IconButton
                   bg="inherit"
                   borderRadius="inherit"
                   _hover="none"
-                  _active={{
-                    bg: "inherit",
-                    transform: "none",
-                    borderColor: "transparent",
-                  }}
-                  _focus={{
-                    boxShadow: "none",
-                  }}
+                  _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
+                  _focus={{ boxShadow: "none" }}
                   icon={<BiSearchAlt color={searchIconColor} w="15px" h="15px" />}
                 />
               </InputLeftElement>
               <Input
                 fontSize="xs"
                 py="11px"
-                placeholder="Nhập mã hoặc tên danh mục"
+                placeholder="Nhập tên sách"
                 borderRadius="inherit"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </InputGroup>
             <Button
-              colorScheme="teal" background="teal.300" p='8px 20px'
-              onClick={handleAddCategory}
+              colorScheme="teal" background="teal.300" p='16px 20px' onClick={() => { setCurrentBook(null); onOpen(); }} ml={4}
             >
-              Thêm danh mục mới
+              Thêm sách mới
             </Button>
           </Flex>
         </Flex>
       </CardHeader>
-
       <CardBody>
         <Flex direction="column" w='100%' p='12px 0px 22px 20px'>
           <Table variant='simple' color={textColor}>
             <Thead>
               <Tr my='.8rem' pl='0px' color='gray.400'>
-                <Th color='gray.400' ps='0px'>
-                  <Text>Mã danh mục</Text>
-                </Th>
-                <Th color='gray.400' ps='0px'>
-                  <Text>Tên danh mục</Text>
-                </Th>
+                <Th color='gray.400' ps='0px'><Text></Text></Th>
+                <Th color='gray.400' ps='0px'><Text>Mã sách</Text></Th>
+                <Th color='gray.400' ps='0px'><Text>Tên sách</Text></Th>
+                <Th color='gray.400' ps='0px'><Text>Danh mục</Text></Th>
+                <Th color='gray.400' ps='0px'><Text>Số lượng</Text></Th>
+                <Th color='gray.400' ps='0px'><Text>Vị trí</Text></Th>
+                <Th color='gray.400' ps='0px'><Text>Tác giả</Text></Th>
+                <Th color='gray.400' ps='0px'><Text>NXB</Text></Th>
+                <Th color='gray.400' ps='0px'><Text>Mô tả</Text></Th>
               </Tr>
             </Thead>
             <Tbody>
-              {filteredCategories.map((category) => (
-                <TableCategory
-                  key={category._id}
-                  id={category.id}
-                  name={category.name}
-                  onEdit={handleEditCategory} 
+              {filteredBooks.map((book) => (
+                <TableBook
+                  key={book._id}
+                  id={book.id}
+                  name={book.name}
+                  quantity={book.quantity}
+                  position={book.position}
+                  author={book.author}
+                  publisher={book.publisher}
+                  description={book.description}
+                  category={book.category_id}
+                  image={book.image}
+                  onEdit={handleEditBook} 
                 />
               ))}
             </Tbody>
@@ -158,16 +152,9 @@ const Categories = () => {
         </Flex>
       </CardBody>
 
-      <AddCategoryDialog 
-        isOpen={isOpen}
-        onClose={() => {
-          setCurrentCategory(null); 
-          onClose();
-        }}
-        currentCategory={currentCategory}
-      />
+      <AddBook isOpen={isOpen} onClose={onClose} currentBook={currentBook} categories={categories}/>
     </Card>
   );
 };
 
-export default Categories;
+export default Books;

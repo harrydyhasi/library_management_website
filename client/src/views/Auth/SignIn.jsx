@@ -52,7 +52,7 @@ function SignIn() {
   };
 /////////////
   if (user) {
-    return <Redirect to="/admin/dashboard" />;
+    return <Redirect to="/manager/dashboard" />;
   }
 
   const handleRedirectToSignUp = () => {
