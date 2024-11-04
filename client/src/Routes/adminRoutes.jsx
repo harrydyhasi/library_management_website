@@ -1,6 +1,6 @@
 // import
 import Dashboard from "../views/Admin/Dashboard";
-import Tables from "../views/Admin/Tables";
+import ConfigTime from "../views/Admin/ConfigTime";
 import Profile from "../views/Admin/Profile";
 import UserManagement from "../views/Admin/UserManagement";
 import { FaCogs } from "react-icons/fa";
@@ -25,7 +25,7 @@ var dashRoutes = [
     path: "/tables",
     name: "Thời gian mượn/trả sách",
     icon: <FaCogs color="inherit" />,
-    component: Tables,
+    component: ConfigTime,
     layout: "/admin",
   },
   {
