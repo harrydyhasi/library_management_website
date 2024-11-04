@@ -15,7 +15,7 @@ const root = createRoot(rootElement);
 root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <Router> {/* Changed HashRouter to BrowserRouter */}
+      <Router> 
           <Switch>
             <Route path={`/auth`} component={AuthLayout} />
             <Route path={`/admin`} component={AdminLayout} />

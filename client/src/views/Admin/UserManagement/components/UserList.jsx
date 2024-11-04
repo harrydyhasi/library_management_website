@@ -89,11 +89,13 @@ const UserList = ({ title, captions, data = [] }) => {
           <Text fontSize='lg' color={textColor} fontWeight='bold'>
             {title}
           </Text>
-          <Flex align="center">
+        </Flex>
+        <Flex align="center">
             <InputGroup
               cursor="pointer"
               bg="white"
               borderRadius="15px"
+              
               w={{ sm: "128px", md: "200px" }}
               me={{ sm: "auto", md: "20px" }}
               _focus={{ borderColor: "teal" }}
@@ -114,6 +116,7 @@ const UserList = ({ title, captions, data = [] }) => {
                 py="11px"
                 placeholder="Nhập tên, email..."
                 borderRadius="inherit"
+                autoComplete="off"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -122,7 +125,6 @@ const UserList = ({ title, captions, data = [] }) => {
               Thêm người dùng
             </Button>
           </Flex>
-        </Flex>
       </CardHeader>
       <CardBody>
         <Table variant="simple" color={textColor}>
@@ -146,6 +148,7 @@ const UserList = ({ title, captions, data = [] }) => {
                   phone={row.phone}
                   role={row.role}
                   status={row.status}
+                  password={row.password}
                 />
               ))
             ) : (
@@ -183,6 +186,7 @@ const UserList = ({ title, captions, data = [] }) => {
               <Input
                 name="email"
                 type="email"
+                autoComplete="off"
                 value={newUserData.email}
                 onChange={handleInputChange(newUserData, setNewUserData)}
                 placeholder="Nhập email"
@@ -193,6 +197,7 @@ const UserList = ({ title, captions, data = [] }) => {
               <FormLabel>Số điện thoại</FormLabel>
               <Input
                 name="phone"
+                autoComplete="off"
                 value={newUserData.phone}
                 onChange={handleInputChange(newUserData, setNewUserData)}
                 placeholder="Nhập số điện thoại"
@@ -203,6 +208,7 @@ const UserList = ({ title, captions, data = [] }) => {
               <InputGroup>
                 <Input
                   name="password"
+                  autoComplete="off"
                   type={showPassword ? "text" : "password"}
                   value={newUserData.password}
                   onChange={handleInputChange(newUserData, setNewUserData)}
@@ -224,6 +230,7 @@ const UserList = ({ title, captions, data = [] }) => {
               <InputGroup>
                 <Input
                   name="confirmPassword"
+                  autoComplete="new-password"
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => {

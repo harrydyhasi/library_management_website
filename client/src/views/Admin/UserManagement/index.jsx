@@ -1,5 +1,5 @@
 // Chakra imports
-import { Flex } from "@chakra-ui/react";
+import { Flex, Spinner, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserList from "./components/UserList";
@@ -12,16 +12,17 @@ function UserManagement() {
     dispatch(fetchAllUsers());
   }, [dispatch]);
 
-  // Access users from the Redux state
   const users = useSelector((state) => state.user.allUsers);
   const loading = useSelector((state) => state.user.loading);
   const error = useSelector((state) => state.user.error);
 
   return (
     <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
-      {error && <p>Error loading users: {error}</p>}
+      {error && <Text color="red.500">Error loading users: {error}</Text>}
       {loading ? (
-        <p>Loading users...</p>
+        <Flex align="center" justify="center" height="100vh">
+          <Spinner size="xl" color="blue.500" />
+        </Flex>
       ) : (
         <UserList
           title={"Danh sách người dùng"}

@@ -17,14 +17,14 @@ import EditUserModal from "./EditUserModal";
 import DeleteUserDialog from "./DeleteUserDialog";
 
 function TableRow(props) {
-  const { id, fullName, email, phone, status, role, logo } = props;
+  const { id, fullName, email, phone, status, role, logo, password } = props;
   const textColor = useColorModeValue("gray.700", "white");
   const bgStatus = useColorModeValue("gray.400", "#1a202c");
   const colorStatus = useColorModeValue("white", "gray.400");
 
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
-  const [editData, setEditData] = useState({ fullName, email, phone, role, status });
+  const [editData, setEditData] = useState({ fullName, email, phone, role, status, password });
 
   const dispatch = useDispatch();
   const toast = useToast();
