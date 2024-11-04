@@ -31,7 +31,6 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
 
   useEffect(() => {
     if (isOpen) {
-      console.log(editData.password);
       setPassword("");
       setConfirmPassword("");
       setFormErrors({});
@@ -213,7 +212,7 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
                   Trạng thái tài khoản
                 </FormLabel>
                 <Switch
-                  id="status-switch"
+                  id="status-switch"  
                   isChecked={editData.status.toLowerCase() === "active"}
                   onChange={handleStatusChange}
                   sx={{
