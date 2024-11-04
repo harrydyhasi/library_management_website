@@ -1,13 +1,9 @@
 // Chakra imports
 import {
   Flex,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import React, {useEffect} from "react";
 import BorrowSlipList from "./components/BorrowSlipList";
-import Projects from "./components/Projects";
-import { borrowSlipData, dashboardTableData } from "../../../variables/general";
-import borrowSlipService from "../../../services/borrow_slip_service"
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBorrowSlips } from '../../../redux/reducers/borrowSlipReducer';
 
@@ -28,11 +24,7 @@ export default function BorrowSlipManagement() {
           captions={["Mã phiếu mượn",  "Ngày mượn", "Ngày trả", "Tình Trạng", ""]}
           data={list}
         />
-        <Projects
-          title={"Projects Table"}
-          captions={["Companies", "Budget", "Status", "Completion", ""]}
-          data={dashboardTableData}
-        />
+        
       </Flex>
     </>
     );

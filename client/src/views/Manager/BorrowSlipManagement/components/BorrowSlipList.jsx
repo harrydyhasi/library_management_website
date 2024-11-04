@@ -74,7 +74,7 @@ const BorrowSlipList = ({ title, captions, data }) => {
             <Text fontSize='lg' color={textColor} fontWeight='bold'>
               {title}
             </Text>
-            <Button colorScheme="green" background="green.400" ml={4} onClick={onOpen}>
+            <Button colorScheme="teal" background="teal" ml={4} onClick={onOpen}>
               <IoMdAdd />
             </Button>
           </Flex>
@@ -84,8 +84,8 @@ const BorrowSlipList = ({ title, captions, data }) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)} // Update search query
                 placeholder="Tìm kiếm ID phiếu mượn"
-                width="250px" // Adjust width as needed
-                ml={4} // Optional: Add margin to the left for spacing
+                width="250px" 
+                ml={4} 
               />
             <Select
               onChange={(e) => setFilter(e.target.value)}
@@ -98,7 +98,7 @@ const BorrowSlipList = ({ title, captions, data }) => {
               <option value="registered">Đã đăng ký ({statusCounts["registered"] || 0})</option>
               <option value="returned">Đã trả ({statusCounts["returned"] || 0})</option>
             </Select>
-            <Button colorScheme="green" background="green.400" ml={2}>
+            <Button colorScheme="teal" background="teal" ml={2}>
               <Flex color="white" cursor="pointer" align="center" p="5px" onClick={handleClickReset}>
                 <Icon as={GrPowerReset} me="4px" />     
               </Flex>

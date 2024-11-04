@@ -17,6 +17,7 @@ import {
   useToast,
   Box,
   IconButton,
+  FormErrorMessage
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 
@@ -41,6 +42,8 @@ const BorrowSlipModal = ({
     books: [] // Add a field for borrowed books
   });
 
+  const [dateError, setDateError] = useState(''); // State for date error
+
   // Reset form data
   useEffect(() => {
     if (isOpen && mode === 'edit' && initialData) {
@@ -61,7 +64,7 @@ const BorrowSlipModal = ({
         status: 'borrowed',
         user_id: '',
         manager_id: '',
-        books: ["abc", "cbs"], // Initialize as empty for new entries
+        books: [], // Initialize as empty for new entries
       });
     }
   }, [isOpen, mode, initialData]);
@@ -79,6 +82,18 @@ const BorrowSlipModal = ({
         ...prevData,
         [name]: value,
       }));
+    }
+
+    // Validate that return_date is later than borrowed_date
+    if (name === 'return_date') {
+      const borrowedDate = new Date(formData.borrowed_date);
+      const returnDate = new Date(value);
+
+      if (returnDate < borrowedDate) {
+        setDateError('Ngày trả phải lớn hơn ngày mượn');
+      } else {
+        setDateError('');
+      }
     }
   };
 
@@ -111,23 +126,28 @@ const BorrowSlipModal = ({
 
   const handleSubmit =   (e) => {
     e.preventDefault();
-    console.log(formData)
-    onSubmit(formData);
-    const title = mode === 'add' ? 'Thêm thành công' : 'Cập nhật thành công';
-    toast({
-      title: title,
-      position: "bottom-right",
-      isClosable: true,
-      status: "success"
-    });
-    onClose(); // Close modal
+    if (dateError){
+      return
+    }
+    else {
+      onSubmit(formData);
+      const title = mode === 'add' ? 'Thêm thành công' : 'Cập nhật thành công';
+      toast({
+        title: title,
+        position: "bottom-right",
+        isClosable: true,
+        status: "success"
+      });
+      onClose(); // Close modal
+    }
+    
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}
       isCentered
       motionPreset='slideInBottom'
-      size='lg'
+      size='xl'
       scrollBehavior='inside'>
       <ModalOverlay />
       <ModalContent>
@@ -170,7 +190,7 @@ const BorrowSlipModal = ({
               />
             </FormControl>
             {/* Return Date */}
-            <FormControl mb="4" isRequired>
+            <FormControl mb="4" isRequired isInvalid={!!dateError}>
               <FormLabel>Ngày trả</FormLabel>
               <Input
                 type="date"
@@ -178,6 +198,7 @@ const BorrowSlipModal = ({
                 value={formData.return_date}
                 onChange={handleChange}
               />
+              {dateError && <FormErrorMessage>{dateError}</FormErrorMessage>}
             </FormControl>
             {/* Status */}
             <FormControl mb="4" isRequired>
@@ -209,7 +230,7 @@ const BorrowSlipModal = ({
               {formData.books.map((book, index) => (
                 <Box key={index} borderWidth="1px" borderRadius="lg" p="4" mb="2">
                   <Flex mb="2">
-                    <FormControl flex="1" mr="2">
+                    <FormControl flex="1" mr="2" isRequired>
                       <FormLabel htmlFor={`book-title-${index}`}>Mã sách</FormLabel>
                       <Flex>
                       <Input
