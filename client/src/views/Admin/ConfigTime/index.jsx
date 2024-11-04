@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchConfig, updateConfig, selectConfig, selectLoading, selectError } from '../../../redux/reducers/config'; // Adjust the import path as necessary
+import { fetchConfig, updateConfig, selectConfig, selectLoading, selectError } from '../../../redux/reducers/configReducer'; // Adjust the import path as necessary
 
 function ConfigTime() {
   const dispatch = useDispatch();

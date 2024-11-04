@@ -4,7 +4,7 @@ import authReducer from './auth_reducer';
 import userReducer from './user_reducer';
 import categoryReducer from './category_reducer';
 import borrowSlipReducer from './borrowSlipReducer';
-import configReducer from './config';
+import configReducer from './configReducer';
 
 
 const rootReducer = combineReducers({

@@ -1,27 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Define an initial state
 const initialState = {
   config: null,
   loading: false,
   error: null,
 };
 
-// Async thunk to fetch configuration
+
 export const fetchConfig = createAsyncThunk('config/fetchConfig', async () => {
-  const response = await axios.get('http://localhost:3000/api/configs'); // Adjust the endpoint as necessary
-  console.log(response)
+  const response = await axios.get('http://localhost:3000/api/configs'); 
   return response.data.data; 
 });
 
-// Async thunk to update configuration
+
 export const updateConfig = createAsyncThunk('config/updateConfig', async (config) => {
-  const response = await axios.put(`http://localhost:3000/api/configs`, config); // Adjust the endpoint as necessary
-  return response.data.data; // Return the updated config data
+  const response = await axios.put(`http://localhost:3000/api/configs`, config); 
+  return response.data.data; 
 });
 
-// Create the slice
+
 const configSlice = createSlice({
   name: 'config',
   initialState,
