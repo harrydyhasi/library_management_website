@@ -8,7 +8,7 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from 'react';
-import defaultImage from '../../../../../public/images/image.png';
+import defaultImage from '/images/image.png?url';
 import DetailBook from "./DetailBook";
 import Card from "components/Card/Card";
 

@@ -16,7 +16,7 @@ import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 import { deleteBook } from '../../../../redux/actions/book_action'; 
 import { useDispatch } from 'react-redux';
 import CustomToast from '../../../../components/Toast/CustomToast';
-import defaultImage from '/images/image.png';
+import defaultImage from '/images/image.png?url';
 
 function TableBook({ id, name, quantity, position, author, publisher, description, category, image, onEdit }) { 
   const textColor = useColorModeValue("gray.700", "white");
