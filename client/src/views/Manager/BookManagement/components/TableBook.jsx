@@ -16,7 +16,7 @@ import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 import { deleteBook } from '../../../../redux/actions/book_action'; 
 import { useDispatch } from 'react-redux';
 import CustomToast from '../../../../components/Toast/CustomToast';
-import defaultImage from '../../../../../public/images/image.png';
+import defaultImage from '/images/image.png';
 
 function TableBook({ id, name, quantity, position, author, publisher, description, category, image, onEdit }) { 
   const textColor = useColorModeValue("gray.700", "white");
@@ -48,7 +48,7 @@ function TableBook({ id, name, quantity, position, author, publisher, descriptio
       <Td pl="0px">
         <Flex alignItems="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
         <Avatar 
-          src={image ? `../../../../..${image}` : defaultImage} 
+          src={image ? `${image}` : defaultImage} 
           w="60px" 
           h="60px"
           borderRadius="12px" 

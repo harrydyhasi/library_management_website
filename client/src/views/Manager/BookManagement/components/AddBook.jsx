@@ -20,6 +20,7 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Flex,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createBook, updateBook } from '../../../../redux/actions/book_action';
@@ -160,46 +161,55 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
         <ModalHeader>{currentBook ? 'Chỉnh sửa sách' : 'Thêm sách mới'}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl mt={4}>
-            <FormLabel>Hình ảnh</FormLabel>
-            <InputGroup>
-              <Input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleImageChange} 
-                display="none" 
-                id="file-upload" 
-              />
-              <Button 
-              as="label" 
-              htmlFor="file-upload" 
-              colorScheme='teal'
-              borderColor='teal.300'
-              color='teal.300'
-              variant='outline'
-              p='8px 20px'>
-                Chọn hình ảnh
-              </Button>
+        <FormControl mt={4}>
+              <FormLabel>Hình ảnh</FormLabel>
               {bookImage && (
-                <Text ml={4} mt={1}>
-                  {bookImage.name} 
-                </Text>
+                  <Flex justifyContent='center' width= '100%'>
+                      <Image 
+                          src={typeof bookImage === 'string' ? bookImage : URL.createObjectURL(bookImage)} 
+                          alt="Preview" 
+                          mt={4} 
+                          boxSize="250px" 
+                          objectFit="cover" 
+                          border="1px" 
+                          borderColor="gray.200"
+                          borderRadius="12px" 
+                          mb={4}
+                      />
+                  </Flex>
               )}
-            </InputGroup>
+              <InputGroup>
+                      <Input 
+                          type="file" 
+                          accept="image/*" 
+                          onChange={handleImageChange} 
+                          display="none" 
+                          id="file-upload" 
+                      />
+                      <Flex direction="column" alignItems="center" justifyContent='center'  width='100%'>
+                          <Button 
+                              as="label" 
+                              htmlFor="file-upload" 
+                              colorScheme='teal'
+                              borderColor='teal'
+                              color='teal'
+                              variant='outline'
+                              p='8px 20px'>
+                              Chọn ảnh
+                          </Button>
+                          {bookImage && (
+                              <Text mt={4} textAlign="center">
+                                  {bookImage.name} 
+                              </Text>
+                          )}
+                      </Flex>
+                      
+                  </InputGroup>
           </FormControl>
-          {bookImage && (
-            <Image 
-              src={typeof bookImage === 'string' ? bookImage : URL.createObjectURL(bookImage)} 
-              alt="Preview" 
-              mt={4} 
-              boxSize="100px" 
-              objectFit="cover" 
-              border="1px" 
-              borderColor="gray.200"
-            />
-          )}
+
+          
           <FormControl>
-            <FormLabel mt={4}>Tên sách</FormLabel>
+            <FormLabel>Tên sách</FormLabel>
             <Input
               value={bookName}
               onChange={(e) => setBookName(e.target.value)}
@@ -277,7 +287,14 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="outline" mr={3} onClick={onClose}>
+          <Button 
+            colorScheme='teal.500'
+            borderColor='teal.500'
+            color='teal.500'
+            variant='outline'
+            p='8px 20px'
+            mr='32px'
+           onClick={onClose}>
             Hủy
           </Button>
           <Button colorScheme="teal" onClick={handleSubmit}>

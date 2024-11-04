@@ -109,7 +109,13 @@ const AddCategoryDialog = ({ isOpen, onClose, currentCategory }) => {
           {error && <Text color="red.500" mt={2}>{error}</Text>} 
         </ModalBody>
         <ModalFooter>
-          <Button variant="outline" mr={3} onClick={onClose}>
+          <Button 
+            colorScheme='teal.500'
+            borderColor='teal.500'
+            color='teal.500'
+            variant='outline'
+            p='8px 20px'
+            mr='32px' onClick={onClose}>
             Hủy
           </Button>
           <Button colorScheme="teal" onClick={handleSubmit}>
