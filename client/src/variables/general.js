@@ -494,11 +494,18 @@ export const olderTransactions = [
 export const borrowSlipData = [
   {
     _id: "67270d0a1ec835244766edf6",  
-    borrowed_date: "11/03/2024",  
-    return_date: "11/03/2024",
+    borrowed_date: "",  
+    return_date: "",
     status: "borrowed",  
     user: "Nguyễn Anh Duy",
     manager: "Nguyễn Văn A"
   },
-  
+  {
+    _id: "67270d0a1ec835244766edf7",  
+    borrowed_date: "",  
+    return_date: "",
+    status: "borrowed",  
+    user: "Nguyễn Anh Duy",
+    manager: "Nguyễn Văn A"
+  },
 ];

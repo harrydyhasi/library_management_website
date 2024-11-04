@@ -7,6 +7,7 @@ import {
   Thead,
   Tr,
   useColorModeValue,
+  useDisclosure,
   Flex,
   Button,
   Icon
@@ -17,17 +18,35 @@ import Card from "components/Card/Card";
 import CardBody from "components/Card/CardBody";
 import CardHeader from "components/Card/CardHeader";
 import BorrowSlipRow from "./BorrowSlipRow";
+import BorrowSlipModal from './BorrowSlipModal';
+
+import { useDispatch } from 'react-redux';
+import { addBorrowSlip, fetchBorrowSlips } from '../../../../redux/reducers/borrowSlipReducer';
+
+
 
 const BorrowSlipList = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
+  
+   // Modal state
+   const { isOpen, onOpen, onClose } = useDisclosure();
+
+   const dispatch = useDispatch();
+
+   // Handler to be called on form submission
+   const handleAdd = async (data) => {
+      await dispatch(addBorrowSlip(data));
+      console.log('Adding New Borrow Slip:', data);
+  };
   return (
+    <>
     <Card overflowX={{ sm: "scroll", xl: "hidden" }}>
       <CardHeader p='6px 0px 22px 0px'>
       <Flex justify='space-between' align='center' minHeight='60px' w='100%'>
           <Text fontSize='lg' color={textColor} fontWeight='bold'>
             {title}
           </Text>
-          <Button colorScheme="green" background= "green.400"  ml={4}>
+          <Button colorScheme="green" background= "green.400"  ml={4} onClick={onOpen}>
               <Text fontSize='sm' color="white" fontWeight='bold'>
             Thêm phiếu mượn
           </Text>
@@ -51,13 +70,13 @@ const BorrowSlipList = ({ title, captions, data }) => {
             {data.map((row) => {
               return (
                 <BorrowSlipRow
-                  key={`${row._id}`}
+                  key={row._id}
                   _id = {row._id}
-                  user={row.user}
+                  user_id={row.user_id}
                   borrowed_date = {row.borrowed_date}
                   return_date = {row.return_date}
                   status = {row.status}
-                  manager = {row.manager}
+                  manager_id = {row.manager_id}
                 />
               );
             })}
@@ -65,6 +84,14 @@ const BorrowSlipList = ({ title, captions, data }) => {
         </Table>
       </CardBody>
     </Card>
+
+    <BorrowSlipModal
+        isOpen={isOpen}
+        onClose={onClose}
+        mode="add" // Set to "add" mode
+        onSubmit={handleAdd}
+      />
+      </>
   );
 };
 
