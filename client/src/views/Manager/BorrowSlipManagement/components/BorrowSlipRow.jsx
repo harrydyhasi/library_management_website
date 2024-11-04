@@ -27,7 +27,7 @@ import { formatDateToDDMMYYY } from '../../../../utils/formatters/date'
 
 
 function BorrowSlipRow(props) {
-  const {_id, borrowed_date, return_date,status,user_id,manager_id} = props;
+  const {_id, borrowed_date, return_date,status,user_id,manager_id, books} = props;
   
   // Colors
   const textColor = useColorModeValue("gray.700", "white");
@@ -121,7 +121,7 @@ function BorrowSlipRow(props) {
         isOpen={isOpenEdit}
         onClose={onCloseEdit}
         mode="edit" // or "add" when needed
-        initialData={{ _id, borrowed_date, return_date, status, user_id, manager_id}}
+        initialData={{ _id, borrowed_date, return_date, status, user_id, manager_id, books}}
         onSubmit={handleEdit}
       />
 

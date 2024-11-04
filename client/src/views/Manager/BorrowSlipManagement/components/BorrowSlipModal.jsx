@@ -14,21 +14,23 @@ import {
   Select,
   Flex,
   Text,
-  useToast
+  useToast,
+  Box,
+  IconButton,
 } from "@chakra-ui/react";
+import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 
-import { formatDateToYYYYMMDD } from '../../../../utils/formatters/date'
-
+import { formatDateToYYYYMMDD } from '../../../../utils/formatters/date';
 
 const BorrowSlipModal = ({ 
   isOpen, 
   onClose, 
   mode, // add or edit
   initialData, // for editing
-  onSubmit // to handle submiting
+  onSubmit // to handle submitting
 }) => {
   const now = new Date().toISOString().split("T")[0];
-  const toast = useToast()
+  const toast = useToast();
   const [formData, setFormData] = useState({
     _id: '',
     borrowed_date: '', 
@@ -36,9 +38,10 @@ const BorrowSlipModal = ({
     status: '',
     user_id: '', 
     manager_id: '',
+    books: [] // Add a field for borrowed books
   });
 
-  // reset form data
+  // Reset form data
   useEffect(() => {
     if (isOpen && mode === 'edit' && initialData) {
       setFormData({
@@ -48,6 +51,7 @@ const BorrowSlipModal = ({
         status: initialData.status || '',
         user_id: initialData.user_id || '',
         manager_id: initialData.manager_id || '',
+        books: initialData.books || [], // Initialize borrowed books
       });
     } else if (isOpen && mode === 'add') {
       setFormData({
@@ -57,54 +61,91 @@ const BorrowSlipModal = ({
         status: 'borrowed',
         user_id: '',
         manager_id: '',
+        books: ["abc", "cbs"], // Initialize as empty for new entries
       });
     }
   }, [isOpen, mode, initialData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "status" && value === "returned") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        return_date: now, 
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  // Handle adding a new book
+  const handleAddBook = () => {
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      books: [...prevData.books, '']
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Handle change for each book (work with string directly)
+  const handleBookChange = (index, e) => {
+    const { value } = e.target;
+    const updatedBooks = formData.books.map((book, i) => (i === index ? value : book));
+    setFormData((prevData) => ({
+      ...prevData,
+      books: updatedBooks,
+    }));
+  };
+
+  // Handle removing a book
+  const handleRemoveBook = (index) => {
+    const updatedBooks = formData.books.filter((_, i) => i !== index);
+    setFormData((prevData) => ({
+      ...prevData,
+      books: updatedBooks,
+    }));
+  };
+
+  const handleSubmit =   (e) => {
     e.preventDefault();
+    console.log(formData)
     onSubmit(formData);
     const title = mode === 'add' ? 'Thêm thành công' : 'Cập nhật thành công';
     toast({
       title: title,
       position: "bottom-right",
       isClosable: true,
-      status:"success"
-    })
-    onClose(); // close modal
+      status: "success"
+    });
+    onClose(); // Close modal
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}
-    isCentered
-    motionPreset='slideInBottom'
-    size='lg'
-    scrollBehavior='inside'>
+      isCentered
+      motionPreset='slideInBottom'
+      size='lg'
+      scrollBehavior='inside'>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{mode === 'edit' ? 'Chỉnh sửa phiếu mượn' : 'Thêm phiếu mượn'}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={handleSubmit}>
-          {mode === 'edit' ? (
-          <FormControl mb="4" >
-            <FormLabel>Mã phiếu mượn</FormLabel>
-            <Input
-              name="_id"
-              value={formData._id}
-              onChange={handleChange}
-              readOnly 
-            />
-          </FormControl>
-        ) : null}
+            {mode === 'edit' ? (
+              <FormControl mb="4">
+                <FormLabel>Mã phiếu mượn</FormLabel>
+                <Input
+                  name="_id"
+                  value={formData._id}
+                  onChange={handleChange}
+                  readOnly 
+                />
+              </FormControl>
+            ) : null}
             {/* Borrower */}
             <FormControl mb="4" isRequired>
               <FormLabel>Thông tin người mượn</FormLabel>
@@ -116,14 +157,7 @@ const BorrowSlipModal = ({
                   placeholder="Mã người mượn"
                   flex="1" 
                 />
-                {/* <Input
-                  name="user_fullName"
-                  value={formData.user_fullName} 
-                  onChange={handleChange}
-                  placeholder="Họ và tên"
-                  flex="1" 
-                /> */}
-            </Flex>
+              </Flex>
             </FormControl>
             {/* Borrowed Date */}
             <FormControl mb="4" isRequired>
@@ -165,8 +199,61 @@ const BorrowSlipModal = ({
                 name="manager_id"
                 value={formData.manager_id}
                 onChange={handleChange}
-                
               />
+            </FormControl>
+            
+            {/* Borrowed Books Section */}
+            <FormControl mb="4">
+              <FormLabel>Danh sách mượn</FormLabel>
+              
+              {formData.books.map((book, index) => (
+                <Box key={index} borderWidth="1px" borderRadius="lg" p="4" mb="2">
+                  <Flex mb="2">
+                    <FormControl flex="1" mr="2">
+                      <FormLabel htmlFor={`book-title-${index}`}>Mã sách</FormLabel>
+                      <Flex>
+                      <Input
+                        id={`book-${index}`}
+                        value={book}
+                        onChange={(e) => handleBookChange(index, e)}
+                        placeholder="Nhập mã sách"
+                      />
+                      <IconButton ml="2"
+                        icon={<DeleteIcon />}
+                        colorScheme="red"
+                        onClick={() => handleRemoveBook(index)}
+                        aria-label="Xóa sách"
+                  />
+                  </Flex>
+                    </FormControl>
+                    {/* <FormControl flex="1" mr="2">
+                      <FormLabel htmlFor={`book-author-${index}`}>Tên sách</FormLabel>
+                      <Input
+                        id={`book-author-${index}`}
+                        name="author"
+                        value={book.author}
+                        onChange={(e) => handleBookChange(index, e)}
+                        placeholder="Nhập tác giả sách"
+                      />
+                    </FormControl>
+                    <FormControl flex="1">
+                      <FormLabel htmlFor={`book-isbn-${index}`}>ISBN</FormLabel>
+                      <Input
+                        id={`book-isbn-${index}`}
+                        name="isbn"
+                        value={book.isbn}
+                        onChange={(e) => handleBookChange(index, e)}
+                        placeholder="Nhập ISBN sách"
+                      />
+                    </FormControl> */}
+                    
+                  </Flex>
+                  
+                </Box>
+              ))}
+              <Button onClick={handleAddBook} colorScheme="teal" leftIcon={<AddIcon />} mb="2">
+                Thêm sách
+              </Button>
             </FormControl>
 
             <ModalFooter>

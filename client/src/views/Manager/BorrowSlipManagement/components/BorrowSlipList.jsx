@@ -16,6 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
 import { GrPowerReset } from "react-icons/gr";
+import { IoIosAddCircle } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 // Custom components
 import Card from "components/Card/Card";
 import CardBody from "components/Card/CardBody";
@@ -73,9 +75,7 @@ const BorrowSlipList = ({ title, captions, data }) => {
               {title}
             </Text>
             <Button colorScheme="green" background="green.400" ml={4} onClick={onOpen}>
-              <Text fontSize='sm' color="white" fontWeight='bold'>
-                Thêm phiếu mượn
-              </Text>
+              <IoMdAdd />
             </Button>
           </Flex>
           <Flex justify='space-between'>
@@ -131,6 +131,7 @@ const BorrowSlipList = ({ title, captions, data }) => {
                   return_date={row.return_date}
                   status={row.status}
                   manager_id={row.manager_id}
+                  books={row.books}
                 />
               ))}
             </Tbody>
