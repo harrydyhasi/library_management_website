@@ -17,14 +17,14 @@ import EditUserModal from "./EditUserModal";
 import DeleteUserDialog from "./DeleteUserDialog";
 
 function TableRow(props) {
-  const { id, fullName, email, phone, status, role, logo, password } = props;
+  const { id, fullName, email, phone, status, role, logo } = props;
   const textColor = useColorModeValue("gray.700", "white");
   const bgStatus = useColorModeValue("gray.400", "#1a202c");
   const colorStatus = useColorModeValue("white", "gray.400");
 
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
-  const [editData, setEditData] = useState({ fullName, email, phone, role, status, password });
+  const [editData, setEditData] = useState({ fullName, email, phone, role, status });
 
   const dispatch = useDispatch();
   const toast = useToast();
@@ -45,7 +45,7 @@ function TableRow(props) {
       await dispatch(updateUser(id, editData)); 
       toast({
         title: "Thành công.",
-        description: "Thông tin người dùng đã được cập nhật!",
+        description: "Thông tin người dùng đã được chỉnh sửa!",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -53,9 +53,9 @@ function TableRow(props) {
       });
       onEditClose();
     } catch (error) {
-      console.error("Chỉnh sửa thông tin thất bại:", error);
+      console.error("Error updating user:", error);
       toast({
-        title: "Chỉnh sửa thông tin thất bại.",
+        title: "Error updating user.",
         description: error.message,
         status: "error",
         duration: 3000,
@@ -113,10 +113,9 @@ function TableRow(props) {
 
       <Td>
         <Text fontSize="sm" color={textColor} fontWeight="bold">
-          {role === "admin" ? 'Admin' : role === "manager" ? "Quản lý thư viện" : "Sinh viên"}
+          {role}
         </Text>
       </Td>
-
 
       <Td>
         <Text fontSize="sm" color={textColor} fontWeight="bold">

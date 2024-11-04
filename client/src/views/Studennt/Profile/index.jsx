@@ -58,7 +58,7 @@ function Profile() {
             title={'Profile Information'}
             description={user.description || 'Default description...'}
             name={user.name || 'Esthera Jackson'}
-            mobile={user.phone || '(44) 123 1234 123'}
+            mobile={user.mobile || '(44) 123 1234 123'}
             email={user.email || 'unknown@example.com'}
             location={user.location || 'United States'}
           />

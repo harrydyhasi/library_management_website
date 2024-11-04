@@ -21,6 +21,7 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false); 
+  const [accountLocked, setAccountLocked] = useState(false); // New state for locked account
 
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.400", "white");
@@ -36,7 +37,6 @@ function SignIn() {
     if (storedPassword) setPassword(storedPassword);
   }, []);
 
-
   const handleSignIn = async (e) => {
     e.preventDefault();
     console.log("Signing in with:", email, password);
@@ -50,10 +50,25 @@ function SignIn() {
       localStorage.removeItem("rememberedPassword");
     }
   };
-/////////////
-  if (user) {
-    return <Redirect to="/manager/dashboard" />;
-  }
+
+  useEffect(() => {
+    if (user) {
+      if (user.status === 'locked') {
+        setAccountLocked(true); 
+      } else {
+        setAccountLocked(false); 
+      }
+    }
+  }, [user]);
+
+  if (user && user.status === 'active') {
+    if (user.role === 'admin') {
+        return <Redirect to="/admin/dashboard" />;
+      } else if (user.role === 'manager') {
+        return <Redirect to="/manager/dashboard" />;
+      } else if (user.role === 'student') {
+        return <Redirect to="/student/dashboard" />;
+    }
 
   const handleRedirectToSignUp = () => {
     history.push("/auth/signup"); 
@@ -155,8 +170,9 @@ function SignIn() {
                 SIGN IN
               </Button>
               {signin_error && <Text color="red.500">{signin_error}</Text>} 
+              {accountLocked && <Text color="red.500">Tài khoản của bạn đã bị khóa. Liên hệ quản trị viên để được hỗ trợ.</Text>} {/* Message for locked accounts */}
             </FormControl>
-            <Flex
+            {/* <Flex
               flexDirection="column"
               justifyContent="center"
               alignItems="center"
@@ -176,7 +192,7 @@ function SignIn() {
                   Sign Up
                 </Link>
               </Text>
-            </Flex>
+            </Flex> */}
           </Flex>
         </Flex>
         <Box

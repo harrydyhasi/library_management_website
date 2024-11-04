@@ -34,7 +34,6 @@ import { logoutUser } from '../../redux/actions/auth_action';
 import { Redirect } from "react-router-dom/cjs/react-router-dom";
 
 export default function HeaderLinks(props) {
-  // eslint-disable-next-line no-unused-vars, react/prop-types
   const { variant, children, fixed, secondary, onOpen, ...rest } = props;
   const [isLogout, setIsLogout] = useState(false); 
 
@@ -74,7 +73,7 @@ export default function HeaderLinks(props) {
       alignItems="center"
       flexDirection="row"
     >
-      <InputGroup
+      {/* <InputGroup
         cursor="pointer"
         bg={inputBg}
         borderRadius="15px"
@@ -116,7 +115,7 @@ export default function HeaderLinks(props) {
           placeholder="Type here..."
           borderRadius="inherit"
         />
-      </InputGroup>
+      </InputGroup> */}
         <Button
           onClick={navigateToProfile}
           ms="0px"
@@ -149,7 +148,7 @@ export default function HeaderLinks(props) {
           color={navbarIcon}
           variant="transparent-with-icon"
         >
-          <Text display={{ sm: "none", md: "flex" }}>Sign out</Text>
+          <Text display={{ sm: "none", md: "flex" }}>Đăng xuất</Text>
         </Button>
       {/* </NavLink> */}
       <SidebarResponsive
