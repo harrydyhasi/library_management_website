@@ -14,9 +14,11 @@ import {
   Select,
   Flex,
   Text,
+  useToast
 } from "@chakra-ui/react";
 
 import { formatDateToYYYYMMDD } from '../../../../utils/formatters/date'
+
 
 const BorrowSlipModal = ({ 
   isOpen, 
@@ -26,6 +28,7 @@ const BorrowSlipModal = ({
   onSubmit // to handle submiting
 }) => {
   const now = new Date().toISOString().split("T")[0];
+  const toast = useToast()
   const [formData, setFormData] = useState({
     _id: '',
     borrowed_date: '', 
@@ -54,7 +57,6 @@ const BorrowSlipModal = ({
         status: 'borrowed',
         user_id: '',
         manager_id: '',
-        
       });
     }
   }, [isOpen, mode, initialData]);
@@ -69,8 +71,14 @@ const BorrowSlipModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting update for ID:", formData._id);
     onSubmit(formData);
+    const title = mode === 'add' ? 'Thêm thành công' : 'Cập nhật thành công';
+    toast({
+      title: title,
+      position: "bottom-right",
+      isClosable: true,
+      status:"success"
+    })
     onClose(); // close modal
   };
 

@@ -16,10 +16,9 @@ export const fetchBorrowSlips = createAsyncThunk(
 
 export const addBorrowSlip = createAsyncThunk(
   'borrowSlips/addBorrowSlip',
-  async (newSlip, {dispatch, rejectWithValue }) => {
+  async (newSlip, {rejectWithValue }) => {
     try {
       const response = await borrowSlipService.add(newSlip); 
-      dispatch(fetchBorrowSlips())
       return response.data; 
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -29,10 +28,10 @@ export const addBorrowSlip = createAsyncThunk(
 
 export const updateBorrowSlip = createAsyncThunk(
   'borrowSlips/updateBorrowSlip',
-  async ({ id, updatedData }, { dispatch, rejectWithValue }) => {
+  async ({ id, updatedData }, {rejectWithValue }) => {
     try {
       const response = await borrowSlipService.update(id, updatedData);
-      dispatch(fetchBorrowSlips())
+      // dispatch(fetchBorrowSlips())
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -75,7 +74,8 @@ const borrowSlipSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(addBorrowSlip.fulfilled, (state, action) => {
-        state.list.push(action.payload); 
+        const newBorrowSlip = action.payload.data;
+        state.list.push(newBorrowSlip); 
       })
       .addCase(updateBorrowSlip.pending, (state) => {
         state.loading = true;
@@ -83,9 +83,11 @@ const borrowSlipSlice = createSlice({
       })
       .addCase(updateBorrowSlip.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.list.findIndex(borrowSlip => borrowSlip._id === action.payload._id);
+        const updatedBorrowSlip = action.payload.data;
+        const index = state.list.findIndex(borrowSlip => borrowSlip._id === updatedBorrowSlip._id);
         if (index !== -1) {
-          state.list[index] = action.payload; // Update the specific borrow slip in the list
+          state.list[index] = updatedBorrowSlip; 
+          
         }
       })
       .addCase(updateBorrowSlip.rejected, (state, action) => {

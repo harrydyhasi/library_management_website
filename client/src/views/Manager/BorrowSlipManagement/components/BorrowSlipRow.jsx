@@ -43,8 +43,8 @@ function BorrowSlipRow(props) {
   const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
 
   
-  const handleEdit = async (data) => {
-    await dispatch(updateBorrowSlip({id: _id, updatedData: data }));
+  const handleEdit = (data) => {
+    dispatch(updateBorrowSlip({id: _id, updatedData: data }));
   };
 
   const handleDeleteConfirm = () => {
@@ -76,13 +76,21 @@ function BorrowSlipRow(props) {
       {/* STATUS */}
       <Td>
         <Badge
-          bg={status === "borrowed" ? "green.400" : bgStatus}
+          bg = {status === "borrowed" 
+            ? bgStatus 
+            : status === "registered" 
+            ? "green.400" 
+            : "red.400"}
           color={status === "Online" ? "white" : colorStatus}
           fontSize="16px"
           p="3px 10px"
           borderRadius="8px"
         >
-          {status}
+          {status === "borrowed" 
+          ? "Đang mượn" 
+          : status === "registered" 
+          ? "Đã đăng ký" 
+          : "Đã trả"}
         </Badge>
       </Td>
 
