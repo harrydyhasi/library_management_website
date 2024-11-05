@@ -1,14 +1,12 @@
 
-import Dashboard from "../views/Admin/Dashboard";
 import ConfigTime from "../views/Admin/ConfigTime";
-import Tables from "../views/Admin/Tables";
+import Tables from "../views/Admin/History";
 import Profile from "../views/Admin/Profile";
 import UserManagement from "../views/Admin/UserManagement";
-import { LuSettings2 } from "react-icons/lu";
 import { IoMdPerson } from "react-icons/io";
 import { BsPersonFillGear } from "react-icons/bs";
 import { FaCogs } from "react-icons/fa";
-
+import {ClockIcon} from "../components/Icons/Icons"
 
 var routes = [
   {
@@ -23,6 +21,14 @@ var routes = [
     name: "Thời gian mượn/trả sách",
     icon: <FaCogs color="inherit" />,
     component: ConfigTime,
+
+    layout: "/admin",
+  },
+  {
+    path: "/history",
+    name: "Lịch sử mượn trả sách",
+    icon: <ClockIcon color="inherit" />,
+    component: Tables,
 
     layout: "/admin",
   },
