@@ -13,6 +13,9 @@ import {
   Select, // Import Select for dropdown
   Input,
   Icon,
+  InputGroup,
+  InputLeftElement,
+  IconButton
 } from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
 import { GrPowerReset } from "react-icons/gr";
@@ -24,6 +27,7 @@ import CardBody from "components/Card/CardBody";
 import CardHeader from "components/Card/CardHeader";
 import BorrowSlipRow from "./BorrowSlipRow";
 import BorrowSlipModal from './BorrowSlipModal';
+import { BiSearchAlt } from "react-icons/bi";
 
 import { useDispatch } from 'react-redux';
 import { addBorrowSlip } from '../../../../redux/reducers/borrowSlipReducer';
@@ -31,6 +35,9 @@ import { useState } from 'react';
 
 const BorrowSlipList = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
+  const searchIconColor = useColorModeValue("gray.700", "gray.200");
+  const inputBg = useColorModeValue("white", "gray.800");
+  const mainTeal = useColorModeValue("teal.300", "teal.300");
   
   // Modal state
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -68,25 +75,47 @@ const BorrowSlipList = ({ title, captions, data }) => {
   return (
     <>
       <Card overflowX={{ sm: "scroll", xl: "hidden" }}>
-        <CardHeader p='6px 0px 22px 0px'>
-        <Flex direction='column' w='100%'>
+        <CardHeader>
+        <Flex direction='column' w='100%' p='12px 0px 22px 20px'>
         <Flex justify='space-between' align='center' minHeight='60px' w='100%'>
-            <Text fontSize='lg' color={textColor} fontWeight='bold'>
+            <Text fontSize='xl' color={textColor} fontWeight='bold' pl='8px'>
               {title}
             </Text>
-            <Button colorScheme="teal" background="teal" ml={4} onClick={onOpen}>
-              <IoMdAdd />
+            <Button colorScheme="teal" background="teal.300" ml={4} onClick={onOpen}>
+              Thêm phiếu mượn
             </Button>
           </Flex>
           <Flex justify='space-between'>
           <Flex>
-          <Input
+
+          <Flex align='center' w='100%' mb="10px" p='0px' my='20px'>
+          <InputGroup
+              bg={inputBg}
+              borderRadius="15px"
+              w="300px"
+              _focus={{ borderColor: mainTeal }}
+              _active={{ borderColor: mainTeal }}
+            >
+              <InputLeftElement>
+                <IconButton
+                  bg="inherit"
+                  borderRadius="inherit"
+                  _hover="none"
+                  _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
+                  _focus={{ boxShadow: "none" }}
+                  icon={<BiSearchAlt color={searchIconColor} w="15px" h="15px" />}
+                />
+              </InputLeftElement>
+              <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)} // Update search query
                 placeholder="Tìm kiếm ID phiếu mượn"
-                width="250px" 
-                ml={4} 
+                fontSize="xs"
+                py="11px"
+                borderRadius="inherit"
+
               />
+            </InputGroup>
             <Select
               onChange={(e) => setFilter(e.target.value)}
               width="200px" 
@@ -98,19 +127,20 @@ const BorrowSlipList = ({ title, captions, data }) => {
               <option value="registered">Đã đăng ký ({statusCounts["registered"] || 0})</option>
               <option value="returned">Đã trả ({statusCounts["returned"] || 0})</option>
             </Select>
-            <Button colorScheme="teal" background="teal" ml={2}>
+            <Button colorScheme="teal" background="teal.300" ml={4}>
               <Flex color="white" cursor="pointer" align="center" p="5px" onClick={handleClickReset}>
                 <Icon as={GrPowerReset} me="4px" />     
               </Flex>
             </Button>
           </Flex>
           </Flex>
-          
+          </Flex>
         </Flex>
           
           
         </CardHeader>
         <CardBody>
+          <Flex direction="column" w='100%' p='12px 0px 22px 20px'>
           <Table variant='simple' color={textColor}>
             <Thead>
               <Tr my='.8rem' pl='0px' color='gray.400'>
@@ -136,6 +166,7 @@ const BorrowSlipList = ({ title, captions, data }) => {
               ))}
             </Tbody>
           </Table>
+          </Flex>
         </CardBody>
       </Card>
 

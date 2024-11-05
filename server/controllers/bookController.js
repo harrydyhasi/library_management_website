@@ -4,7 +4,8 @@ const generateBookId = require('../middlewares/bookMiddleware');
 
 const addBook = async (req, res) => {
     const { category_id, name, quantity, position, author, publisher, description } = req.body;
-    const image = req.file ? `/images/${req.file.filename}` : null; 
+    const image = req.files.image ? `/images/${req.files.image[0].filename}` : null; 
+    const pdf = req.files.pdf ? `/pdfs/${req.files.pdf[0].filename}` : null;
 
     if (!category_id || !name || !quantity || !position || !author || !publisher) {
         return res.status(400).json({ message: 'All fields are required' });
@@ -24,16 +25,17 @@ const addBook = async (req, res) => {
             author,
             publisher,
             description,
-            image 
+            image,
+            pdf 
         });
 
         await newBook.save();
         return res.status(200).json({ message: 'Book created successfully', data: newBook });
     } catch (error) {
+        console.error("Error adding book:", error);
         return res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-
 
 const updateBook = async (req, res) => {
     const { category_id, name, quantity, position, author, publisher, description } = req.body;
@@ -62,8 +64,13 @@ const updateBook = async (req, res) => {
         book.publisher = publisher;
         book.description = description;
 
-        if (req.file) {
-            book.image = `/images/${req.file.filename}`; 
+        if (req.files && req.files.image) {
+            book.image = `/images/${req.files.image[0].filename}`; 
+        }
+
+        // Cập nhật PDF nếu có
+        if (req.files && req.files.pdf) {
+            book.pdf = `/pdfs/${req.files.pdf[0].filename}`; 
         }
 
         if (book.category_id.toString() !== category._id.toString()) {

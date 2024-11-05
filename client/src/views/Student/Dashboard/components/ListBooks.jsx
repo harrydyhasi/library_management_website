@@ -161,6 +161,7 @@ const ListBook = ({ title }) => {
                             description={book.description}
                             category={book.category_id}
                             image={book.image}
+                            pdf={book.pdf}
                         />
                     ))}
                 </Grid>
