@@ -10,13 +10,13 @@ export const fetchAllUsers = () => {
 }
 
 export const createUser = (user) => {
-  return api.post('/users', user); // Assuming you're using POST for creation
+  return api.post('/users', user); 
 }
 
 export const updateUser = (userId, userData) => {
-  return api.put(`/users/${userId}`, userData); // Assuming you're using PUT for updates
+  return api.put(`/users/${userId}`, userData); 
 }
 
 export const deleteUser = (userId) => {
-  return api.delete(`/users/${userId}`); // Assuming you're using DELETE for removal
+  return api.delete(`/users/${userId}`); 
 }

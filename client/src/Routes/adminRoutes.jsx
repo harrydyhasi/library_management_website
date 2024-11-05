@@ -10,7 +10,7 @@ import { BsPersonFillGear } from "react-icons/bs";
 import { FaCogs } from "react-icons/fa";
 
 
-var dashRoutes = [
+var routes = [
   {
     path: "/dashboard",
     name: "Quản lý người dùng",
@@ -34,7 +34,6 @@ var dashRoutes = [
       {
         path: "/profile",
         name: "Profile",
-        rtlName: "لوحة القيادة",
         icon: <IoMdPerson color="inherit" />,
         secondaryNavbar: true,
         component: Profile,
@@ -43,4 +42,4 @@ var dashRoutes = [
     ],
   },
 ];
-export default dashRoutes;
+export default routes;
