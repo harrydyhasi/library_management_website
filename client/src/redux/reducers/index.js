@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   category: categoryReducer,
   borrowSlips: borrowSlipReducer,
-  config: configReducer
+  config: configReducer,
   book: bookReducer,
   // other reducers...
 });

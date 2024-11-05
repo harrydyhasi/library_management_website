@@ -7,6 +7,7 @@ import UserManagement from "../views/Admin/UserManagement";
 import { LuSettings2 } from "react-icons/lu";
 import { IoMdPerson } from "react-icons/io";
 import { BsPersonFillGear } from "react-icons/bs";
+import { FaCogs } from "react-icons/fa";
 
 
 var dashRoutes = [
