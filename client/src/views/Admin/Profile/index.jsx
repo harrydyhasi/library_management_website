@@ -11,7 +11,7 @@ import PlatformSettings from "./components/PlatformSettings";
 import ProfileInformation from "./components/ProfileInformation";
 import Projects from "./components/Projects";
 
-import { fetchUser } from '../../../redux/actions/user_action';
+
 
 function Profile() {
   const dispatch = useDispatch();

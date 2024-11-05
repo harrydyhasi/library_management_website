@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { formatDateToYYYYMMDD, formatWithThousandsSeparator } from '../../../../utils/formatters/date';
+import { fetchUser } from '.././../../../redux/actions/user_action';
 
 const BorrowSlipModal = ({ 
   isOpen, 

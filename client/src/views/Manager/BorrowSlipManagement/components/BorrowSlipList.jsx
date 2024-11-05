@@ -43,6 +43,8 @@ const BorrowSlipList = ({ title, captions, data }) => {
 
   const {user: loggedInUser } = useSelector((state) => state.auth);
   const [manager, setManager] = useState(loggedInUser);
+
+
   
   // Handler to be called on form submission
   const handleAdd = (data) => {
