@@ -12,8 +12,8 @@ import { TbEdit } from "react-icons/tb";
 import { MdDeleteOutline } from "react-icons/md";
 import ConfirmDialog from "../../../../components/Dialog/ConfirmDialog";
 import { deleteCategory } from '../../../../redux/actions/category_action'; 
-import { useDispatch } from 'react-redux';
 import CustomToast from '../../../../components/Toast/CustomToast';
+import { useDispatch, useSelector } from 'react-redux';
 
 function TableCategory({ id, name, onEdit }) {
   const textColor = useColorModeValue("gray.700", "white");
@@ -22,10 +22,18 @@ function TableCategory({ id, name, onEdit }) {
   const { showToast } = CustomToast();
   const iconColor = useColorModeValue("gray", "white");
 
-
+  const books = useSelector((state) => state.book.books); 
   const handleDelete = () => {
+    const hasBooksInCategory = books.some(book => book.category_id.id === id);
+
+    if (hasBooksInCategory) {
+      showToast({ title: "Không thể xóa danh mục này vì có sách thuộc danh mục!", status: "error" });
+      onClose();
+      return;
+    }
+
     dispatch(deleteCategory(id));
-    showToast({ title: "Xóa danh mục thành công!", status: "success", });
+    showToast({ title: "Xóa danh mục thành công!", status: "success" });
     onClose();
   };
 
