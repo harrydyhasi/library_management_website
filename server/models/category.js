@@ -6,7 +6,5 @@ const categorySchema = new mongoose.Schema({
 });
 
 categorySchema.index({ id: 1 }, { unique: true });
-
 const Category = mongoose.model('Category', categorySchema);
-
 module.exports = Category;
