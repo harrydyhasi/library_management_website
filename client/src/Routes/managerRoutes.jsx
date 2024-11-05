@@ -1,9 +1,7 @@
 // import
-import Dashboard from "../views/Manager/Dashboard";
-
 import category_management from "../views/Manager/category_management";
 import BookManagement from "../views/Manager/BookManagement"
-import Billing from "../views/Manager/Billing";
+import Dashboard from "../views/Manager/Dashboard";
 import Profile from "../views/Manager/Profile";
 import BorrowSlipManagement from "../views/Manager/BorrowSlipManagement";
 import { LuBookCopy } from "react-icons/lu";
@@ -15,10 +13,10 @@ var dashRoutes = [
  
 //manager
   {
-    path: "/billing",
+    path: "/dashboard",
     name: "Trang chủ",
     icon: <TbHome color="inherit" />,
-    component: Billing,
+    component: Dashboard,
     layout: "/manager",
   },
   {
@@ -36,7 +34,7 @@ var dashRoutes = [
     layout: "/manager",
   },
   {
-    path: "/dashboard",
+    path: "/borrow_slip_management",
     name: "Quản lý phiếu mượn",
     icon: <AiOutlineReconciliation color="inherit" />,
     component: BorrowSlipManagement,

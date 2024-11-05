@@ -10,7 +10,8 @@ const bookSchema = new mongoose.Schema({
     author: { type: String, required: true },
     publisher: { type: String, required: true },
     description: { type: String },
-    image: { type: String }
+    image: { type: String },
+    pdf: { type: String },
 });
 
 bookSchema.pre('save', generateBookId);

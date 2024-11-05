@@ -37,6 +37,7 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
   const [bookPublisher, setBookPublisher] = React.useState('');
   const [bookDescription, setBookDescription] = React.useState('');
   const [bookImage, setBookImage] = React.useState(null);
+  const [bookPdf, setBookPdf] = React.useState(null);
   const [error, setError] = React.useState('');
   const { showToast } = CustomToast();
 
@@ -49,6 +50,7 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
     setBookPublisher('');
     setBookDescription('');
     setBookImage(null);
+    setBookPdf(null);
   };
 
   const handleAddBook = async (categoryId) => {
@@ -62,11 +64,15 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
     formData.append('description', bookDescription);
 
     if (bookImage) {
-      formData.append('image', bookImage); 
+      formData.append('image', bookImage);
+    }
+
+    if (bookPdf) {
+      formData.append('pdf', bookPdf);
     }
 
     try {
-      await dispatch(createBook(formData)); 
+      await dispatch(createBook(formData));
       showToast({ title: "Thêm sách thành công!", status: "success" });
     } catch (error) {
       showToast({ title: "Thêm sách thất bại!", status: "error" });
@@ -94,8 +100,12 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
       formData.append('image', bookImage);
     }
 
+    if (bookPdf) {
+      formData.append('pdf', bookPdf);
+    }
+
     try {
-      await dispatch(updateBook(currentBook.id, formData)); 
+      await dispatch(updateBook(currentBook.id, formData));
       showToast({ title: "Cập nhật sách thành công!", status: "success" });
     } catch (error) {
       showToast({ title: "Cập nhật sách thất bại!", status: "error" });
@@ -114,6 +124,7 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
       setBookPublisher(currentBook.publisher);
       setBookDescription(currentBook.description);
       setBookImage(currentBook.image); 
+      setBookPdf(currentBook.pdf); // Set the PDF value
       setError('');
     } else {
       clearForm();
@@ -143,13 +154,25 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Kiểm tra định dạng và kích thước tệp
       const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-      if (validImageTypes.includes(file.type) && file.size <= 5 * 1024 * 1024) { 
+      if (validImageTypes.includes(file.type) && file.size <= 5 * 1024 * 1024) {
         setBookImage(file);
         showToast({ title: "Tải lên hình ảnh thành công!", status: "success" });
       } else {
         setError('Vui lòng chọn hình ảnh hợp lệ (JPEG, PNG, GIF) và kích thước không quá 5MB.');
+      }
+    }
+  };
+
+  const handlePdfChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const validPdfTypes = ['application/pdf'];
+      if (validPdfTypes.includes(file.type)) {
+        setBookPdf(file);
+        showToast({ title: "Tải lên PDF thành công!", status: "success" });
+      } else {
+        setError('Vui lòng chọn file PDF hợp lệ.');
       }
     }
   };
@@ -161,10 +184,10 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
         <ModalHeader>{currentBook ? 'Chỉnh sửa sách' : 'Thêm sách mới'}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-        <FormControl mt={4}>
+          <FormControl mt={4}>
               <FormLabel>Hình ảnh</FormLabel>
               {bookImage && (
-                  <Flex justifyContent='center' width= '100%'>
+                  <Flex justifyContent='center' width='100%'>
                       <Image 
                           src={typeof bookImage === 'string' ? bookImage : URL.createObjectURL(bookImage)} 
                           alt="Preview" 
@@ -179,36 +202,79 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
                   </Flex>
               )}
               <InputGroup>
-                      <Input 
-                          type="file" 
-                          accept="image/*" 
-                          onChange={handleImageChange} 
-                          display="none" 
-                          id="file-upload" 
-                      />
-                      <Flex direction="column" alignItems="center" justifyContent='center'  width='100%'>
-                          <Button 
-                              as="label" 
-                              htmlFor="file-upload" 
-                              colorScheme='teal'
-                              borderColor='teal'
-                              color='teal'
-                              variant='outline'
-                              p='8px 20px'>
-                              Chọn ảnh
-                          </Button>
-                          {bookImage && (
-                              <Text mt={4} textAlign="center">
-                                  {bookImage.name} 
-                              </Text>
-                          )}
-                      </Flex>
-                      
-                  </InputGroup>
+                  <Input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleImageChange} 
+                      display="none" 
+                      id="file-upload" 
+                  />
+                  <Flex direction="column" alignItems="center" justifyContent='center' width='100%'>
+                      <Button 
+                          as="label" 
+                          htmlFor="file-upload" 
+                          colorScheme='teal'
+                          borderColor='teal'
+                          color='teal'
+                          variant='outline'
+                          p='8px 20px'>
+                          Chọn ảnh
+                      </Button>
+                      {bookImage && (
+                          <Text mt={4} textAlign="center">
+                              {bookImage.name} 
+                          </Text>
+                      )}
+                  </Flex>
+              </InputGroup>
           </FormControl>
 
-          
-          <FormControl>
+          <FormControl mt={4}>
+            <FormLabel>File PDF</FormLabel>
+            <Input 
+                type="file" 
+                accept="application/pdf" 
+                onChange={handlePdfChange} 
+                display="none" 
+                id="pdf-upload" 
+            />
+            <Flex width='100%'>
+                <Button 
+                    as="label" 
+                    htmlFor="pdf-upload" 
+                    colorScheme='teal'
+                    borderColor='teal'
+                    color='teal'
+                    variant='outline'
+                    p='8px 20px'
+                    mr={4}
+                   >
+                    Chọn PDF
+                </Button>
+                {bookPdf && (
+                    <Text mt={2} textAlign="center">
+                        {bookPdf.name}
+                    </Text>
+                )}
+            </Flex>
+            {currentBook && currentBook.pdf && (
+            <Flex mb={4} mt={4} alignItems="center">
+                <Text mr={2}>Tệp PDF hiện có:</Text>
+                <Text 
+                    as="span" 
+                    color="blue.500" 
+                    cursor="pointer" 
+                    textDecoration="underline" 
+                    onClick={() => window.open(currentBook.pdf, '_blank')}
+                >
+                    {currentBook.name}.pdf
+                </Text>
+            </Flex>
+        )}
+
+          </FormControl>
+
+          <FormControl mt={4}>
             <FormLabel>Tên sách</FormLabel>
             <Input
               value={bookName}
@@ -236,8 +302,7 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
             <FormLabel>Số lượng</FormLabel>
             <NumberInput 
               value={bookQuantity} 
-              onChange={(valueString) => setBookQuantity(valueString)} 
-              min={1}
+              onChange={(valueString) => setBookQuantity(valueString)}
             >
               <NumberInputField placeholder="Nhập số lượng" />
               <NumberInputStepper>
@@ -283,18 +348,15 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
             />
           </FormControl>
 
-          {error && <Text color="red.500" mt={2}>{error}</Text>}
+          {error && <Text color="red.500">{error}</Text>}
         </ModalBody>
-
         <ModalFooter>
-          <Button 
-            colorScheme='teal.500'
+          <Button colorScheme='teal.500'
             borderColor='teal.500'
             color='teal.500'
             variant='outline'
             p='8px 20px'
-            mr='32px'
-           onClick={onClose}>
+            mr='28px' onClick={onClose} >
             Hủy
           </Button>
           <Button colorScheme="teal" onClick={handleSubmit}>

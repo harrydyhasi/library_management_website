@@ -17,10 +17,10 @@ import {
   AlertDialog
 } from "@chakra-ui/react";
 import React from "react";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import BorrowSlipModal from './BorrowSlipModal';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-
+import { TbEdit } from "react-icons/tb";
+import { MdDeleteOutline } from "react-icons/md";
 import { useDispatch } from 'react-redux';
 import { updateBorrowSlip, deleteBorrowSlip } from '../../../../redux/reducers/borrowSlipReducer';
 import { formatDateToDDMMYYY } from '../../../../utils/formatters/date'
@@ -33,7 +33,7 @@ function BorrowSlipRow(props) {
   const textColor = useColorModeValue("gray.700", "white");
   const bgStatus = useColorModeValue("gray.400", "#1a202c");
   const colorStatus = useColorModeValue("white", "gray.400");
-
+  const iconColor = useColorModeValue("gray", "white");
   const dispatch = useDispatch();
 
   // Modal state
@@ -95,21 +95,21 @@ function BorrowSlipRow(props) {
       </Td>
 
       <Td>
-        <Flex gap="2">
+        <Flex justifyContent="flex-end">
         <Button
             p="0px"
             bg="transparent"
             mb={{ sm: "10px", md: "0px" }}
             me={{ md: "12px" }}
-            onClick={onOpenDelete}
+            onClick={onOpenEdit}
           >
-            <Flex color="red.500" cursor="pointer" align="center" p="12px">
-              <Icon as={FaTrashAlt} me="4px" /> 
+            <Flex color={iconColor} cursor="pointer" align="center" p="12px">
+              <TbEdit size='20px' />
             </Flex>
           </Button>
-          <Button p="0px" bg="transparent" onClick={onOpenEdit}>
-            <Flex color={textColor} cursor="pointer" align="center" p="12px">
-              <Icon as={FaPencilAlt} me="4px" />     
+          <Button p="0px" bg="transparent"  onClick={onOpenDelete}>
+          <Flex color="red.400" cursor="pointer" align="center" p="12px">
+              <MdDeleteOutline size='21px' />
             </Flex>
           </Button>
         </Flex>
