@@ -15,7 +15,6 @@ const rootReducer = combineReducers({
   borrowSlips: borrowSlipReducer,
   config: configReducer,
   book: bookReducer,
-  // other reducers...
 });
 
 export default rootReducer;

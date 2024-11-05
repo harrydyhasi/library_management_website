@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import CustomToast from '../../../../components/Toast/CustomToast';
 import defaultImage from '/images/image.png?url';
 
-function TableBook({ id, name, quantity, position, author, publisher, description, category, image, onEdit }) { 
+function TableBook({ id, name, quantity, position, author, publisher, description, category, image, pdf, onEdit }) { 
   const textColor = useColorModeValue("gray.700", "white");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
@@ -122,7 +122,7 @@ function TableBook({ id, name, quantity, position, author, publisher, descriptio
             bg="transparent" 
             mb={{ sm: "10px", md: "0px" }} 
             me={{ md: "12px" }} 
-            onClick={() => onEdit({ id, name, quantity, position, author, publisher, description, category, image })} 
+            onClick={() => onEdit({ id, name, quantity, position, author, publisher, description, category, image, pdf })} 
           >
             <Flex color={iconColor} cursor="pointer" align="center" p="12px">
               <TbEdit size='20px' />

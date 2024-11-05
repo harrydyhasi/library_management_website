@@ -49,7 +49,8 @@ export const useUserLogic = () => {
   const filterData = (data, searchQuery) => {
     return data.filter(user =>
       user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.id.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
 

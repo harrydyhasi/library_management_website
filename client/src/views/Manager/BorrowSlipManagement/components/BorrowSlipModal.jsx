@@ -22,6 +22,7 @@ import {
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { formatDateToYYYYMMDD, formatWithThousandsSeparator } from '../../../../utils/formatters/date';
 import { fetchUser } from '.././../../../redux/actions/user_action';
+import { MdDeleteOutline } from "react-icons/md";
 
 const BorrowSlipModal = ({ 
   isOpen, 
@@ -305,7 +306,7 @@ const BorrowSlipModal = ({
                         placeholder="Nhập mã sách"
                       />
                       <IconButton ml="2"
-                        icon={<DeleteIcon />}
+                        icon={<MdDeleteOutline size='20'/>}
                         colorScheme="red"
                         onClick={() => handleRemoveBook(index)}
                         aria-label="Xóa sách"
@@ -337,18 +338,24 @@ const BorrowSlipModal = ({
                   
                 </Box>
               ))}
-              <Button onClick={handleAddBook} colorScheme="teal" leftIcon={<AddIcon />} mb="2">
+              <Button onClick={handleAddBook} colorScheme="teal" mb="2">
                 Thêm sách
               </Button>
             </FormControl>
 
             <ModalFooter>
-              <Button colorScheme="blue" type="submit">
-                {mode === 'edit' ? 'Lưu' : 'Thêm'}
-              </Button>
-              <Button variant="ghost" onClick={onClose}>
+            <Button colorScheme='teal.500'
+              borderColor='teal.500'
+              color='teal.500'
+              variant='outline'
+              p='8px 20px'
+              mr='24px' onClick={onClose}>
                 Hủy
               </Button>
+              <Button colorScheme="teal" type="submit">
+                {mode === 'edit' ? 'Cập nhật' : 'Thêm'}
+              </Button>
+              
             </ModalFooter>
           </form>
         </ModalBody>

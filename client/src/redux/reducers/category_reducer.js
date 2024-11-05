@@ -20,7 +20,6 @@ const initialState = {
 };
 
 const categoryReducer = (state = initialState, action) => {
-  console.log("Action received:", action);
   switch (action.type) {
     case FETCH_CATEGORIES_REQUEST:
     case CREATE_CATEGORY_REQUEST:

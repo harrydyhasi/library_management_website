@@ -6,7 +6,7 @@ import Sidebar from '../components/Sidebar';
 import SidebarManager from '../components/Sidebar/Manager';
 import { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import routes from '../Routes/managerRoutes';
+import routes from '../routes/managerRoutes';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';

@@ -114,26 +114,17 @@ const Books = () => {
     <Card overflowX={{ sm: "scroll", xl: "hidden" }}>
       <CardHeader>
         <Flex direction="column" w='100%' p='12px 0px 22px 20px'>
-          <Flex>
+          <Flex justifyContent={'space-between'}>
             <Text fontSize='xl' color={textColor} fontWeight='bold' pl='8px'>
               Tất cả sách
             </Text>
-          </Flex>
-          <Flex mt={4}>
-            <Select
-              placeholder="Tất cả"
-              onChange={handleCategoryChange}
-              value={categoryFilter}
-              w="200px"
+            <Button
+              colorScheme="teal" background="teal.300" p='16px 20px' mr={8} onClick={() => { setCurrentBook(null); onOpen(); }} ml={4}
             >
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </Select>
+              Thêm sách mới
+            </Button>
           </Flex>
-          <Flex justify='space-between' align='center' w='100%' mb="10px" p='0px' my='20px'>
+          <Flex align='center' w='100%' mb="10px" p='0px' my='20px'>
             <InputGroup
               bg={inputBg}
               borderRadius="15px"
@@ -161,11 +152,20 @@ const Books = () => {
               />
             </InputGroup>
             
-            <Button
-              colorScheme="teal" background="teal.300" p='16px 20px' onClick={() => { setCurrentBook(null); onOpen(); }} ml={4}
+            <Flex ml={8}>
+            <Select
+              placeholder="Tất cả"
+              onChange={handleCategoryChange}
+              value={categoryFilter}
+              w="200px"
             >
-              Thêm sách mới
-            </Button>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </Select>
+          </Flex>
           </Flex>
           
         </Flex>
@@ -199,6 +199,7 @@ const Books = () => {
                   description={book.description}
                   category={book.category_id}
                   image={book.image}
+                  pdf={book.pdf}
                   onEdit={handleEditBook} 
                 />
               ))}

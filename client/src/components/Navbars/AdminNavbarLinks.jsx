@@ -27,7 +27,7 @@ import SidebarResponsive from "components/Sidebar/SidebarResponsive";
 import PropTypes from "prop-types";
 import React, { useState }  from "react";
 import { useHistory } from "react-router-dom"; 
-import routes from "../../routes";
+import routes from "../../routes/adminRoutes";
 
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/actions/auth_action'; 

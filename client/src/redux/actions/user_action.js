@@ -76,7 +76,6 @@ export const updateUser = (userId, userData) => {
     try {
       const response = await updateUserService(userId, userData);
       dispatch(updateUserSuccess(response.data));
-      // Optionally fetch all users again if needed
       dispatch(fetchAllUsers());
     } catch (error) {
       dispatch(updateUserFailure(error.message));
