@@ -30,6 +30,7 @@ function TableRow(props) {
   const toast = useToast();
 
   const handleEditChange = (e) => {
+    
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
@@ -42,6 +43,8 @@ function TableRow(props) {
 
   const handleEditSubmit = async () => {
     try {
+      console.log(editData);
+
       await dispatch(updateUser(id, editData)); 
       toast({
         title: "Thành công.",
@@ -128,11 +131,11 @@ function TableRow(props) {
         <Badge
           bg={status === "active" ? "green.400" : bgStatus}
           color={status === "active" ? "white" : colorStatus}
-          fontSize="16px"
-          p="3px 10px"
+          fontSize="14px"
+          p="5px 12px"
           borderRadius="8px"
         >
-          {status}
+          {status === "active" ? 'Hoạt động' : 'Đã Bị khóa'}
         </Badge>
       </Td>
 

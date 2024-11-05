@@ -118,7 +118,7 @@ function SignIn() {
                   mb="24px"
                   fontSize="sm"
                   type="text"
-                  placeholder="Your email address"
+                  placeholder="Email"
                   size="lg"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -131,7 +131,7 @@ function SignIn() {
                   mb="36px"
                   fontSize="sm"
                   type="password"
-                  placeholder="Your password"
+                  placeholder="Mật khẩu"
                   size="lg"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

@@ -6,7 +6,7 @@ import AdminNavbar from '../components/Navbars/AdminNavbar';
 import Sidebar from '../components/Sidebar';
 import { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import routes from '../Routes/adminRoutes';
+import routes from '../routes/adminRoutes';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';

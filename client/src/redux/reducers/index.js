@@ -10,7 +10,6 @@ const rootReducer = combineReducers({
   user: userReducer,
   category: categoryReducer,
   book: bookReducer,
-  // other reducers...
 });
 
 export default rootReducer;

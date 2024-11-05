@@ -8,7 +8,7 @@ import { IoMdPerson } from "react-icons/io";
 import { BsPersonFillGear } from "react-icons/bs";
 
 
-var dashRoutes = [
+var routes = [
   {
     path: "/dashboard",
     name: "Quản lý người dùng",
@@ -31,7 +31,6 @@ var dashRoutes = [
       {
         path: "/profile",
         name: "Profile",
-        rtlName: "لوحة القيادة",
         icon: <IoMdPerson color="inherit" />,
         secondaryNavbar: true,
         component: Profile,
@@ -40,4 +39,4 @@ var dashRoutes = [
     ],
   },
 ];
-export default dashRoutes;
+export default routes;

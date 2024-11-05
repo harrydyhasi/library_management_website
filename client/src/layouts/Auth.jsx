@@ -3,7 +3,7 @@ import { Box, ChakraProvider } from '@chakra-ui/react';
 // core components
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import routes from '../routes';
+import routes from '../routes/authRoutes';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
@@ -85,7 +85,7 @@ export default function Pages(props) {
 					<Box ref={wrapper} w='100%'>
 						<Switch>
 							{getRoutes(routes)}
-							<Redirect from='/auth' to='/auth/login-page' />
+							<Redirect from='/auth' to='/auth/signin' />
 						</Switch>
 					</Box>
 				</Box>

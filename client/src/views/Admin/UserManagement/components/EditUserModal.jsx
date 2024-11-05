@@ -37,11 +37,6 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
     }
   }, [isOpen]);
 
-  const handleOldPasswordChange = (event) => {
-    setOldPassword(event.target.value);
-    setError("");
-  };
-
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
     setError("");
@@ -52,21 +47,33 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
     setError("");
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    return emailRegex.test(email);
+  };
+
+  const validatePhoneNumber = (phone) => {
+    return /^\d*$/.test(phone); 
+  };
+
   const validateForm = () => {
     const errors = {};
     if (!editData.fullName) {
-      errors.fullName = "Họ và tên là bắt buộc!";
+      errors.fullName = "Họ và tên không được để trống!";
     }
     if (!editData.email) {
-      errors.email = "Email là bắt buộc!";
+      errors.email = "Email không được để trống!";
+    } else if (!validateEmail(editData.email)) {
+      errors.email = "Email không hợp lệ!";
     }
-    if (password) {
-      if (!oldPassword) {
-        errors.oldPassword = "Vui lòng nhập mật khẩu cũ để thay đổi mật khẩu!";
-      }
-      if (password !== confirmPassword) {
-        errors.confirmPassword = "Mật khẩu không trùng khớp!";
-      }
+    if (editData.phone && !validatePhoneNumber(editData.phone)) {
+      errors.phone = "Số điện thoại chỉ được phép là số!";
+    }
+    if (!editData.email) {
+      errors.email = "Email không được để trống!";
+    }
+    if (password && password !== confirmPassword || !password && confirmPassword) {
+      errors.confirmPassword = "Mật khẩu không trùng khớp!";
     }
     return errors;
   };
@@ -77,8 +84,21 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
       setFormErrors(errors);
       return;
     }
-    handleEditSubmit({ ...editData, oldPassword, password: password || undefined });
+
+    const updatedEditData = { ...editData };
+
+    if (password && password === confirmPassword) {
+      updatedEditData.password = password; 
+    } else if (password) {
+      setFormErrors((prev) => ({
+        ...prev,
+        confirmPassword: "Mật khẩu không trùng khớp!",
+      }));
+      return; 
+    }
+    handleEditSubmit(updatedEditData); 
   };
+
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -108,6 +128,7 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
                 </FormLabel>
                 <Input
                   name="email"
+                  type="email"
                   autoComplete="off"
                   value={editData.email}
                   onChange={handleEditChange}
@@ -116,7 +137,7 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
               </FormControl>
             </GridItem>
             <GridItem>
-              <FormControl mb="4">
+              <FormControl mb="4" isInvalid={!!formErrors.phone}>
                 <FormLabel>Số điện thoại</FormLabel>
                 <Input
                   name="phone"
@@ -124,30 +145,10 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
                   value={editData.phone}
                   onChange={handleEditChange}
                 />
+                <FormErrorMessage>{formErrors.phone}</FormErrorMessage>
               </FormControl>
             </GridItem>
 
-            <GridItem>
-              <FormControl mb="4" isInvalid={!!formErrors.oldPassword}>
-                <FormLabel>Mật khẩu cũ</FormLabel>
-                <InputGroup>
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    value={editData.password}
-                    onChange={handleOldPasswordChange}
-                  />
-                  <InputRightElement>
-                    <IconButton
-                      variant="link"
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                      icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                      onClick={() => setShowPassword(!showPassword)}
-                    />
-                  </InputRightElement>
-                </InputGroup>
-                <FormErrorMessage>{formErrors.oldPassword}</FormErrorMessage>
-              </FormControl>
-            </GridItem>
             <GridItem>
               <FormControl mb="4">
                 <FormLabel>Mật khẩu mới</FormLabel>
@@ -155,6 +156,7 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
                   <Input
                     type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
+                    name="password"
                     value={password}
                     onChange={handlePasswordChange}
                   />
@@ -220,11 +222,10 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
                       backgroundColor: editData.status.toLowerCase() === "active" ? "teal.400" : "gray.300",
                     },
                     "& .chakra-switch__thumb": {
-                      backgroundColor: "white", // Keeps the thumb white, or you can adjust as needed
+                      backgroundColor: "white",
                     },
                   }}
                 />
-
               </FormControl>
             </GridItem>
           </Grid>
