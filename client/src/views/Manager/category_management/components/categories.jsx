@@ -20,7 +20,7 @@ import {
 import Card from "../../../../components/Card/Card";
 import CardBody from "../../../../components/Card/CardBody";
 import CardHeader from "../../../../components/Card/CardHeader";
-import TableCategory from '../../../../components/Tables/TableCategory';
+import TableCategory from './TableCategory';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../../../redux/actions/category_action';
@@ -40,6 +40,7 @@ const Categories = () => {
   const searchIconColor = useColorModeValue("gray.700", "gray.200");
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentCategory, setCurrentCategory] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -64,21 +65,26 @@ const Categories = () => {
     category.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleAddCategory = (newCategory) => {
-    console.log("Adding category:", newCategory);
+  const handleAddCategory = () => {
+    setCurrentCategory(null); 
+    onOpen();
+  };
+
+  const handleEditCategory = (category) => {
+    setCurrentCategory(category); 
+    onOpen();
   };
 
   return (
     <Card overflowX={{ sm: "scroll", xl: "hidden" }}>
-      <CardHeader p='0px 0px 0px 0px'>
-        <Flex direction="column" w='100%' p='12px 0px 22px 0px'>
-        <Flex>
-        <Text fontSize='xl' color={textColor} fontWeight='bold'>
+      <CardHeader>
+        <Flex direction="column" w='100%' p='12px 0px 22px 20px'>
+          <Flex>
+            <Text fontSize='xl' color={textColor} fontWeight='bold' pl='8px'>
               Danh mục sách
             </Text>
           </Flex>
-          <Flex justify='space-between' align='center' w='100%' mb="10px" p='12px'>
-            
+          <Flex justify='space-between' align='center' w='100%' mb="10px" p='0px' my='20px'>
             <InputGroup
               bg={inputBg}
               borderRadius="15px"
@@ -116,50 +122,49 @@ const Categories = () => {
               />
             </InputGroup>
             <Button
-              colorScheme='teal'
-              borderColor='teal.300'
-              color='teal.300'
-              variant='outline'
-              fontSize='sm'
-              p='8px 20px'
-              onClick={onOpen}
+              colorScheme="teal" background="teal.300" p='8px 20px'
+              onClick={handleAddCategory}
             >
-              <IoAdd size= '18px'/>
               Thêm danh mục mới
             </Button>
           </Flex>
-          
         </Flex>
       </CardHeader>
 
       <CardBody>
-        <Table variant="striped" colorScheme="teal">
-          <Thead>
-            <Tr my='.8rem' pl='0px' color='gray.400'>
-              <Th color='gray.400'>
-                <Text>Mã danh mục</Text>
-              </Th>
-              <Th color='gray.400'>
-                <Text>Tên danh mục</Text>
-              </Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {filteredCategories.map((category) => (
-              <TableCategory
-                key={category._id}
-                id={category.id}
-                name={category.name}
-              />
-            ))}
-          </Tbody>
-        </Table>
+        <Flex direction="column" w='100%' p='12px 0px 22px 20px'>
+          <Table variant='simple' color={textColor}>
+            <Thead>
+              <Tr my='.8rem' pl='0px' color='gray.400'>
+                <Th color='gray.400' ps='0px'>
+                  <Text>Mã danh mục</Text>
+                </Th>
+                <Th color='gray.400' ps='0px'>
+                  <Text>Tên danh mục</Text>
+                </Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {filteredCategories.map((category) => (
+                <TableCategory
+                  key={category._id}
+                  id={category.id}
+                  name={category.name}
+                  onEdit={handleEditCategory} 
+                />
+              ))}
+            </Tbody>
+          </Table>
+        </Flex>
       </CardBody>
 
       <AddCategoryDialog 
         isOpen={isOpen}
-        onClose={onClose}
-        onAdd={handleAddCategory}
+        onClose={() => {
+          setCurrentCategory(null); 
+          onClose();
+        }}
+        currentCategory={currentCategory}
       />
     </Card>
   );

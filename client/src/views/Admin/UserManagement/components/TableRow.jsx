@@ -7,72 +7,60 @@ import {
   Text,
   Tr,
   useColorModeValue,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
   useDisclosure,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  useToast, 
+  useToast,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateUser, deleteUser } from '../../../../redux/actions/user_action'; // Adjust the path according to your file structure
+import { updateUser, deleteUser } from '../../../../redux/actions/user_action';
+import EditUserModal from "./EditUserModal";
+import DeleteUserDialog from "./DeleteUserDialog";
 
 function TableRow(props) {
-  const { id, fullName, email, phone, status, role, logo, onUserUpdated, onUserDeleted } = props; // Added props for callbacks
+  const { id, fullName, email, phone, status, role, logo, password } = props;
   const textColor = useColorModeValue("gray.700", "white");
   const bgStatus = useColorModeValue("gray.400", "#1a202c");
   const colorStatus = useColorModeValue("white", "gray.400");
 
-  // Edit Modal Controls
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
-  const [editData, setEditData] = useState({ fullName, email, phone, role });
-
-  // Delete Confirmation Controls
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
-  const cancelRef = useRef();
+  const [editData, setEditData] = useState({ fullName, email, phone, role, status, password });
 
   const dispatch = useDispatch();
-  const toast = useToast(); 
+  const toast = useToast();
 
   const handleEditChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
+  const handleStatusChange = () => {
+    setEditData((prevData) => ({
+      ...prevData,
+      status: prevData.status.toLowerCase() === "active" ? "locked" : "active",
+    }));
+  };
+
   const handleEditSubmit = async () => {
     try {
-      await dispatch(updateUser(id, editData)); // Update user with the editData
+      await dispatch(updateUser(id, editData)); 
       toast({
         title: "Thành công.",
-        description: "Thông tin người dùng đã được chỉnh sửa!",
+        description: "Thông tin người dùng đã được cập nhật!",
         status: "success",
         duration: 3000,
         isClosable: true,
         position: "bottom-right",
       });
-      // onUserUpdated(); 
       onEditClose();
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.error("Chỉnh sửa thông tin thất bại:", error);
       toast({
-        title: "Error updating user.",
+        title: "Chỉnh sửa thông tin thất bại.",
         description: error.message,
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "bottom-right",
       });
     }
   };
@@ -86,6 +74,7 @@ function TableRow(props) {
         status: "success",
         duration: 3000,
         isClosable: true,
+        position: "bottom-right",
       });
       onDeleteClose();
     } catch (error) {
@@ -95,6 +84,7 @@ function TableRow(props) {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "bottom-right",
       });
     }
   };
@@ -116,24 +106,25 @@ function TableRow(props) {
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold">
+        <Text fontSize="sm" color={textColor} fontWeight="bold">
           {id}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold">
-          {role}
+        <Text fontSize="sm" color={textColor} fontWeight="bold">
+          {role === "admin" ? 'Admin' : role === "manager" ? "Quản lý thư viện" : "Sinh viên"}
         </Text>
       </Td>
 
+
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold">
+        <Text fontSize="sm" color={textColor} fontWeight="bold">
           {phone}
         </Text>
       </Td>
 
-      <Td>
+      <Td >
         <Badge
           bg={status === "active" ? "green.400" : bgStatus}
           color={status === "active" ? "white" : colorStatus}
@@ -147,7 +138,7 @@ function TableRow(props) {
 
       <Td width={50}>
         <Button onClick={onEditOpen} p="0px" bg="transparent" variant="no-hover">
-          <Text fontSize="md" color="teal.300" fontWeight="bold" cursor="pointer">
+          <Text fontSize="sm" color="blue.400" fontWeight="bold" cursor="pointer">
             Chỉnh sửa
           </Text>
         </Button>
@@ -155,91 +146,27 @@ function TableRow(props) {
 
       <Td width={50}>
         <Button onClick={onDeleteOpen} p="0px" bg="transparent" variant="no-hover">
-          <Text fontSize="md" color="red.300" fontWeight="bold" cursor="pointer">
+          <Text fontSize="sm" color="red.300" fontWeight="bold" cursor="pointer">
             Xóa
           </Text>
         </Button>
       </Td>
 
-      {/* Edit Modal */}
-      <Modal isOpen={isEditOpen} onClose={onEditClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Chỉnh sửa thông tin người dùng</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl mb="4">
-              <FormLabel>Họ và tên</FormLabel>
-              <Input
-                name="fullName"
-                value={editData.fullName}
-                onChange={handleEditChange}
-              />
-            </FormControl>
-            <FormControl mb="4">
-              <FormLabel>Email</FormLabel>
-              <Input
-                name="email"
-                value={editData.email}
-                onChange={handleEditChange}
-              />
-            </FormControl>
-            <FormControl mb="4">
-              <FormLabel>Số điện thoại</FormLabel>
-              <Input
-                name="phone"
-                value={editData.phone}
-                onChange={handleEditChange}
-              />
-            </FormControl>
-            <FormControl mb="4">
-              <FormLabel>Phân quyền</FormLabel>
-              <Select
-                name="role"
-                value={editData.role} // This sets the current value as selected
-                onChange={handleEditChange}
-                placeholder="Chọn vai trò" // Placeholder shown when no option is selected
-              >
-                <option value="student">Sinh viên</option>
-                <option value="manager">Quản lý thư viện</option>
-                <option value="admin">Admin</option>
-              </Select>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleEditSubmit}>
-              Save
-            </Button>
-            <Button onClick={onEditClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <EditUserModal
+        isOpen={isEditOpen}
+        onClose={onEditClose}
+        editData={editData}
+        handleEditChange={handleEditChange}
+        handleStatusChange={handleStatusChange}
+        handleEditSubmit={handleEditSubmit}
+      />
 
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog
+      <DeleteUserDialog
         isOpen={isDeleteOpen}
-        leastDestructiveRef={cancelRef}
         onClose={onDeleteClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Xóa người dùng
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              Bạn có chắc muốn xóa {fullName}?.
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onDeleteClose}>
-                Cancel
-              </Button>
-              <Button colorScheme="red" onClick={handleDelete} ml={3}>
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        handleDelete={handleDelete}
+        fullName={fullName}
+      />
     </Tr>
   );
 }

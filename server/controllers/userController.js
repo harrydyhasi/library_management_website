@@ -120,24 +120,21 @@ const updateUser = async (req, res) => {
     const saltRounds = 10;
 
     try {
-        const user = await User.findOne({ id: id }); // Assuming you're using _id as the identifier
+        const user = await User.findOne({ id: id }); 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Update user fields only if new values are provided
         user.fullName = fullName?? user.fullName;  
         user.email = email ?? user.email;
         user.phone = phone ?? user.phone;
         user.status = status ?? user.status;
         user.role = role ?? user.role;
 
-        // Update the password if provided
         if (password) {
             user.password = await bcrypt.hash(password, saltRounds);
         }
 
-        // Save the updated user
         await user.save();
 
         res.json({ message: 'User updated successfully', user });

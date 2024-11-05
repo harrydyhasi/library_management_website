@@ -4,6 +4,7 @@ const generateBookId = require('../middlewares/bookMiddleware');
 
 const addBook = async (req, res) => {
     const { category_id, name, quantity, position, author, publisher, description } = req.body;
+    const image = req.file ? `/images/${req.file.filename}` : null; 
 
     if (!category_id || !name || !quantity || !position || !author || !publisher) {
         return res.status(400).json({ message: 'All fields are required' });
@@ -16,13 +17,14 @@ const addBook = async (req, res) => {
         }
 
         const newBook = new Books({
-            category_id: category._id, 
+            category_id: category._id,
             name,
             quantity,
             position,
             author,
             publisher,
-            description
+            description,
+            image 
         });
 
         await newBook.save();
@@ -31,6 +33,7 @@ const addBook = async (req, res) => {
         return res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
 
 const updateBook = async (req, res) => {
     const { category_id, name, quantity, position, author, publisher, description } = req.body;
@@ -59,6 +62,10 @@ const updateBook = async (req, res) => {
         book.publisher = publisher;
         book.description = description;
 
+        if (req.file) {
+            book.image = `/images/${req.file.filename}`; 
+        }
+
         if (book.category_id.toString() !== category._id.toString()) {
             await generateBookId.call(book); 
         }
@@ -77,7 +84,7 @@ const deleteBook = async (req, res) => {
         if (!book) {
             return res.status(404).json({ message: 'Book not found'});
         }
-
+        
         await Books.deleteOne({ id: id});
         return res.status(200).json({ message: 'Book deleted successfully' });
 
@@ -89,7 +96,7 @@ const deleteBook = async (req, res) => {
 const getAllBooks = async (req, res) => {
     try {
         const books = await Books.find()
-            .populate('category_id', 'name'); 
+            .populate('category_id'); 
 
         return res.status(200).json({ message: 'Books retrieved successfully', data: books });
     } catch (error) {

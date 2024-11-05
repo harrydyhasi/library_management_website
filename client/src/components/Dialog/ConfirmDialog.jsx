@@ -17,15 +17,18 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, message = "" }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
-            Xác nhận
-            </ModalHeader>
+        <ModalHeader>Xác nhận</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text>{message}</Text>
         </ModalBody>
         <ModalFooter>
-          <Button variant="outline" mr={3} onClick={onClose}>
+          <Button colorScheme='red.400'
+            borderColor='red.400'
+            color='red.400'
+            variant='outline'
+            p='8px 20px'
+            mr='32px' onClick={onClose}>
             Hủy
           </Button>
           <Button colorScheme="red" onClick={() => { onConfirm(); onClose(); }}>
