@@ -20,8 +20,7 @@ import {
   FormErrorMessage
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
-
-import { formatDateToYYYYMMDD } from '../../../../utils/formatters/date';
+import { formatDateToYYYYMMDD, formatWithThousandsSeparator } from '../../../../utils/formatters/date';
 
 const BorrowSlipModal = ({ 
   isOpen, 
@@ -32,6 +31,8 @@ const BorrowSlipModal = ({
 }) => {
   const now = new Date().toISOString().split("T")[0];
   const toast = useToast();
+  const [config, setConfig] = useState(null);
+
   const [formData, setFormData] = useState({
     _id: '',
     borrowed_date: '', 
@@ -39,10 +40,31 @@ const BorrowSlipModal = ({
     status: '',
     user_id: '', 
     manager_id: '',
+    manager_name: '',
     books: [] // Add a field for borrowed books
   });
 
   const [dateError, setDateError] = useState(''); // State for date error
+  const [fineFee, setFineFee] = useState(0); 
+  const [daysOverdue, setDaysOverdue] = useState(0); 
+  const [showFineFee, setshowFineFee] = useState(false); 
+
+  // Fetch config data on component mount
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/configs');
+        const result = await response.json();
+        if (result.success) {
+          setConfig(result.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch config data", error);
+      }
+    };
+
+    fetchConfig();
+  }, []);
 
   // Reset form data
   useEffect(() => {
@@ -54,16 +76,21 @@ const BorrowSlipModal = ({
         status: initialData.status || '',
         user_id: initialData.user_id || '',
         manager_id: initialData.manager_id || '',
+        manager_name: initialData.manager_name || '',
         books: initialData.books || [], // Initialize borrowed books
       });
-    } else if (isOpen && mode === 'add') {
+    } else if (isOpen && mode === 'add' && config) {
+      const borrowedDate = now;
+      const calculatedReturnDate = new Date(borrowedDate);
+      calculatedReturnDate.setDate(calculatedReturnDate.getDate() + config.maxBorrowDays);
       setFormData({
         _id: '',
         borrowed_date: now,
-        return_date: '',
+        return_date: formatDateToYYYYMMDD(calculatedReturnDate),
         status: 'borrowed',
         user_id: '',
-        manager_id: '',
+        manager_id: initialData.manager_id || '',
+        manager_name: initialData.manager_name || '',
         books: [], // Initialize as empty for new entries
       });
     }
@@ -71,30 +98,58 @@ const BorrowSlipModal = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "status" && value === "returned") {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-        return_date: now, 
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+    // if (name === "status" && value === "returned") {
+    //   setFormData((prevData) => ({
+    //     ...prevData,
+    //     [name]: value,
+    //     return_date: now, 
+    //   }));
+    // } else {
+    //   setFormData((prevData) => ({
+    //     ...prevData,
+    //     [name]: value,
+    //   }));
+    // }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+   
+    
+
+    const borrowedDate = new Date(formData.borrowed_date);
+    const returnDate = new Date(formData.return_date);
+    const nowDate = new Date(now);
+
+    if (name === "status" && value==="returned"){
+      setshowFineFee(true)
+      // Calculate days overdue if `now` is later than `returnDate`
+      if (nowDate > returnDate) {
+        const diffTime = Math.abs(nowDate - returnDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        setDaysOverdue(diffDays);
+        setFineFee(4 * config.dailyFine); 
+      } else {
+        setDaysOverdue(0);
+        setFineFee(0);
+      }
+      }
+    else {
+      setshowFineFee(false)
     }
 
     // Validate that return_date is later than borrowed_date
     if (name === 'return_date') {
-      const borrowedDate = new Date(formData.borrowed_date);
-      const returnDate = new Date(value);
-
+      
       if (returnDate < borrowedDate) {
         setDateError('Ngày trả phải lớn hơn ngày mượn');
       } else {
         setDateError('');
       }
     }
+
+    
   };
 
   // Handle adding a new book
@@ -181,7 +236,7 @@ const BorrowSlipModal = ({
             </FormControl>
             {/* Borrowed Date */}
             <FormControl mb="4" isRequired>
-              <FormLabel>Ngày mượn</FormLabel>
+              <FormLabel>Ngày đăng ký/Ngày mượn</FormLabel>
               <Input
                 type="date"
                 name="borrowed_date"
@@ -212,21 +267,30 @@ const BorrowSlipModal = ({
                 <option value="borrowed">Đang mượn</option>
                 <option value="returned">Đã trả</option>  
               </Select>
+              {showFineFee ? <Text mt="2" color="red" as='i'>Phí phạt: {formatWithThousandsSeparator(fineFee)} VNĐ (Trễ {daysOverdue} ngày)</Text> : null}
             </FormControl>
+            
             {/* Manager */}
             <FormControl mb="4">
-              <FormLabel>Người cho mượn</FormLabel>
+              <FormLabel>Thông tin người cho mượn</FormLabel>
+              <Flex gap="4">
               <Input
                 name="manager_id"
                 value={formData.manager_id}
                 onChange={handleChange}
               />
+              <Input
+                name="manager_name"
+                value={formData.manager_name}
+                onChange={handleChange}
+              />
+              </Flex>
+              
             </FormControl>
             
             {/* Borrowed Books Section */}
             <FormControl mb="4">
               <FormLabel>Danh sách mượn</FormLabel>
-              
               {formData.books.map((book, index) => (
                 <Box key={index} borderWidth="1px" borderRadius="lg" p="4" mb="2">
                   <Flex mb="2">

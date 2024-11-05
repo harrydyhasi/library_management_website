@@ -22,3 +22,7 @@ export const formatDateToDDMMYYY = (dateString) => {
     return `${day}/${month}/${year}`;
 };
 
+export const formatWithThousandsSeparator = (number) => {
+    return new Intl.NumberFormat('vi-VN').format(number); 
+  };
+

@@ -17,6 +17,7 @@ function Profile() {
   const dispatch = useDispatch();
   const { loading, user, error } = useSelector((state) => state.user);
   const { user: loggedInUser } = useSelector((state) => state.auth); 
+
   // Fetch user details if loggedInUser is available
   useEffect(() => {
     if (loggedInUser && loggedInUser.id) {

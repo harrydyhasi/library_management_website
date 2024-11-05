@@ -25,9 +25,9 @@ import CardHeader from "components/Card/CardHeader";
 import BorrowSlipRow from "./BorrowSlipRow";
 import BorrowSlipModal from './BorrowSlipModal';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch , useSelector} from 'react-redux';
 import { addBorrowSlip } from '../../../../redux/reducers/borrowSlipReducer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const BorrowSlipList = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
@@ -41,6 +41,9 @@ const BorrowSlipList = ({ title, captions, data }) => {
 
   const dispatch = useDispatch();
 
+  const {user: loggedInUser } = useSelector((state) => state.auth);
+  const [manager, setManager] = useState(loggedInUser);
+  
   // Handler to be called on form submission
   const handleAdd = (data) => {
     dispatch(addBorrowSlip(data));
@@ -144,6 +147,7 @@ const BorrowSlipList = ({ title, captions, data }) => {
         onClose={onClose}
         mode="add" // Set to "add" mode
         onSubmit={handleAdd}
+        initialData={{manager_id: manager.id, manager_name: manager.fullName}}
       />
     </>
   );
