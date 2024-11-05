@@ -1,5 +1,6 @@
-// import
 
+import Dashboard from "../views/Admin/Dashboard";
+import ConfigTime from "../views/Admin/ConfigTime";
 import Tables from "../views/Admin/Tables";
 import Profile from "../views/Admin/Profile";
 import UserManagement from "../views/Admin/UserManagement";
@@ -19,8 +20,9 @@ var dashRoutes = [
   {
     path: "/tables",
     name: "Thời gian mượn/trả sách",
-    icon: <LuSettings2 color="inherit" />,
-    component: Tables,
+    icon: <FaCogs color="inherit" />,
+    component: ConfigTime,
+
     layout: "/admin",
   },
   {

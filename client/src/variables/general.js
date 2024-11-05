@@ -349,10 +349,10 @@ export const booksTableData = [
 export const borrowHistoryData = [
   {
     bookId: 1,
-    bookTitle: "The Great Gatsby",
+    bookTitle: "Nguyen Anh Duy",
     bookCover: avatar1, // URL to the book cover image
     borrowerName: "John Doe",
-    borrowerEmail: "johndoe@example.com",
+    borrowerEmail: "johndoe@example.com123",
     borrowDate: "2024-01-15",
     returnDate: "2024-01-30",
     returnStatus: "Returned", // Can be "Returned", "Overdue", or "Not Returned"
@@ -488,5 +488,24 @@ export const olderTransactions = [
     date: "25 March 2021, at 16:30 PM",
     price: "- $987",
     logo: FaArrowDown,
+  },
+];
+
+export const borrowSlipData = [
+  {
+    _id: "67270d0a1ec835244766edf6",  
+    borrowed_date: "",  
+    return_date: "",
+    status: "borrowed",  
+    user: "Nguyễn Anh Duy",
+    manager: "Nguyễn Văn A"
+  },
+  {
+    _id: "67270d0a1ec835244766edf7",  
+    borrowed_date: "",  
+    return_date: "",
+    status: "borrowed",  
+    user: "Nguyễn Anh Duy",
+    manager: "Nguyễn Văn A"
   },
 ];
