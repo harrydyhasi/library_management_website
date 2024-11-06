@@ -41,17 +41,16 @@ const createUser = async (req, res) => {
 
         const existingUserByEmail = await User.findOne({ email });
         if (existingUserByEmail) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(400).json({ message: 'Email đã được sử dụng.' });
         }
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         const rolePrefix = role === 'student' ? 'SV' : role === 'manager' ? 'QL' : 'AD';
 
-        // Find the latest user ID for the specific role
         const lastUser = await User.findOne({ id: new RegExp(`^${rolePrefix}`) }).sort({ id: -1 });
-        const lastIdNumber = lastUser ? parseInt(lastUser.id.slice(2), 10) : 0; // Extract number from last ID
-        const newIdNumber = lastIdNumber + 1; // Increment for new ID
+        const lastIdNumber = lastUser ? parseInt(lastUser.id.slice(2), 10) : 0; 
+        const newIdNumber = lastIdNumber + 1; 
         const formattedId = `${rolePrefix}${newIdNumber}`;
 
         const newUser = await User.create({
@@ -60,8 +59,8 @@ const createUser = async (req, res) => {
             email,
             password: hashedPassword,
             fullName,
-            phone, // Store phone number
-            role // Store role
+            phone, 
+            role 
         });
 
         res.status(201).json({
@@ -71,7 +70,7 @@ const createUser = async (req, res) => {
                 email: newUser.email,
                 phone: newUser.phone,
                 role: newUser.role,
-                fullName: newUser.fullName // Include full name in the response
+                fullName: newUser.fullName 
             }
         });
     } catch (error) {
@@ -124,6 +123,13 @@ const updateUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+        if (email && user.email !== email) { 
+            const existingUserByEmail = await User.findOne({ email });
+            if (existingUserByEmail && existingUserByEmail.id!== id) {
+                return res.status(400).json({ message: 'Email đã được sử dụng.' });
+            }
+        }
+        
 
         user.fullName = fullName?? user.fullName;  
         user.email = email ?? user.email;

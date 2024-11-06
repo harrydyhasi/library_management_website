@@ -1,9 +1,9 @@
-// userUtils.js
 import { createUser } from '@/redux/actions/user_action.js'; 
 import { useToast } from "@chakra-ui/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const useUserLogic = () => {
+  const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
   const toast = useToast();
 
@@ -26,18 +26,33 @@ export const useUserLogic = () => {
 
     try {
       await dispatch(createUser(newUserData));
-      toast({
-        title: "Thêm người dùng mới thành công!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "bottom-right"
-      });
+      if (error)
+      {
+        toast({
+          title: "Thất bại",
+          description: error,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "bottom-right"
+        });
+        
+      } else {
+        toast({
+          title: "Thành công!",
+          description: "Thêm người dùng mới thành công",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "bottom-right"
+        });
+      }
       onClose(); 
       setNewUserData({ fullName: '', email: '', password: '', phone: '', role: '' }); 
-    } catch (error) {
+    } catch (e) {
       toast({
-        title: "Đã xảy ra lỗi: " + error.message,
+        title: "Đã xảy ra lỗi.",
+        description: e,
         status: "error",
         duration: 3000,
         isClosable: true,

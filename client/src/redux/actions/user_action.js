@@ -78,7 +78,8 @@ export const updateUser = (userId, userData) => {
       dispatch(updateUserSuccess(response.data));
       dispatch(fetchAllUsers());
     } catch (error) {
-      dispatch(updateUserFailure(error.message));
+      const errorMessage = error.response ? error.response.data.message : error.message; 
+      dispatch(updateUserFailure(errorMessage));
     }
   };
 };
@@ -94,10 +95,17 @@ export const deleteUser = (userId) => {
     try {
       await deleteUserService(userId);
       dispatch(deleteUserSuccess(userId));
-      // Optionally fetch all users again if needed
       dispatch(fetchAllUsers());
     } catch (error) {
-      dispatch(deleteUserFailure(error.message));
+      const errorMessage = error.response ? error.response.data.message : error.message; 
+      dispatch(deleteUserFailure(errorMessage));
     }
   };
 };
+
+
+export const CLEAR_ERROR = "CLEAR_ERROR"; 
+
+export const clearError = () => ({
+  type: CLEAR_ERROR, 
+});

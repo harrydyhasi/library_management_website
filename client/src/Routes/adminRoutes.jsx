@@ -1,7 +1,7 @@
 
 import ConfigTime from "../views/Admin/ConfigTime";
 import Tables from "../views/Admin/History";
-import Profile from "../views/Admin/Profile";
+import Profile from "../components/Profile"
 import UserManagement from "../views/Admin/UserManagement";
 import { IoMdPerson } from "react-icons/io";
 import { BsPersonFillGear } from "react-icons/bs";

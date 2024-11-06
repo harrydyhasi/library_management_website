@@ -14,11 +14,10 @@ function UserManagement() {
 
   const users = useSelector((state) => state.user.allUsers);
   const loading = useSelector((state) => state.user.loading);
-  const error = useSelector((state) => state.user.error);
 
   return (
     <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
-      {error && <Text color="red.500">Error loading users: {error}</Text>}
+      {/* {error && <Text color="red.500">Error loading users: {error}</Text>} */}
       {loading ? (
         <Flex align="center" justify="center" height="100vh">
           <Spinner size="xl" color="blue.500" />
