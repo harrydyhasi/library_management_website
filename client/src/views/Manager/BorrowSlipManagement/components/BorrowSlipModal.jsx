@@ -74,7 +74,7 @@ const BorrowSlipModal = ({
       setFormData({
         _id: initialData._id || '',
         borrowed_date: formatDateToYYYYMMDD(initialData.borrowed_date) || now,
-        return_date: formatDateToYYYYMMDD(initialData.return_date) || now,
+        return_date: formatDateToYYYYMMDD(initialData.return_date) || '',
         status: initialData.status || '',
         user_id: initialData.user_id || '',
         manager_id: initialData.manager_id || '',
