@@ -170,6 +170,7 @@ export default function HeaderLinks(props) {
         w="18px"
         h="18px"
       />
+      
       <Menu>
         <MenuButton>
           <BellIcon color={navbarIcon} w="18px" h="18px" />
