@@ -11,12 +11,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateUser, deleteUser } from '../../../../redux/actions/user_action';
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser, deleteUser, clearError } from "../../../../redux/actions/user_action";
 import EditUserModal from "./EditUserModal";
 import DeleteUserDialog from "./DeleteUserDialog";
 
 function TableRow(props) {
+  const error = useSelector((state) => state.user.error);
   const { id, fullName, email, phone, status, role, logo, password } = props;
   const textColor = useColorModeValue("gray.700", "white");
   const bgStatus = useColorModeValue("gray.400", "#1a202c");
@@ -25,12 +26,12 @@ function TableRow(props) {
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const [editData, setEditData] = useState({ fullName, email, phone, role, status, password });
+  const [hasToastShown, setHasToastShown] = useState(false); // Track if toast has been shown
 
   const dispatch = useDispatch();
   const toast = useToast();
 
   const handleEditChange = (e) => {
-    
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
@@ -43,23 +44,37 @@ function TableRow(props) {
 
   const handleEditSubmit = async () => {
     try {
-      console.log(editData);
+      dispatch(clearError());
+      await dispatch(updateUser(id, editData));
 
-      await dispatch(updateUser(id, editData)); 
-      toast({
-        title: "Thành công.",
-        description: "Thông tin người dùng đã được cập nhật!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "bottom-right",
-      });
+      if (!hasToastShown) {
+        if (error) {
+          toast({
+            title: "Thất bại.",
+            description: error,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+            position: "bottom-right",
+          });
+        } else {
+          toast({
+            title: "Thành công.",
+            description: "Thông tin người dùng đã được cập nhật!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "bottom-right",
+          });
+        }
+        setHasToastShown(true); // Ensure toast is shown only once
+        setTimeout(() => setHasToastShown(false), 3000); // Reset after toast duration
+      }
       onEditClose();
-    } catch (error) {
-      console.error("Chỉnh sửa thông tin thất bại:", error);
+    } catch (e) {
       toast({
-        title: "Chỉnh sửa thông tin thất bại.",
-        description: error.message,
+        title: "Đã xảy ra lỗi.",
+        description: e.message,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -71,19 +86,34 @@ function TableRow(props) {
   const handleDelete = async () => {
     try {
       await dispatch(deleteUser(id));
-      toast({
-        title: "Thành công.",
-        description: "Xóa người dùng thành công!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "bottom-right",
-      });
+      if (!hasToastShown) {
+        if (error) {
+          toast({
+            title: "Thất bại.",
+            description: error,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+            position: "bottom-right",
+          });
+        } else {
+          toast({
+            title: "Thành công.",
+            description: "Xóa người dùng thành công!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "bottom-right",
+          });
+        }
+        setHasToastShown(true); // Prevent multiple toasts
+        setTimeout(() => setHasToastShown(false), 3000); // Reset after toast duration
+      }
       onDeleteClose();
-    } catch (error) {
+    } catch (e) {
       toast({
-        title: "Xảy ra lỗi.",
-        description: error.message,
+        title: "Đã xảy ra lỗi.",
+        description: e.message,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -120,14 +150,13 @@ function TableRow(props) {
         </Text>
       </Td>
 
-
       <Td>
         <Text fontSize="sm" color={textColor} fontWeight="bold">
           {phone}
         </Text>
       </Td>
 
-      <Td >
+      <Td>
         <Badge
           bg={status === "active" ? "green.400" : bgStatus}
           color={status === "active" ? "white" : colorStatus}

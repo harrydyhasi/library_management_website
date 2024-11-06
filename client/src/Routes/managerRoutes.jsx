@@ -2,7 +2,7 @@
 import category_management from "../views/Manager/category_management";
 import BookManagement from "../views/Manager/BookManagement"
 import Dashboard from "../views/Manager/Dashboard";
-import Profile from "../views/Manager/Profile";
+import Profile from "../components/Profile";
 import BorrowSlipManagement from "../views/Manager/BorrowSlipManagement";
 import { LuBookCopy } from "react-icons/lu";
 import { TbCategory } from "react-icons/tb";
