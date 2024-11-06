@@ -20,7 +20,6 @@ const borrowSlipSchema = new mongoose.Schema({
   },
   manager_id: {
     type: String,
-    required: true,
   },
   books: [{
     type: String, 

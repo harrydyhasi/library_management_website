@@ -123,8 +123,7 @@ export default function Dashboard(props) {
 				{getRoute() ? (
 					<PanelContent>
 						<PanelContainer>
-							{/* Logout Button */}
-							
+							{/* Logout Button */}	
 							<Switch>
 								{getRoutes(routes)}
 								<Redirect from='/student' to='/student/dashboard' />

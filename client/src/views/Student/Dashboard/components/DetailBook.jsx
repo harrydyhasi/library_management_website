@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createBook, updateBook } from '../../../../redux/actions/book_action';
 import CustomToast from '../../../../components/Toast/CustomToast';
 import defaultImage from '/images/image.png?url';
+import { addBookToCart } from '../../../../redux/reducers/bookInCartReducer';
 
 const DetailBook = ({ isOpen, onClose, currentBook }) => {
     const dispatch = useDispatch();
@@ -34,6 +35,10 @@ const DetailBook = ({ isOpen, onClose, currentBook }) => {
     const [bookDescription, setBookDescription] = React.useState('');
     const [bookId, setBookId] = React.useState('');
     const textColor = useColorModeValue("gray.700", "white");
+
+    const handleAddToCart = () => {
+        dispatch(addBookToCart({ bookId: currentBook.id, bookName: currentBook.name }));
+    }
 
     useEffect(() => {
         if (currentBook) {
@@ -149,7 +154,7 @@ const DetailBook = ({ isOpen, onClose, currentBook }) => {
                         >
                             Hủy
                         </Button>
-                        <Button colorScheme="teal">
+                        <Button colorScheme="teal" onClick={handleAddToCart}>
                             Mượn sách
                         </Button>
                     </Flex>
