@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileInformation from "./components/ProfileInformation";
-import { Flex, useColorModeValue, Text, Box, useToast } from "@chakra-ui/react";
+import { Flex, useColorModeValue, Text, Box, useToast, Spinner } from "@chakra-ui/react";
 import avatar4 from "../../assets/img/avatars/avatar4.png";
 import ProfileBgImage from "../../assets/img/ProfileBackground.png";
 import { FaCube, FaPenFancy } from "react-icons/fa";
@@ -41,15 +41,15 @@ function Profile() {
       console.log(editData);
       await dispatch(updateUser(user.id, editData));
       toast({
-        title: "Success.",
-        description: "User information has been updated!",
+        title: "Thành công.",
+        description: "Thông tin cá nhân đã được cập nhật!",
         status: "success",
         duration: 3000,
         isClosable: true,
         position: "bottom-right",
       });
       setIsEditing(false);
-      dispatch(fetchUser(loggedInUser.id));  
+      dispatch(fetchUser(loggedInUser.id));
     } catch (e) {
       toast({
         title: "An error occurred.",
@@ -77,9 +77,9 @@ function Profile() {
 
       <Flex direction="column" minH="100vh" >
         {loading ? (
-          <Text fontSize="xl" textAlign="center" mt="5">
-            Loading...
-          </Text>
+          <Flex justifyContent="center" mt="5">
+            <Spinner size="xl" color="blue.500" />
+          </Flex>
         ) : error ? (
           <Text fontSize="xl" textAlign="center" color="red.500" mt="5">
             {error}

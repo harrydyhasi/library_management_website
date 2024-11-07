@@ -27,6 +27,7 @@ function TableRow(props) {
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const [editData, setEditData] = useState({ fullName, email, phone, role, status, password });
+
   const [hasToastShown, setHasToastShown] = useState(false); // Track if toast has been shown
   const iconColor = useColorModeValue("gray", "white");
 
@@ -44,10 +45,11 @@ function TableRow(props) {
     }));
   };
 
-  const handleEditSubmit = async () => {
+  const handleEditSubmit = async (updatedData) => {
     try {
       dispatch(clearError());
-      await dispatch(updateUser(id, editData));
+      console.log(updatedData)
+      await dispatch(updateUser(id, updatedData));
 
       if (!hasToastShown) {
         if (error) {
