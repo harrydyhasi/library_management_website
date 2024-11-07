@@ -56,7 +56,20 @@ const borrowSlipController = {
     },
 
     getBorrowSlipsByUserId: async(req, res) => {
-        
+        const { userId } = req.params; // assuming userId is passed as a route parameter
+
+        try {
+            const borrowSlips = await borrowSlipService.getBorrowSlipsByUserId(userId);
+            
+            if (!borrowSlips || borrowSlips.length === 0) {
+            return res.status(404).json({ success: false, message: "No borrow slips found for this user" });
+            }
+            return res.json({ success: true, data: borrowSlips });  
+            // res.status(200).json(borrowSlips);
+        } catch (error) {
+            console.error("Error in getBorrowSlipsByUserId:", error);
+            res.status(500).json({success: false, message: "Server error occurred while fetching borrow slips" });
+        }
     }
 }
 

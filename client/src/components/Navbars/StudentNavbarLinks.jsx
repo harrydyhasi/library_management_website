@@ -32,6 +32,7 @@ import routes from "../../routes/studentRoutes";
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/actions/auth_action'; 
 import { Redirect } from "react-router-dom/cjs/react-router-dom";
+import {resetList} from "../../redux/reducers/borrowSlipReducer"
 
 export default function HeaderLinks(props) {
   // eslint-disable-next-line no-unused-vars, react/prop-types
@@ -56,6 +57,7 @@ export default function HeaderLinks(props) {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    dispatch(resetList());
     setIsLogout(true); 
   };
 

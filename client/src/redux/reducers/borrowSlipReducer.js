@@ -13,6 +13,19 @@ export const fetchBorrowSlips = createAsyncThunk(
   }
 );
 
+export const fetchBorrowSlipsByUserId = createAsyncThunk(
+  'borrowSlips/fetchBorrowSlipsByUserId',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await borrowSlipService.getByUserId(id);
+      console.log("DATA", response.data.data)
+      return response.data.data; 
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 
 export const addBorrowSlip = createAsyncThunk(
   'borrowSlips/addBorrowSlip',
@@ -58,7 +71,11 @@ const borrowSlipSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    resetList: (state) => {
+      state.list = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBorrowSlips.pending, (state) => {
@@ -73,6 +90,20 @@ const borrowSlipSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+       // Get by user ID cases
+      .addCase(fetchBorrowSlipsByUserId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchBorrowSlipsByUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list = action.payload; 
+      })
+      .addCase(fetchBorrowSlipsByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
       .addCase(addBorrowSlip.fulfilled, (state, action) => {
         const newBorrowSlip = action.payload.data;
         state.list.push(newBorrowSlip); 
@@ -100,5 +131,5 @@ const borrowSlipSlice = createSlice({
   },
 });
 
-
+export const { resetList } = borrowSlipSlice.actions; // Export the action
 export default borrowSlipSlice.reducer;

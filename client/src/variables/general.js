@@ -348,46 +348,14 @@ export const booksTableData = [
 
 export const borrowHistoryData = [
   {
-    bookId: 1,
-    bookTitle: "Nguyen Anh Duy",
-    bookCover: avatar1, // URL to the book cover image
-    borrowerName: "John Doe",
-    borrowerEmail: "johndoe@example.com123",
-    borrowDate: "2024-01-15",
-    returnDate: "2024-01-30",
-    returnStatus: "Returned", // Can be "Returned", "Overdue", or "Not Returned"
+    _id: "672c18701cb9be691cfb0032",
+    user_id: "SV02",
+    status: "borrowed",
+    borrowed_date: "2024-11-07T00:00:00.000Z",
+    return_date: "2024-12-07T00:00:00.000Z",
+    manager_id: "QL1",
+    books: ["CBA", "DS"],
   },
-  {
-    bookId: 2,
-    bookTitle: "1984",
-    bookCover: avatar2,
-    borrowerName: "Jane Smith",
-    borrowerEmail: "janesmith@example.com",
-    borrowDate: "2024-02-01",
-    returnDate: "2024-02-15",
-    returnStatus: "Not Returned",
-  },
-  {
-    bookId: 3,
-    bookTitle: "To Kill a Mockingbird",
-    bookCover: avatar3,
-    borrowerName: "Robert Brown",
-    borrowerEmail: "robertbrown@example.com",
-    borrowDate: "2024-01-20",
-    returnDate: "2024-02-05",
-    returnStatus: "Returned",
-  },
-  {
-    bookId: 4,
-    bookTitle: "Pride and Prejudice",
-    bookCover: avatar4,
-    borrowerName: "Emily Davis",
-    borrowerEmail: "emilydavis@example.com",
-    borrowDate: "2024-03-10",
-    returnDate: "2024-03-25",
-    returnStatus: "Overdue",
-  },
-  // Add more entries as needed
 ];
 
 export const invoicesData = [
@@ -509,3 +477,4 @@ export const borrowSlipData = [
     manager: "Nguyễn Văn A"
   },
 ];
+
