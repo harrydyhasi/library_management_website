@@ -161,7 +161,7 @@ const DetailBook = ({ isOpen, onClose, currentBook }) => {
                             Hủy
                         </Button>
                         <Button colorScheme="teal" onClick={handleAddToCart}>
-                            Mượn sách
+                            Thêm vào giỏ
                         </Button>
                     </Flex>
                 </ModalFooter>
