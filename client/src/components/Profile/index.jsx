@@ -85,7 +85,8 @@ function Profile() {
             {error}
           </Text>
         ) : (
-          <Box w={600} p="4">
+          <Flex direction="column" align="center">
+            <Box w={600} p="4">
             <ProfileInformation
               title="Thông tin cá nhân"
               id={user?.id || "Unknown Id"}
@@ -98,6 +99,7 @@ function Profile() {
               handleEditChange={handleEditChange}
             />
           </Box>
+          </Flex>
         )}
       </Flex>
     </Flex>
