@@ -7,6 +7,7 @@ import ProfileBgImage from "../../assets/img/ProfileBackground.png";
 import { FaCube, FaPenFancy } from "react-icons/fa";
 import Header from "./components/Header";
 import { fetchUser, updateUser, clearError } from "../../redux/actions/user_action";
+import defaultImage from '/images/image.png?url';
 
 function Profile() {
   const dispatch = useDispatch();
@@ -66,19 +67,15 @@ function Profile() {
       <Header
         backgroundHeader={ProfileBgImage}
         backgroundProfile={useColorModeValue("hsla(0,0%,100%,.8)", "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)")}
-        avatarImage={avatar4}
+        avatarImage={defaultImage}
         name={loading ? "Loading..." : user?.fullName || "Unknown username"}
         email={loading ? "Loading..." : user?.email || "unknown@example.com"}
         role={loading ? "Loading..." : user?.role || "unknown"}
         status={loading ? "Loading..." : user?.status || ""}
-        tabs={[
-          { name: "OVERVIEW", icon: <FaCube w="24px" h="24px" /> },
-          { name: "TEAMS", icon: <FaPenFancy w="24px" h="24px" /> },
-          { name: "PROJECTS", icon: <FaPenFancy w="24px" h="24px" /> },
-        ]}
+        
       />
 
-      <Flex direction="column" minH="100vh">
+      <Flex direction="column" minH="100vh" >
         {loading ? (
           <Text fontSize="xl" textAlign="center" mt="5">
             Loading...
@@ -88,7 +85,7 @@ function Profile() {
             {error}
           </Text>
         ) : (
-          <Box p="4">
+          <Box w={600} p="4">
             <ProfileInformation
               title="Thông tin cá nhân"
               id={user?.id || "Unknown Id"}

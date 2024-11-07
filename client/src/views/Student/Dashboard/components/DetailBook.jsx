@@ -35,9 +35,15 @@ const DetailBook = ({ isOpen, onClose, currentBook }) => {
     const [bookDescription, setBookDescription] = React.useState('');
     const [bookId, setBookId] = React.useState('');
     const textColor = useColorModeValue("gray.700", "white");
+    const { showToast } = CustomToast();
 
     const handleAddToCart = () => {
-        dispatch(addBookToCart({ bookId: currentBook.id, bookName: currentBook.name }));
+        try {
+            dispatch(addBookToCart({ bookId: currentBook.id, bookName: currentBook.name, bookImage: currentBook.image }));
+            showToast({ title: "Thêm sách vào giỏ thành công!", status: "success" });
+        } catch (error) {
+            showToast({ title: "Thêm sách vào giỏ thất bại!", status: "error" });
+        }
     }
 
     useEffect(() => {

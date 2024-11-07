@@ -32,8 +32,7 @@ import ErrorAlert from '../../../../components/Alert/CustomAlert';
 import { BiSearchAlt } from "react-icons/bi";
 import {ItemBook} from '../components/BookInCart'
 import { addBorrowSlip } from '../../../../redux/reducers/borrowSlipReducer';
-
-
+import { HiShoppingBag } from "react-icons/hi2";
 const ListBook = ({ title }) => {
     const dispatch = useDispatch();
     const textColor = useColorModeValue("gray.700", "white");
@@ -165,28 +164,34 @@ const ListBook = ({ title }) => {
                                 ))}
                             </Select>
                         </Flex>
-                        <Flex ml={8}>
+                        <Flex ml='auto' mr={8}>
                             <Menu>
                                 <MenuButton>
-                                    <FaCartShopping color={navbarIcon} w="24px" h="24px"/>
+                                <Icon as={HiShoppingBag} color="teal.300" w={6} h={6} />
+                                    {/* <IconButton ml="8" size='sm'
+                                        icon={<IoCartOutline/>}
+                                        colorScheme="teal"
+                                        /> */}
                                 </MenuButton>
                                 <MenuList p="16px 8px">
-                                    <Flex flexDirection="column">
-                                    {booksInCart.map((book, index) => (
-                                        <MenuItem key={index} borderRadius="8px" mb="10px">
-                                            <ItemBook
-                                                bookId={book.bookId}
-                                                bookName={book.bookName}
-                                            />
-                                        </MenuItem>
-                                    ))}
-                                    {booksInCart.length == 0 
-                                    ? "Không có gì" 
-                                    : <Button colorScheme="teal" onClick={handleBorrow}>
-                                        Mượn sách
-                                     </Button>}
+                                    <Flex flexDirection="column" alignItems="center" justifyContent="center">
+                                        {booksInCart.map((book, index) => (
+                                            <MenuItem key={index} borderRadius="8px" mb="10px">
+                                                <ItemBook
+                                                    bookImage={book.bookImage}
+                                                    bookId={book.bookId}
+                                                    bookName={book.bookName}
+                                                />
+                                            </MenuItem>
+                                        ))}
+                                        {booksInCart.length === 0 
+                                        ? "Không có gì" 
+                                        : <Button colorScheme="teal" w={120} onClick={handleBorrow}>
+                                            Mượn sách
+                                        </Button>}
                                     </Flex>
                                 </MenuList>
+
                             </Menu>
                         </Flex>
                     </Flex>
