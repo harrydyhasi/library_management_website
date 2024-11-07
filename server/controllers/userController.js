@@ -129,7 +129,6 @@ const updateUser = async (req, res) => {
                 return res.status(400).json({ message: 'Email đã được sử dụng.' });
             }
         }
-        
 
         user.fullName = fullName?? user.fullName;  
         user.email = email ?? user.email;
@@ -149,7 +148,6 @@ const updateUser = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
-
 
 // Delete a user
 const deleteUser = async (req, res) => {

@@ -96,6 +96,7 @@ function EditUserModal({ isOpen, onClose, editData, handleEditChange, handleStat
       }));
       return; 
     }
+    console.log(updatedEditData)
     handleEditSubmit(updatedEditData); 
   };
 
