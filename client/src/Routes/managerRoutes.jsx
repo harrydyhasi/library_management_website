@@ -1,5 +1,5 @@
 // import
-import category_management from "../views/Manager/category_management";
+import category_management from "../views/Manager/CategoryManagement";
 import BookManagement from "../views/Manager/BookManagement"
 import Dashboard from "../views/Manager/Dashboard";
 import Profile from "../components/Profile";

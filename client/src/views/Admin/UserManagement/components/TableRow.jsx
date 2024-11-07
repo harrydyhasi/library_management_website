@@ -15,7 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser, deleteUser, clearError } from "../../../../redux/actions/user_action";
 import EditUserModal from "./EditUserModal";
 import DeleteUserDialog from "./DeleteUserDialog";
-
+import { TbEdit } from "react-icons/tb";
+import { MdDeleteOutline } from "react-icons/md";
 function TableRow(props) {
   const error = useSelector((state) => state.user.error);
   const { id, fullName, email, phone, status, role, logo, password } = props;
@@ -26,7 +27,9 @@ function TableRow(props) {
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const [editData, setEditData] = useState({ fullName, email, phone, role, status, password });
-  const [hasToastShown, setHasToastShown] = useState(false); 
+
+  const [hasToastShown, setHasToastShown] = useState(false); // Track if toast has been shown
+  const iconColor = useColorModeValue("gray", "white");
 
   const dispatch = useDispatch();
   const toast = useToast();
@@ -127,7 +130,6 @@ function TableRow(props) {
     <Tr>
       <Td minWidth={{ sm: "200px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Avatar src={logo} w="50px" borderRadius="12px" me="18px" />
           <Flex direction="column">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
               {fullName}
@@ -169,21 +171,27 @@ function TableRow(props) {
         </Badge>
       </Td>
 
+      <Flex justifyContent="flex-end" marginRight={16}>
       <Td width={50}>
-        <Button onClick={onEditOpen} p="0px" bg="transparent" variant="no-hover">
-          <Text fontSize="sm" color="blue.400" fontWeight="bold" cursor="pointer">
-            Chỉnh sửa
-          </Text>
+        <Button onClick={onEditOpen} 
+        p="0px" 
+            bg="transparent" 
+            mb={{ sm: "10px", md: "0px" }} 
+            me={{ md: "12px" }}>
+          <Flex color={iconColor} cursor="pointer" align="center" p="12px">
+              <TbEdit size='20px' />
+            </Flex>
         </Button>
       </Td>
 
       <Td width={50}>
-        <Button onClick={onDeleteOpen} p="0px" bg="transparent" variant="no-hover">
-          <Text fontSize="sm" color="red.300" fontWeight="bold" cursor="pointer">
-            Xóa
-          </Text>
+        <Button onClick={onDeleteOpen} p="0px" bg="transparent" variant="no-hover" marginLeft='20px'>
+        <Flex color="red.400" cursor="pointer" align="center" p="12px">
+              <MdDeleteOutline size='21px' />
+            </Flex>
         </Button>
       </Td>
+      </Flex>
 
       <EditUserModal
         isOpen={isEditOpen}

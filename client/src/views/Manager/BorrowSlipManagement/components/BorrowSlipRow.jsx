@@ -16,12 +16,12 @@ import {
   AlertDialogBody,
   AlertDialog
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BorrowSlipModal from './BorrowSlipModal';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import { TbEdit } from "react-icons/tb";
 import { MdDeleteOutline } from "react-icons/md";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateBorrowSlip, deleteBorrowSlip } from '../../../../redux/reducers/borrowSlipReducer';
 import { formatDateToDDMMYYY } from '../../../../utils/formatters/date'
 
@@ -35,6 +35,9 @@ function BorrowSlipRow(props) {
   const colorStatus = useColorModeValue("white", "gray.400");
   const iconColor = useColorModeValue("gray", "white");
   const dispatch = useDispatch();
+
+  const {user: loggedInUser } = useSelector((state) => state.auth);
+  const [manager, setManager] = useState(loggedInUser);
 
   // Modal state
   const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
@@ -121,7 +124,7 @@ function BorrowSlipRow(props) {
         isOpen={isOpenEdit}
         onClose={onCloseEdit}
         mode="edit" // or "add" when needed
-        initialData={{ _id, borrowed_date, return_date, status, user_id, manager_id, books}}
+        initialData={{ _id, borrowed_date, return_date, status, user_id, manager_id:manager.id, books, manager_name: manager.fullName}}
         onSubmit={handleEdit}
       />
 

@@ -91,15 +91,29 @@ const ProfileInformation = ({
 
           {/* Edit/Save Buttons */}
           {!isEditing ? (
-            <Button mt="4" colorScheme="blue" onClick={onEditToggle}>
+            <Button
+              colorScheme='teal'
+              borderColor='teal.300'
+              color='teal.300'
+              variant='outline'
+              ml={4}
+              p='8px 20px'
+             onClick={onEditToggle}>
               Chỉnh sửa thông tin
             </Button>
           ) : (
             <Flex justify="space-between" mt="4">
-              <Button colorScheme="blue" onClick={handleSave}>
+              <Button colorScheme="teal" onClick={handleSave}>
                 Lưu
               </Button>
-              <Button onClick={onEditToggle} colorScheme="red">
+              <Button 
+                colorScheme='teal.500'
+                borderColor='teal.500'
+                color='teal.500'
+                variant='outline'
+                p='8px 20px'
+                mr='32px'
+                onClick={onEditToggle} >
                 Hủy
               </Button>
             </Flex>

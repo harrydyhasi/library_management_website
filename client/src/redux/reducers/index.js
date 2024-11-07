@@ -6,6 +6,7 @@ import categoryReducer from './category_reducer';
 import borrowSlipReducer from './borrowSlipReducer';
 import configReducer from './configReducer';
 import bookReducer from './book_reducer';
+import bookInCartReducer from './bookInCartReducer';
 
 
 const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   borrowSlips: borrowSlipReducer,
   config: configReducer,
   book: bookReducer,
+  booksInCart: bookInCartReducer
 });
 
 export default rootReducer;

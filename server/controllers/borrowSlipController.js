@@ -23,8 +23,8 @@ const borrowSlipController = {
     create: async (req, res) => {
         const {user_id, status,borrowed_date,return_date,manager_id, books} = req.body; 
         try {
-            if (!user_id || !status || !manager_id) {
-                return res.status(400).json({ success: false, message: 'user_id, status, and manager_id are required' });
+            if (!user_id || !status) {
+                return res.status(400).json({ success: false, message: 'user_id and status are required' });
             }
             const data = await borrowSlipService.create(user_id, status, borrowed_date, return_date, manager_id, books);
             return res.json({ success: true, data });
@@ -53,6 +53,10 @@ const borrowSlipController = {
         } catch (error) {
             return res.status(500).json({ success: false, message: error.message });  
         }
+    },
+
+    getBorrowSlipsByUserId: async(req, res) => {
+        
     }
 }
 
