@@ -82,13 +82,13 @@ const Header = ({
             w={{ sm: "100%" }}
             textAlign={{ sm: "center", md: "start" }}
           >
-            <Avatar
+            {/* <Avatar
               me={{ md: "22px" }}
               src={avatarImage}
               w="80px"
               h="80px"
               borderRadius="15px"
-            />
+            /> */}
             <Flex direction="column" maxWidth="100%" my={{ sm: "14px" }}>
               <Text
                 fontSize={{ sm: "lg", lg: "xl" }}

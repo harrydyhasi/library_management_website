@@ -6,7 +6,7 @@ import UserManagement from "../views/Admin/UserManagement";
 import { IoMdPerson } from "react-icons/io";
 import { BsPersonFillGear } from "react-icons/bs";
 import { FaCogs } from "react-icons/fa";
-import {ClockIcon} from "../components/Icons/Icons"
+import { MdOutlineHistory } from "react-icons/md";
 
 var routes = [
   {
@@ -17,7 +17,7 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/tables",
+    path: "/setting",
     name: "Thời gian mượn/trả sách",
     icon: <FaCogs color="inherit" />,
     component: ConfigTime,
@@ -26,8 +26,8 @@ var routes = [
   },
   {
     path: "/history",
-    name: "Lịch sử mượn trả sách",
-    icon: <ClockIcon color="inherit" />,
+    name: "Thống kê",
+    icon: <MdOutlineHistory color="inherit" />,
     component: Tables,
 
     layout: "/admin",
