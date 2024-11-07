@@ -38,12 +38,20 @@ const AddCategoryDialog = ({ isOpen, onClose, currentCategory }) => {
   }, [currentCategory, isOpen]); 
 
   const handleAddCategory = () => {
-    dispatch(createCategory({ id: categoryId, name: categoryName }));
-    showToast({ title: "Thêm danh mục thành công!", status: "success" });
+    try {
+      dispatch(createCategory({ id: categoryId, name: categoryName }));
+      showToast({ title: "Thêm danh mục thành công!", status: "success" });
+    } catch (err) {
+      showToast({ title: "Thêm danh mục thất bại!", status: "error" });
+    }
   };
   const handleUpdateCategory = () => {
-    dispatch(updateCategory(currentCategory.id, { name: categoryName, id: categoryId }));
-    showToast({ title: "Cập nhật danh mục thành công!", status: "success" });
+    try {
+      dispatch(updateCategory(currentCategory.id, { name: categoryName, id: categoryId }));
+      showToast({ title: "Cập nhật danh mục thành công!", status: "success" });
+    } catch (error) {
+      showToast({ title: "Cập nhật danh mục thất bại!", status: "error" });
+    }
   };
 
   const handleSubmit = () => {
