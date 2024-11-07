@@ -15,6 +15,10 @@ const borrowSlipService = {
     
     delete: (id) => {
         return api.delete(`/borrowSlips/${id}`);
+    },
+
+    getByUserId: (id) => {
+        return api.get(`/borrowSlips/history/${id}`);
     }
 
 
