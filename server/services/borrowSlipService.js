@@ -73,6 +73,15 @@ const borrowSlipService = {
         } catch (error) {
             throw new Error(`Error checking existing borrow slip: ${error.message}`);
         }
+    },
+    getBorrowSlipsByUserId: async(userId) => {
+        try {
+            const borrowSlips = await BorrowSlip.find({ user_id: userId });
+            return borrowSlips;
+            } catch (error) {
+            console.error("Error fetching borrow slips:", error);
+            throw error;
+        }
     }
 };
 

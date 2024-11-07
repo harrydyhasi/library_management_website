@@ -1,6 +1,6 @@
 // import
 import Dashboard from "../views/Student/Dashboard";
-import Tables from "../views/Dashboard/Tables";
+import Tables from "../views/Student/Tables";
 import Profile from "../components/Profile";
 import { TbHome } from "react-icons/tb";
 import { IoMdPerson } from "react-icons/io";

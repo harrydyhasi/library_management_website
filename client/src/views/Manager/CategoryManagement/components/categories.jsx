@@ -26,7 +26,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../../../redux/actions/category_action';
 import { BiSearchAlt } from "react-icons/bi";
 import ErrorAlert from '../../../../components/Alert/CustomAlert';
-import AddCategoryDialog from './add_category';
+import AddCategoryDialog from './AddCategory';
 import { IoAdd } from "react-icons/io5";
 
 const Categories = () => {

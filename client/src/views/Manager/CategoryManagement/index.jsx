@@ -1,6 +1,6 @@
 // Chakra imports
 import { Flex } from "@chakra-ui/react";
-import Categories from "./components/categories";
+import Categories from "./components/Categories";
 
 function category_management() {
   return (
