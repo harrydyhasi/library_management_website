@@ -26,7 +26,7 @@ var routes = [
   },
   {
     path: "/history",
-    name: "Lịch sử mượn trả sách",
+    name: "Thống kê",
     icon: <MdOutlineHistory color="inherit" />,
     component: Tables,
 
