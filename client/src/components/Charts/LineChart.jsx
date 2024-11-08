@@ -1,35 +1,38 @@
 import React from "react";
-import ReactApexChart from "react-apexcharts";
-import { lineChartData, lineChartOptions } from "../../variables/charts";
+import Chart from "react-apexcharts";
 
-class LineChart extends React.Component {
-  constructor(props) {
-    super(props);
+const LineChart = ({ data }) => {
+  const bookNames = data.map((item) => item._id);
+  const borrowCounts = data.map((item) => item.count);
 
-    this.state = {
-      chartData: [],
-      chartOptions: {},
-    };
-  }
+  const options = {
+    chart: {
+      type: "line",
+    },
+    xaxis: {
+      categories: bookNames,
+    },
+    title: {
+      text: "Most Borrowed Books",
+    },
+  };
 
-  componentDidMount() {
-    this.setState({
-      chartData: lineChartData,
-      chartOptions: lineChartOptions,
-    });
-  }
+  const series = [
+    {
+      name: "Borrows",
+      data: borrowCounts,
+    },
+  ];
 
-  render() {
-    return (
-      <ReactApexChart
-        options={this.state.chartOptions}
-        series={this.state.chartData}
-        type="area"
-        width="100%"
-        height="100%"
-      />
-    );
-  }
-}
+  return (
+    <Chart
+      options={options}
+      series={series}
+      type="line"
+      width="100%"
+      height="100%"
+    />
+  );
+};
 
 export default LineChart;

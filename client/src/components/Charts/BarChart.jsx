@@ -1,43 +1,38 @@
-import  { Component } from "react";
-import Card from "components/Card/Card";
+import React from "react";
 import Chart from "react-apexcharts";
-import { barChartData, barChartOptions } from "../../variables/charts";
 
-class BarChart extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chartData: [],
-      chartOptions: {},
-    };
-  }
+const BarChart = ({ data }) => {
+  const categories = data.map((item) => item._id);
+  const counts = data.map((item) => item.count);
 
-  componentDidMount() {
-    this.setState({
-      chartData: barChartData,
-      chartOptions: barChartOptions,
-    });
-  }
+  const options = {
+    chart: {
+      type: "bar",
+    },
+    xaxis: {
+      categories: categories,
+    },
+    title: {
+      text: "Books per Category",
+    },
+  };
 
-  render() {
-    return (
-      <Card
-        py="1rem"
-        height={{ sm: "200px" }}
-        width="100%"
-        bg="linear-gradient(81.62deg, #313860 2.25%, #151928 79.87%)"
-        position="relative"
-      >
-        <Chart
-          options={this.state.chartOptions}
-          series={this.state.chartData}
-          type="bar"
-          width="100%"
-          height="100%"
-        />
-      </Card>
-    );
-  }
-}
+  const series = [
+    {
+      name: "Books",
+      data: counts,
+    },
+  ];
+
+  return (
+    <Chart
+      options={options}
+      series={series}
+      type="bar"
+      width="100%"
+      height="100%"
+    />
+  );
+};
 
 export default BarChart;

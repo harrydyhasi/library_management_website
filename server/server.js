@@ -6,6 +6,7 @@ const categoryRouter = require('./routes/categoryRoutes');
 const bookRouter = require('./routes/bookRoutes')
 const borrowRouter = require('./routes/borrowSlipRoute')
 const configRouter = require('./routes/configRoutes')
+const statisticsRouter = require('./routes/statisticsRoutes'); // Import statistics routes
 const configService = require('./services/configService');
 require('dotenv').config(); 
 
@@ -31,6 +32,7 @@ app.use('/api', categoryRouter);
 app.use('/api', bookRouter);
 app.use('/api/borrowSlips', borrowRouter)
 app.use('/api/configs', configRouter)
+app.use('/api/statistics', statisticsRouter); 
 
 // Start the server
 const PORT = process.env.PORT || 3000;

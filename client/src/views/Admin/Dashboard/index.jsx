@@ -30,10 +30,22 @@ import WorkWithTheRockets from "./components/WorkWithTheRockets.jsx";
 
 export default function Dashboard() {
   const iconBoxInside = useColorModeValue("white", "white");
+  const [userCountByRole, setUserCountByRole] = useState([]);
+
+  useEffect(() => {
+    // Fetch user count by role data
+    fetch("http://localhost:3000/api/statistics/user-count-by-role")
+      .then((response) => response.json())
+      .then((data) => setUserCountByRole(data.userCountByRole));
+  }, []);
 
   return (
-    <Flex flexDirection='column' pt={{ base: "120px", md: "75px" }}>
-      <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing='24px'>
+    <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
+      <Grid templateColumns={{ sm: "1fr", lg: "1fr 1fr" }} gap="24px">
+        <UserRoleChart data={userCountByRole} />
+      </Grid>
+
+      <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
         <MiniStatistics
           title={"Today's Moneys"}
           amount={"$53,000"}
@@ -62,8 +74,9 @@ export default function Dashboard() {
       <Grid
         templateColumns={{ md: "1fr", lg: "1.8fr 1.2fr" }}
         templateRows={{ md: "1fr auto", lg: "1fr" }}
-        my='26px'
-        gap='24px'>
+        my="26px"
+        gap="24px"
+      >
         <BuiltByDevelopers
           title={"Built by Developers"}
           name={"Purity UI Dashboard"}
@@ -73,7 +86,7 @@ export default function Dashboard() {
           image={
             <Image
               src={logoChakra}
-              alt='chakra image'
+              alt="chakra image"
               minWidth={{ md: "300px", lg: "auto" }}
             />
           }
@@ -89,8 +102,9 @@ export default function Dashboard() {
       <Grid
         templateColumns={{ sm: "1fr", lg: "1.3fr 1.7fr" }}
         templateRows={{ sm: "repeat(2, 1fr)", lg: "1fr" }}
-        gap='24px'
-        mb={{ lg: "26px" }}>
+        gap="24px"
+        mb={{ lg: "26px" }}
+      >
         <ActiveUsers
           title={"Active Users"}
           percentage={23}
@@ -105,7 +119,8 @@ export default function Dashboard() {
       <Grid
         templateColumns={{ sm: "1fr", md: "1fr 1fr", lg: "2fr 1fr" }}
         templateRows={{ sm: "1fr auto", md: "1fr", lg: "1fr" }}
-        gap='24px'>
+        gap="24px"
+      >
         <Projects
           title={"Projects"}
           amount={30}
