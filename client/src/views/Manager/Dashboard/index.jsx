@@ -66,22 +66,17 @@ export default function Dashboard() {
     <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
       <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
         <MiniStatistics
-          title={"Total Books"}
+          title={"Tổng số sách"}
           amount={totalBooks}
           icon={<DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
         />
         <MiniStatistics
-          title={"Total Users"}
-          amount={totalUsers}
-          icon={<GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-        />
-        <MiniStatistics
-          title={"Total Borrows"}
+          title={"Tổng số lượt mượn"}
           amount={totalBorrows}
           icon={<CartIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
         />
         <MiniStatistics
-          title={"Total Returns"}
+          title={"Tổng số lần trả"}
           amount={totalReturns}
           icon={<WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
         />
@@ -94,10 +89,6 @@ export default function Dashboard() {
         mb={{ lg: "26px" }}
       >
         <ActiveUsers chart={<BarChart data={booksPerCategory} />} />
-        {/* <SalesOverview
-          // title={"Sales Overview"}
-          chart={<LineChart data={mostBorrowedBooks} />} */}
-        {/* /> */}
         <Box w="100%">
           <PieChart data={mostBorrowedBooks} />
         </Box>

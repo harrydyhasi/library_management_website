@@ -13,7 +13,7 @@ const BarChart = ({ data }) => {
       categories: categories,
     },
     title: {
-      text: "Books per Category",
+      text: "Số lượng sách theo loại",
     },
   };
 
