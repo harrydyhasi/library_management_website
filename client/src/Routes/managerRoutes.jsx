@@ -42,13 +42,13 @@ var dashRoutes = [
   },
 
   {
-    name: "ACCOUNT PAGES",
+    name: "QUẢN LÝ TÀI KHOẢN",
     category: "account",
     state: "pageCollapse",
     views: [
       {
         path: "/profile",
-        name: "Profile",
+        name: "Thông tin cá nhân",
         rtlName: "لوحة القيادة",
         icon: <IoMdPerson color="inherit" />,
         secondaryNavbar: true,

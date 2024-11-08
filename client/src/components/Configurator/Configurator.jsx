@@ -56,16 +56,16 @@ export default function Configurator(props) {
           <DrawerHeader pt="24px" px="24px">
             <DrawerCloseButton />
             <Text fontSize="xl" fontWeight="bold" mt="16px">
-              Purity UI Configurator
+              Cài đặt
             </Text>
-            <Text fontSize="md" mb="16px">
+            {/* <Text fontSize="md" mb="16px">
               See your dashboard options.
-            </Text>
+            </Text> */}
             <Separator />
           </DrawerHeader>
           <DrawerBody w="340px" ps="24px" pe="40px">
             <Flex flexDirection="column">
-              <Box>
+              {/* <Box>
                 <Text fontSize="md" fontWeight="600">
                   Sidenav Type
                 </Text>
@@ -100,14 +100,14 @@ export default function Configurator(props) {
                     Opaque
                   </Button>
                 </Flex>
-              </Box>
+              </Box> */}
               <Box
                 display={fixedDisplay}
                 justifyContent="space-between "
                 mb="16px"
               >
                 <Text fontSize="md" fontWeight="600" mb="4px">
-                  Navbar Fixed
+                  Thanh điều hướng
                 </Text>
                 <Switch
                   colorScheme="teal"
@@ -129,10 +129,10 @@ export default function Configurator(props) {
                 mb="24px"
               >
                 <Text fontSize="md" fontWeight="600" mb="4px">
-                  Dark/Light
+                  Tối/Sáng
                 </Text>
                 <Button onClick={toggleColorMode}>
-                  Toggle {colorMode === "light" ? "Dark" : "Light"}
+                  Chế độ {colorMode === "light" ? "Tối" : "Sáng"}
                 </Button>
               </Flex>
 

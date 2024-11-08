@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Flex } from "@chakra-ui/react";
 import Chart from "react-apexcharts";
+import Card from "components/Card/Card";
 
 const PieChart = ({ data }) => {
   const [chartData, setChartData] = useState({ labels: [], series: [] });
@@ -32,18 +33,22 @@ const PieChart = ({ data }) => {
   };
 
   return (
-    <Box w="100%" h="300px" textAlign="center">
-      <Text fontSize="lg" fontWeight="bold" mb="20px">
-        Số lượng tài khoản theo phân quyền
-      </Text>
-      <Chart
-        options={chartOptions}
-        series={chartData.series}
-        type="pie"
-        width="100%"
-        height="100%"
-      />
-    </Box>
+    <Card>
+      <Flex direction='column' w='100%' p='12px 0px 40px 20px'>
+        <Box w="100%" h="300px" textAlign="center">
+        <Text fontSize="lg" fontWeight="bold" mb="20px">
+          Số lượng tài khoản theo phân quyền
+        </Text>
+        <Chart
+          options={chartOptions}
+          series={chartData.series}
+          type="pie"
+          width="100%"
+          height="100%"
+        />
+      </Box>
+      </Flex>
+    </Card>
   );
 };
 

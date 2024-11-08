@@ -34,7 +34,7 @@ const PieChart = ({ data }) => {
   return (
     <Box w="100%" h="300px" textAlign="center">
       <Text fontSize="lg" fontWeight="bold" mb="20px">
-        Sách được mượn nhiều nhất theo loại
+        Thống kê số lượng sách được mượn theo danh mục
       </Text>
       <Chart
         options={chartOptions}

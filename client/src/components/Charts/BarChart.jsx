@@ -27,7 +27,7 @@ const BarChart = ({ data }) => {
       labels: { style: { fontSize: "12px", colors: "#666" } },
     },
     title: {
-      text: "Số lượng sách theo loại",
+      text: "Thống kê số lượng sách theo danh mục",
       align: "center",
       style: { fontSize: "20px", fontWeight: "bold", color: "#319795" },
     },
@@ -35,7 +35,7 @@ const BarChart = ({ data }) => {
       borderColor: "#e5e5e5",
       strokeDashArray: 4,
     },
-    colors: ["#319795"], // Teal color for bars
+    colors: ["#81E6D9"], // Teal color for bars
     plotOptions: {
       bar: {
         borderRadius: 8,
