@@ -1,9 +1,11 @@
 // Chakra imports
-import { Flex, Spinner, Text } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { Flex, Spinner, Text, Grid, Box } from "@chakra-ui/react";
+import { useEffect, useState } from "react"; // Add useState here
 import { useDispatch, useSelector } from "react-redux";
 import UserList from "./components/UserList";
 import { fetchAllUsers } from "../../../redux/actions/user_action";
+import UserRoleChart from "./components/UserRoleChart";
+import PieChart from "./components/PieChart";
 
 function UserManagement() {
   const dispatch = useDispatch();
@@ -12,8 +14,16 @@ function UserManagement() {
     dispatch(fetchAllUsers());
   }, [dispatch]);
 
+  useEffect(() => {
+    // Fetch user count by role data
+    fetch("http://localhost:3000/api/statistics/user-count-by-role")
+      .then((response) => response.json())
+      .then((data) => setUserCountByRole(data.userCountByRole));
+  }, []);
+
   const users = useSelector((state) => state.user.allUsers);
   const loading = useSelector((state) => state.user.loading);
+  const [userCountByRole, setUserCountByRole] = useState([]);
 
   return (
     <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
@@ -25,10 +35,23 @@ function UserManagement() {
       ) : (
         <UserList
           title={"Danh sách người dùng"}
-          captions={["Họ tên", "Mã số", "Phân quyền", "Số điện thoại", "Trạng thái tài khoản"]}
-          data={users} 
+          captions={[
+            "Họ tên",
+            "Mã số",
+            "Phân quyền",
+            "Số điện thoại",
+            "Trạng thái tài khoản",
+          ]}
+          data={users}
         />
       )}
+
+      <Box w="100%">
+        <PieChart
+          data={userCountByRole}
+          title="Thống kê người dùng theo phân quyền"
+        />
+      </Box>
     </Flex>
   );
 }

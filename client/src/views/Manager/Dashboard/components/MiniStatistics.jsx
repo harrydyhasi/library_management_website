@@ -41,7 +41,7 @@ const MiniStatistics = ({ title, amount, percentage, icon }) => {
                 fontWeight='bold'
                 ps='3px'
                 fontSize='md'>
-                {percentage > 0 ? `+${percentage}%` : `${percentage}%`}
+                {/* {percentage > 0 ? `+${percentage}%` : `${percentage}%`} */}
               </StatHelpText>
             </Flex>
           </Stat>
