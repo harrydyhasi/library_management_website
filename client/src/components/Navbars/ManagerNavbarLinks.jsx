@@ -150,7 +150,7 @@ export default function HeaderLinks(props) {
           color={navbarIcon}
           variant="transparent-with-icon"
         >
-          <Text display={{ sm: "none", md: "flex" }}>Sign out</Text>
+          <Text display={{ sm: "none", md: "flex" }}>Đăng xuất</Text>
         </Button>
       {/* </NavLink> */}
       <SidebarResponsive
@@ -178,7 +178,7 @@ export default function HeaderLinks(props) {
         </MenuButton>
         <MenuList p="16px 8px">
           <Flex flexDirection="column">
-            <MenuItem borderRadius="8px" mb="10px">
+            {/* <MenuItem borderRadius="8px" mb="10px">
               <ItemContent
                 time="13 minutes ago"
                 info="from Alicia"
@@ -204,7 +204,7 @@ export default function HeaderLinks(props) {
                 aName="Kara"
                 aSrc={avatar3}
               />
-            </MenuItem>
+            </MenuItem> */}
           </Flex>
         </MenuList>
       </Menu>

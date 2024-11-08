@@ -100,7 +100,7 @@ export default function Dashboard(props) {
 		<ChakraProvider theme={theme} resetCss={false}>
 			<Sidebar
 				routes={routes}
-				logoText={'LIBRARY MANAGEMENT'}
+				logoText={'QUẢN LÝ THƯ VIỆN'}
 				display='none'
 				sidebarVariant={sidebarVariant}
 				{...rest}

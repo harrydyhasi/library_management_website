@@ -4,22 +4,25 @@ import {
   Grid,
   SimpleGrid,
   useColorModeValue,
-  Box,
+  Box, 
 } from "@chakra-ui/react"; // Added Box here
 import BarChart from "../../../components/Charts/BarChart";
-import LineChart from "components/Charts/LineChart";
 // Import the new PieChart component
 import PieChart from "./components/PieChart"; // Adjust the import path as necessary
 import MiniStatistics from "./components/MiniStatistics.jsx";
 import ActiveUsers from "./components/ActiveUsers.jsx";
-import SalesOverview from "./components/SalesOverview.jsx";
+import Card from "components/Card/Card";
+
 import {
   WalletIcon,
   GlobeIcon,
   DocumentIcon,
   CartIcon,
 } from "../../../components/Icons/Icons";
-
+import { ImBook } from "react-icons/im";
+import { TbBookDownload } from "react-icons/tb";
+import { TbBookUpload } from "react-icons/tb";
+import { TbBook2 } from "react-icons/tb";
 export default function Dashboard() {
   const [totalBooks, setTotalBooks] = useState(0);
   const [booksPerCategory, setBooksPerCategory] = useState([]);
@@ -68,17 +71,17 @@ export default function Dashboard() {
         <MiniStatistics
           title={"Tổng số sách"}
           amount={totalBooks}
-          icon={<DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
+          icon={<TbBook2 size={24} color={iconBoxInside} />}
         />
         <MiniStatistics
           title={"Tổng số lượt mượn"}
           amount={totalBorrows}
-          icon={<CartIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
+          icon={<TbBookUpload size={24} color={iconBoxInside} />}
         />
         <MiniStatistics
           title={"Tổng số lần trả"}
           amount={totalReturns}
-          icon={<WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
+          icon={<TbBookDownload size={24} color={iconBoxInside} />}
         />
       </SimpleGrid>
 
@@ -89,9 +92,11 @@ export default function Dashboard() {
         mb={{ lg: "26px" }}
       >
         <ActiveUsers chart={<BarChart data={booksPerCategory} />} />
-        <Box w="100%">
-          <PieChart data={mostBorrowedBooks} />
-        </Box>
+        <Card>
+          <Box w="100%">
+            <PieChart data={mostBorrowedBooks} />
+          </Box>
+        </Card>
       </Grid>
     </Flex>
   );

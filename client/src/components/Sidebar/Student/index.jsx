@@ -48,7 +48,7 @@ function SidebarManager(props) {
         >
           <SidebarContent
             routes={routes}
-            logoText={logoText || "LIBRARY MANAGEMENT"}
+            logoText={logoText || "QUẢN LÝ THƯ VIỆN"}
             display="none"
             sidebarVariant={sidebarVariant}
           />

@@ -1,6 +1,6 @@
 
 import ConfigTime from "../views/Admin/ConfigTime";
-import Tables from "../views/Admin/History";
+import Statictis from "../views/Admin/Statistics";
 import Profile from "../components/Profile"
 import UserManagement from "../views/Admin/UserManagement";
 import { IoMdPerson } from "react-icons/io";
@@ -25,21 +25,21 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/history",
-    name: "Thống kê",
+    path: "/statistic",
+    name: "Thống kê người dùng",
     icon: <MdOutlineHistory color="inherit" />,
-    component: Tables,
+    component: Statictis,
 
     layout: "/admin",
   },
   {
-    name: "ACCOUNT PAGES",
+    name: "QUẢN LÝ TÀI KHOẢN",
     category: "account",
     state: "pageCollapse",
     views: [
       {
         path: "/profile",
-        name: "Profile",
+        name: "Thông tin cá nhân",
         icon: <IoMdPerson color="inherit" />,
         secondaryNavbar: true,
         component: Profile,
