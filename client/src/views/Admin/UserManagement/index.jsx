@@ -45,13 +45,13 @@ function UserManagement() {
           data={users}
         />
       )}
-
+{/* 
       <Box w="100%">
         <PieChart
           data={userCountByRole}
           title="Thống kê người dùng theo phân quyền"
         />
-      </Box>
+      </Box> */}
     </Flex>
   );
 }
