@@ -74,7 +74,7 @@ export default function Dashboard() {
           icon={<TbBook2 size={24} color={iconBoxInside} />}
         />
         <MiniStatistics
-          title={"Tổng số lượt mượn"}
+          title={"Tổng số phiếu mượn"}
           amount={totalBorrows}
           icon={<TbBookUpload size={24} color={iconBoxInside} />}
         />
