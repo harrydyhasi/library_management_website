@@ -33,11 +33,11 @@ const PieChart = ({ data }) => {
   };
 
   return (
-    <Card>
+    <Card boxShadow="md">
       <Flex direction='column' w='100%' p='12px 0px 40px 20px'>
         <Box w="100%" h="300px" textAlign="center">
         <Text fontSize="lg" fontWeight="bold" mb="20px">
-          Số lượng tài khoản theo phân quyền
+          Thống kê số lượng tài khoản theo phân quyền
         </Text>
         <Chart
           options={chartOptions}

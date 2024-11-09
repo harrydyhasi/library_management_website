@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalOverlay,
-  ModalContent,
+  ModalContent,  
   ModalHeader,
   ModalCloseButton,
   ModalBody,
@@ -17,16 +17,23 @@ import {
   useToast,
   Box,
   IconButton,
-  FormErrorMessage
+  FormErrorMessage,
+  useDisclosure, // Import useDisclosure here
 } from "@chakra-ui/react";
 import { formatDateToYYYYMMDD, formatWithThousandsSeparator } from '../../../../utils/formatters/date';
 import { MdDeleteOutline } from "react-icons/md";
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteBorrowSlip } from '../../../../redux/reducers/borrowSlipReducer';
+import DeleteConfirmationDialog from '../../../Manager/BorrowSlipManagement/components/DeleteConfirmationDialog';
+import CustomToast from '../../../../components/Toast/CustomToast';
 
 const HistoryModal = ({ 
   isOpen, 
   onClose, 
-  initialData, // for editin
+  initialData, // for editing
 }) => {
+  const dispatch = useDispatch();
+  const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
   const [formData, setFormData] = useState({
     _id: '',
     borrowed_date: '', 
@@ -37,12 +44,23 @@ const HistoryModal = ({
     manager_name: '',
     books: [] // Add a field for borrowed books
   });
+  const { showToast } = CustomToast();
 
-  // Reset form data
+  const handleDeleteConfirm = () => {
+    try {
+      dispatch(deleteBorrowSlip(formData._id));
+      showToast({ title: "Xóa phiếu mượn thành công!", status: "success" });
+  } catch (error) {
+      showToast({ title: "Xóa phiếu mượn thất bại!", status: "error" });
+  } finally {
+      onCloseDelete();
+    }
+  };
+
   useEffect(() => {
       setFormData({
         _id: initialData._id || '',
-        borrowed_date: formatDateToYYYYMMDD(initialData.borrowed_date) || now,
+        borrowed_date: formatDateToYYYYMMDD(initialData.borrowed_date) || '',
         return_date: formatDateToYYYYMMDD(initialData.return_date) || '',
         status: initialData.status || '',
         user_id: initialData.user_id || '',
@@ -119,8 +137,6 @@ const HistoryModal = ({
                       <Input
                         id={`book-${index}`}
                         value={book}
-                        // onChange={(e) => handleBookChange(index, e)}
-                        placeholder="Nhập mã sách"
                         readOnly
                       />
                   </Flex>
@@ -128,11 +144,31 @@ const HistoryModal = ({
                   </Flex>
                 </Box>
               ))}
-             
             </FormControl>
+            {formData.status === "registered" && (
+              <Flex justifyContent='center'>
+                <Button
+                colorScheme='red'
+                borderColor='red.400'
+                color='red.400'
+                variant='outline'
+                ml={4}
+                p='8px 20px'
+                onClick={onOpenDelete} // Open delete confirmation dialog
+              >
+              Xóa phiếu mượn
+              </Button>
+              </Flex>
+            )}
             <ModalFooter>
             </ModalFooter>
-         
+            <DeleteConfirmationDialog
+              isOpen={isOpenDelete} // Pass delete dialog open state
+              onClose={onCloseDelete} // Close delete dialog on cancel
+              title="Xóa phiếu mượn này"
+              message="Bạn có chắc muốn xóa phiếu mượn này."
+              onConfirm={handleDeleteConfirm}
+            />
         </ModalBody>
       </ModalContent>
     </Modal>

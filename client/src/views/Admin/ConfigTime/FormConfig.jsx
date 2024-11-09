@@ -68,7 +68,7 @@ function FormConfig() {
     }
   };
   return (
-    <Card overflowX={{ sm: "scroll", xl: "hidden" }}>
+    <Card overflowX={{ sm: "scroll", xl: "hidden" }} boxShadow="md">
         <Flex direction='column' w='50%' p='12px 0px 22px 20px'>
             {/* Thời hạn mượn sách tối đa */}
             <FormControl mb="4" isRequired>
@@ -127,13 +127,20 @@ function FormConfig() {
             <Flex mt="4">
                 {isEditable ? (
                 <>
-                    <Button colorScheme="blue" onClick={handleSave}>
-                    Lưu
-                    </Button>
+                <Button colorScheme='teal.500'
+                  borderColor='teal.500'
+                  color='teal.500'
+                  variant='outline'
+                  p='8px 20px'
+                  mr='28px' onClick={handleCancel} >
+                  Hủy
+                </Button>
+
+                <Button colorScheme="teal" onClick={handleSave}>
+                Lưu
+                </Button>
                     
-                    <Button variant="outline" onClick={handleCancel} ml="2">
-                    Hủy
-                    </Button>
+                    
                 </>
                 ) : (
                 <Button colorScheme="teal" onClick={handleUpdate}>
