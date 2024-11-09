@@ -33,6 +33,8 @@ import { BiSearchAlt } from "react-icons/bi";
 import {ItemBook} from '../components/BookInCart'
 import { addBorrowSlip } from '../../../../redux/reducers/borrowSlipReducer';
 import { HiShoppingBag } from "react-icons/hi2";
+import CustomToast from '../../../../components/Toast/CustomToast';
+import { clearCart} from '../../../../redux/reducers/bookInCartReducer'
 const ListBook = ({ title }) => {
     const dispatch = useDispatch();
     const textColor = useColorModeValue("gray.700", "white");
@@ -55,7 +57,8 @@ const ListBook = ({ title }) => {
     
     const {user: loggedInUser } = useSelector((state) => state.auth);
     const [student, setManager] = useState(loggedInUser);
-    
+    const { showToast } = CustomToast();
+
 
     useEffect(() => {
         dispatch(fetchAllBooks());
@@ -69,9 +72,15 @@ const ListBook = ({ title }) => {
 
     const handleBorrow = () => {
         const now = new Date().toISOString().split("T")[0];
-        alert("Mượn sách" + student.id)
+        //alert("Mượn sách" + student.id)
         const bookIds = booksInCart.map(book => book.bookId);
-        dispatch(addBorrowSlip({books: bookIds, status: "registered", user_id: student.id, borrowed_date: now }))
+        try {
+            dispatch(addBorrowSlip({books: bookIds, status: "registered", user_id: student.id, borrowed_date: now }))
+            showToast({ title: "Đăng ký mượn sách thành công!", status: "success" });
+            dispatch(clearCart());
+        } catch (error) {
+            showToast({ title: "Đăng ký mượn sách thất bại!", status: "error" });
+        }
     }
 
     const filteredBooks = books.filter((book) => {

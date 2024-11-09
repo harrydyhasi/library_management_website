@@ -178,7 +178,11 @@ const AddBook = ({ isOpen, onClose, currentBook }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose}
+    isCentered
+      motionPreset='slideInBottom'
+      size='xl'
+      scrollBehavior='inside'>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{currentBook ? 'Chỉnh sửa sách' : 'Thêm sách mới'}</ModalHeader>

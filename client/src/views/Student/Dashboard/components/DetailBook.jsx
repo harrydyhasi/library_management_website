@@ -43,7 +43,9 @@ const DetailBook = ({ isOpen, onClose, currentBook }) => {
             showToast({ title: "Thêm sách vào giỏ thành công!", status: "success" });
         } catch (error) {
             showToast({ title: "Thêm sách vào giỏ thất bại!", status: "error" });
-        }
+        } finally {
+            onClose();
+          }
     }
 
     useEffect(() => {

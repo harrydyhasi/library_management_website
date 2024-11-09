@@ -1,7 +1,6 @@
 // Chakra imports
 import { Flex } from "@chakra-ui/react";
 import History from "./components/HistoryList";
-import { tablesTableData, dashboardTableData, borrowHistoryData } from "../../../variables/general";
 import {useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 // import { fetchBorrowSlips } from '../../../redux/reducers/borrowSlipReducer';
