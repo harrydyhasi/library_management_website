@@ -177,10 +177,11 @@ function SignIn() {
             display={{ base: "none", md: "block" }}
             overflowX="hidden"
             h="100%"
-            w="40vw"
+            w="45vw"
             position="absolute"
             right="0px"
           >
+            {/* Background Image */}
             <Box
               bgImage={signInImage}
               w="100%"
@@ -190,7 +191,20 @@ function SignIn() {
               position="absolute"
               borderBottomLeftRadius="20px"
             ></Box>
+
+            {/* Teal overlay with opacity */}
+            <Box
+              backgroundColor="teal.300"
+              opacity="0.3"
+              w="100%"
+              h="100%"
+              position="absolute"
+              top="0"
+              left="0"
+              borderBottomLeftRadius="20px"
+            ></Box>
           </Box>
+
         </Flex>
       </Flex>
     );

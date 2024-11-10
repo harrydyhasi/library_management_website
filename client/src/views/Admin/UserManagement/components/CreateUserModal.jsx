@@ -69,7 +69,10 @@ const CreateUserModal = ({ isOpen, onClose, handleCreateUser, newUserData, setNe
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered
+      motionPreset='slideInBottom'
+      size='xl'
+      scrollBehavior='inside'>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Tạo người dùng mới</ModalHeader>
