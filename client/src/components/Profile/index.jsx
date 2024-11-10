@@ -2,12 +2,10 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileInformation from "./components/ProfileInformation";
 import { Flex, useColorModeValue, Text, Box, useToast, Spinner } from "@chakra-ui/react";
-import avatar4 from "../../assets/img/avatars/avatar4.png";
 import ProfileBgImage from "../../assets/img/ProfileBackground.png";
-import { FaCube, FaPenFancy } from "react-icons/fa";
-import Header from "./components/Header";
 import { fetchUser, updateUser, clearError } from "../../redux/actions/user_action";
 import defaultImage from '/images/image.png?url';
+import Header from "./components/Header";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -38,11 +36,10 @@ function Profile() {
   const handleEditSubmit = async () => {
     dispatch(clearError());
     try {
-      console.log(editData);
       await dispatch(updateUser(user.id, editData));
       toast({
-        title: "Thành công.",
-        description: "Thông tin cá nhân đã được cập nhật!",
+        title: "Success.",
+        description: "Profile updated successfully!",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -52,7 +49,7 @@ function Profile() {
       dispatch(fetchUser(loggedInUser.id));
     } catch (e) {
       toast({
-        title: "An error occurred.",
+        title: "Error",
         description: e.message,
         status: "error",
         duration: 3000,
@@ -72,36 +69,15 @@ function Profile() {
         email={loading ? "Loading..." : user?.email || "unknown@example.com"}
         role={loading ? "Loading..." : user?.role || "unknown"}
         status={loading ? "Loading..." : user?.status || ""}
-        
+        loading={loading}
+        error={error}
+        user={user}
+        isEditing={isEditing}
+        editData={editData}
+        setIsEditing={setIsEditing}
+        handleEditSubmit={handleEditSubmit}
+        handleEditChange={handleEditChange}
       />
-
-      <Flex direction="column" minH="100vh" >
-        {loading ? (
-          <Flex justifyContent="center" mt="5">
-            <Spinner size="xl" color="blue.500" />
-          </Flex>
-        ) : error ? (
-          <Text fontSize="xl" textAlign="center" color="red.500" mt="5">
-            {error}
-          </Text>
-        ) : (
-          <Flex direction="column" align="center">
-            <Box w={600} p="4">
-            <ProfileInformation
-              title="Thông tin cá nhân"
-              id={user?.id || "Unknown Id"}
-              fullName={editData.fullName}
-              phone={editData.phone}
-              email={user?.email || "unknown@example.com"}
-              isEditing={isEditing}
-              onEditToggle={() => setIsEditing(!isEditing)}
-              onSave={handleEditSubmit}
-              handleEditChange={handleEditChange}
-            />
-          </Box>
-          </Flex>
-        )}
-      </Flex>
     </Flex>
   );
 }
