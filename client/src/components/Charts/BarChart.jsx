@@ -45,7 +45,7 @@ const BarChart = ({ data }) => {
       },
     },
     tooltip: {
-      theme: "dark",
+      theme: "light",
       y: {
         formatter: (value) => `${value} books`,
       },
