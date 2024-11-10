@@ -1,4 +1,5 @@
 const BorrowSlip = require('../models/borrowSlip');  
+const Books = require('../models/books');
 
 const borrowSlipService = {
     create: async (userId, status, borrowedDate, returnDate, managerId, books) => {
@@ -34,6 +35,16 @@ const borrowSlipService = {
         try {
             const  borrowSlip = await BorrowSlip.findByIdAndUpdate(id, updates, { new: true });
             if (! borrowSlip) throw new Error(' BorrowSlip not found');
+            borrowSlip.books.map(async (a) => {
+                const book = await Books.findOne({ id: a});
+                if (borrowSlip.status == "borrowed") {
+                    book.quantity--
+                }
+                else if (borrowSlip.status == 'returned') {
+                    book.quantity++
+                }
+                await book.save()
+            })
             return  borrowSlip;
         } catch (error) {
             throw new Error(`Error updating borrow slip: ${error.message}`);

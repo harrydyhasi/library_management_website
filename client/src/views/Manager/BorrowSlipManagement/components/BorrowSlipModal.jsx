@@ -117,9 +117,6 @@ const BorrowSlipModal = ({
       [name]: value,
     }));
 
-   
-    
-
     const borrowedDate = new Date(formData.borrowed_date);
     const returnDate = new Date(formData.return_date);
     const nowDate = new Date(now);
@@ -181,7 +178,7 @@ const BorrowSlipModal = ({
     }));
   };
 
-  const handleSubmit =   (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (dateError){
       return

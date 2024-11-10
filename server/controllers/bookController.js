@@ -84,6 +84,28 @@ const updateBook = async (req, res) => {
     }
 };
 
+const updateQuantityBook = async (req, res) => {
+    const {quantity} = req.body;
+    const bookId = req.params.id; 
+
+    const book = await Books.findOne({ id: bookId }); 
+        if (!book) {
+            return res.status(404).json({ message: 'Book not found' });
+        }
+
+    if (!quantity) {
+        return res.status(400).json({ message: 'Quantity field are required' });
+    }
+
+    try {
+        book.quantity = quantity;
+        await book.save();
+        return res.status(200).json({ message: 'Book updated successfully', data: book });
+    } catch (error) {
+        return res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 const deleteBook = async (req, res) => {
     try {
         const { id } = req.params;
@@ -134,4 +156,5 @@ module.exports = {
     deleteBook,
     getAllBooks,
     getBookById,
+    updateQuantityBook,
 };
