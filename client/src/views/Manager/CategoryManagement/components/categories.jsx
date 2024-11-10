@@ -16,6 +16,7 @@ import {
   Spinner,
   VStack,
   useDisclosure,
+  useToast
 } from "@chakra-ui/react";
 import Card from "../../../../components/Card/Card";
 import CardBody from "../../../../components/Card/CardBody";
@@ -42,6 +43,13 @@ const Categories = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentCategory, setCurrentCategory] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setIsLoading] = useState({
+    books: false,
+    categories: false,
+    borrowslips: false,
+    users: false,
+  });
+  const toast = useToast();
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -74,15 +82,64 @@ const Categories = () => {
     setCurrentCategory(category); 
     onOpen();
   };
+  const handleExport = async (type) => {
+    setIsLoading((prev) => ({ ...prev, [type]: true }));
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/statistics/export-${type}`,
+        {
+          method: "GET",
+        }
+      );
 
+      if (!response.ok) {
+        throw new Error(`Failed to export ${type}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${type}.xlsx`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Xuất file thành công",
+        description: `Xuất danh sách danh mục thành công`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Xuất file thất bại",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading((prev) => ({ ...prev, [type]: false }));
+    }
+  };
   return (
     <Card overflowX={{ sm: "scroll", xl: "hidden" }}>
       <CardHeader>
         <Flex direction="column" w='100%' p='12px 0px 22px 20px'>
-          <Flex>
+          <Flex justifyContent='space-between'>
             <Text fontSize='xl' color={textColor} fontWeight='bold' pl='8px'>
               Danh mục sách
             </Text>
+            <Button
+              colorScheme="teal" background="teal.300" p='8px 20px'
+              onClick={handleAddCategory}
+            >
+              Thêm danh mục mới
+            </Button>
           </Flex>
           <Flex justify='space-between' align='center' w='100%' mb="10px" p='0px' my='20px'>
             <InputGroup
@@ -121,12 +178,21 @@ const Categories = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </InputGroup>
+            
+            <Flex justifyContent="flex-end" w="100%" >
             <Button
-              colorScheme="teal" background="teal.300" p='8px 20px'
-              onClick={handleAddCategory}
+              colorScheme="teal.300"
+              borderColor="teal.300"
+              color="teal.300"
+              variant="outline"
+              p="8px 20px"
+              onClick={() => handleExport("categories")}
+              isLoading={isLoading.categories}
+              loadingText="Đang xuất..."
             >
-              Thêm danh mục mới
+              Xuất danh sách danh mục
             </Button>
+          </Flex>
           </Flex>
         </Flex>
       </CardHeader>

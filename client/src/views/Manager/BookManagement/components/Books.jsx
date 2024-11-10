@@ -17,6 +17,7 @@ import {
   VStack,
   Select,
   useDisclosure,
+  useToast
 } from "@chakra-ui/react";
 import Card from "../../../../components/Card/Card";
 import CardBody from "../../../../components/Card/CardBody";
@@ -47,7 +48,13 @@ const Books = () => {
   // Thêm trạng thái phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 10; // Số lượng sách mỗi trang
-
+  const [isLoading, setIsLoading] = useState({
+    books: false,
+    categories: false,
+    borrowslips: false,
+    users: false,
+  });
+  const toast = useToast();
   useEffect(() => {
     dispatch(fetchAllBooks());
     dispatch(fetchCategories());
@@ -78,6 +85,50 @@ const Books = () => {
   const handleCategoryChange = (event) => {
     setCategoryFilter(event.target.value);
     setCurrentPage(1);
+  };
+  const handleExport = async (type) => {
+    setIsLoading((prev) => ({ ...prev, [type]: true }));
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/statistics/export-${type}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to export ${type}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${type}.xlsx`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Xuất file thành công",
+        description: `Xuất danh sách sách thành công`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Xuất file thất bại",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading((prev) => ({ ...prev, [type]: false }));
+    }
   };
 
   const filteredBooks = books.filter((book) => {
@@ -166,8 +217,21 @@ const Books = () => {
               ))}
             </Select>
           </Flex>
+          <Flex justifyContent="flex-end" w="100%" >
+            <Button
+              colorScheme="teal.300"
+              borderColor="teal.300"
+              color="teal.300"
+              variant="outline"
+              p="8px 20px"
+              onClick={() => handleExport("books")}
+              isLoading={isLoading.books}
+              loadingText="Đang xuất..."
+            >
+              Xuất danh sách sách
+            </Button>
           </Flex>
-          
+          </Flex>
         </Flex>
       </CardHeader>
       <CardBody>
