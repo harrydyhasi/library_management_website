@@ -25,7 +25,7 @@ function Tables() {
     <Flex direction='column' pt={{ base: "120px", md: "75px" }}>
       <History
         title={"Lịch sử mượn trả sách"}
-        captions={["Mã phiếu mượn", "Ngày mượn", "Tình trạng", "Ngày trả", ""]}
+        captions={["Mã phiếu mượn", "Ngày mượn", "Ngày trả", , "Tình trạng", ""]}
         data={list}
       />
     </Flex>
