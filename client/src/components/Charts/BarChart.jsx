@@ -2,7 +2,7 @@ import React from "react";
 import Chart from "react-apexcharts";
 
 const BarChart = ({ data }) => {
-  const categories = data.map((item) => item._id);
+  const categories = data.map((item) => item.name);
   const counts = data.map((item) => item.count);
 
   const options = {
@@ -35,19 +35,20 @@ const BarChart = ({ data }) => {
       borderColor: "#e5e5e5",
       strokeDashArray: 4,
     },
-    colors: ["#81E6D9"], // Teal color for bars
+    colors: ["#81E6D9"],
     plotOptions: {
       bar: {
         borderRadius: 8,
         horizontal: false,
         barHeight: "70%",
         distributed: true,
+        columnWidth: "40%", // Adjust this value to control bar width
       },
     },
     tooltip: {
       theme: "light",
       y: {
-        formatter: (value) => `${value} books`,
+        formatter: (value) => `${value} quyển`, // Tooltip text in Vietnamese
       },
     },
     dataLabels: {
@@ -65,7 +66,7 @@ const BarChart = ({ data }) => {
 
   const series = [
     {
-      name: "Books",
+      name: "Số lượng sách",
       data: counts,
     },
   ];
