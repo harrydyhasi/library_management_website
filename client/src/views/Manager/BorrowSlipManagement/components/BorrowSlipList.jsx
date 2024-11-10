@@ -15,7 +15,8 @@ import {
   Icon,
   InputGroup,
   InputLeftElement,
-  IconButton
+  IconButton,
+  useToast
 } from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
 import { GrPowerReset } from "react-icons/gr";
@@ -50,7 +51,13 @@ const BorrowSlipList = ({ title, captions, data }) => {
 
   const {user: loggedInUser } = useSelector((state) => state.auth);
   const [manager, setManager] = useState(loggedInUser);
-
+  const [isLoading, setIsLoading] = useState({
+    books: false,
+    categories: false,
+    borrowslips: false,
+    users: false,
+  });
+  const toast = useToast();
 
   
   // Handler to be called on form submission
@@ -75,6 +82,50 @@ const BorrowSlipList = ({ title, captions, data }) => {
     return acc;
   }, {});
 
+  const handleExport = async (type) => {
+    setIsLoading((prev) => ({ ...prev, [type]: true }));
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/statistics/export-${type}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to export ${type}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${type}.xlsx`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Xuất file thành công",
+        description: `Xuất danh sách phiếu mượn thành công`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Xuất file thất bại",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading((prev) => ({ ...prev, [type]: false }));
+    }
+  };
 
 
   return (
@@ -91,55 +142,66 @@ const BorrowSlipList = ({ title, captions, data }) => {
             </Button>
           </Flex>
           <Flex justify='space-between'>
-          <Flex>
+            <Flex align='center' w='100%' mb="10px" p='0px' my='20px'>
+              <InputGroup
+                  bg={inputBg}
+                  borderRadius="15px"
+                  w="300px"
+                  _focus={{ borderColor: mainTeal }}
+                  _active={{ borderColor: mainTeal }}
+                >
+                  <InputLeftElement>
+                    <IconButton
+                      bg="inherit"
+                      borderRadius="inherit"
+                      _hover="none"
+                      _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
+                      _focus={{ boxShadow: "none" }}
+                      icon={<BiSearchAlt color={searchIconColor} w="15px" h="15px" />}
+                    />
+                  </InputLeftElement>
+                  <Input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                    placeholder="Tìm kiếm ID phiếu mượn"
+                    fontSize="xs"
+                    py="11px"
+                    borderRadius="inherit"
 
-          <Flex align='center' w='100%' mb="10px" p='0px' my='20px'>
-          <InputGroup
-              bg={inputBg}
-              borderRadius="15px"
-              w="300px"
-              _focus={{ borderColor: mainTeal }}
-              _active={{ borderColor: mainTeal }}
-            >
-              <InputLeftElement>
-                <IconButton
-                  bg="inherit"
-                  borderRadius="inherit"
-                  _hover="none"
-                  _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
-                  _focus={{ boxShadow: "none" }}
-                  icon={<BiSearchAlt color={searchIconColor} w="15px" h="15px" />}
-                />
-              </InputLeftElement>
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} // Update search query
-                placeholder="Tìm kiếm ID phiếu mượn"
-                fontSize="xs"
-                py="11px"
-                borderRadius="inherit"
-
-              />
-            </InputGroup>
-            <Select
-              onChange={(e) => setFilter(e.target.value)}
-              width="200px" 
-              ml={4} 
-              value={filter}
-            >
-              <option value="all">Tất cả ({data.length})</option>
-              <option value="borrowed">Đang mượn ({statusCounts["borrowed"] || 0})</option>
-              <option value="registered">Đã đăng ký ({statusCounts["registered"] || 0})</option>
-              <option value="returned">Đã trả ({statusCounts["returned"] || 0})</option>
-            </Select>
-            <Button colorScheme="teal" background="teal.300" ml={4}>
-              <Flex color="white" cursor="pointer" align="center" p="5px" onClick={handleClickReset}>
-                <Icon as={GrPowerReset} me="4px" />     
+                  />
+                </InputGroup>
+                <Select
+                  onChange={(e) => setFilter(e.target.value)}
+                  width="200px" 
+                  ml={4} 
+                  value={filter}
+                >
+                  <option value="all">Tất cả ({data.length})</option>
+                  <option value="borrowed">Đang mượn ({statusCounts["borrowed"] || 0})</option>
+                  <option value="registered">Đã đăng ký ({statusCounts["registered"] || 0})</option>
+                  <option value="returned">Đã trả ({statusCounts["returned"] || 0})</option>
+                </Select>
+                <Button colorScheme="teal" background="teal.300" ml={4}>
+                  <Flex color="white" cursor="pointer" align="center" p="5px" onClick={handleClickReset}>
+                    <Icon as={GrPowerReset} me="4px" />     
+                  </Flex>
+                </Button>
               </Flex>
-            </Button>
-          </Flex>
-          </Flex>
-          </Flex>
+              <Flex justify='end' marginTop={4}>
+                <Button
+                  colorScheme='teal.300'
+                  borderColor='teal.300'
+                  color='teal.300'
+                  variant='outline'
+                  p='8px 20px'
+                  onClick={() => handleExport("borrowslips")}
+                  isLoading={isLoading.borrowslips}
+                  loadingText="Đang xuất..."
+                >
+                  Xuất danh sách phiếu mượn
+                </Button>
+              </Flex>
+            </Flex>
         </Flex>
           
           

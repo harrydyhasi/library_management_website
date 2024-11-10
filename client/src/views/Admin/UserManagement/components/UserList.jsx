@@ -16,6 +16,7 @@ import {
   InputLeftElement,
   IconButton,
   Select, 
+  useToast
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import Card from "components/Card/Card";
@@ -36,18 +37,73 @@ const UserList = ({ title, captions, data = [] }) => {
   const [formErrors, setFormErrors] = useState({}); 
 
   const { handleCreateUser, filterData } = useUserLogic();
-
+  const [isLoading, setIsLoading] = useState({
+    books: false,
+    categories: false,
+    borrowslips: false,
+    users: false,
+  });
+  const toast = useToast();
   const filteredData = filterData(data, searchQuery).filter(user => {
     return selectedRole ? user.role === selectedRole : true; 
   });
+  const handleExport = async (type) => {
+    setIsLoading((prev) => ({ ...prev, [type]: true }));
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/statistics/export-${type}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to export ${type}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${type}.xlsx`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Xuất file thành công",
+        description: `Xuất danh sách người dùng thành công`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Xuất file thất bại",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading((prev) => ({ ...prev, [type]: false }));
+    }
+  };
 
   return (
     <Card overflowX={{ sm: "scroll", xl: "hidden" }}>
       <CardHeader>
         <Flex direction="column" justify='space-between' minHeight='60px' w='100%'>
+          <Flex align="center" direction="row" justify='space-between' my={4}>
           <Text fontSize='lg' color={textColor} fontWeight='bold'>
             {title}
           </Text>
+          <Button leftIcon={<HiUserAdd />} colorScheme="teal" background="teal.300" onClick={onOpen} ml={4}>
+                Thêm người dùng
+              </Button>
+          </Flex>
             <Flex align="center" direction="row" justify='space-between' my={4}>
               <Flex align="center">
                 <Select
@@ -94,10 +150,20 @@ const UserList = ({ title, captions, data = [] }) => {
                   />
                 </InputGroup>
               </Flex>
-              <Button leftIcon={<HiUserAdd />} colorScheme="teal" background="teal.300" onClick={onOpen} ml={4}>
-                Thêm người dùng
+              <Button
+                colorScheme='teal.300'
+                borderColor='teal.300'
+                color='teal.300'
+                variant='outline'
+                p='8px 20px'
+                onClick={() => handleExport("users")}
+                isLoading={isLoading.users}
+                loadingText="Đang xuất..."
+              >
+                Xuất danh sách người dùng
               </Button>
             </Flex>
+            
       </Flex>
         
 
