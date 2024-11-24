@@ -38,8 +38,8 @@ function Profile() {
     try {
       await dispatch(updateUser(user.id, editData));
       toast({
-        title: "Success.",
-        description: "Profile updated successfully!",
+        title: "Thành công.",
+        description: "Cập nhật thông tin cá nhân thành công!",
         status: "success",
         duration: 3000,
         isClosable: true,
