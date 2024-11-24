@@ -192,17 +192,7 @@ function SignIn() {
               borderBottomLeftRadius="20px"
             ></Box>
 
-            {/* Teal overlay with opacity */}
-            <Box
-              backgroundColor="teal.300"
-              opacity="0.3"
-              w="100%"
-              h="100%"
-              position="absolute"
-              top="0"
-              left="0"
-              borderBottomLeftRadius="20px"
-            ></Box>
+            
           </Box>
 
         </Flex>
