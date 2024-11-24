@@ -1,4 +1,6 @@
 const Category = require('../models/category');
+const csv = require('csv-parser');
+const fs = require('fs');
 
 const addCategory = async (req, res) => {
     const {id, name} = req.body;
@@ -89,10 +91,44 @@ const getCategoryById = async (req, res) => {
         return res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+const importCategories = async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const results = [];
+    fs.createReadStream(req.file.path)
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', async () => {
+            try {
+                for (const result of results) {
+                    const { id, name } = result;
+                    if (!id || !name) {
+                        console.error(`Skipping invalid category data: ${JSON.stringify(result)}`);
+                        continue;
+                    }
+                    const existingCategory = await Category.findOne({ $or: [{ id: id }, { name: name }] });
+                    if (!existingCategory) {
+                        const newCategory = new Category({ id, name });
+                        await newCategory.save();
+                    }
+                }
+                fs.unlinkSync(req.file.path); // Delete the uploaded file
+                return res.status(200).json({ message: 'Categories imported successfully' });
+            } catch (error) {
+                return res.status(500).json({ message: 'Server error during import', error: error.message });
+            }
+        });
+};
+
+
 module.exports = {
     addCategory,
     updateCategory,
     deleteCategory,
     getAllCategories,
-    getCategoryById
+    getCategoryById,
+    importCategories
 };
