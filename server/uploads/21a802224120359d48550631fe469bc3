@@ -1,0 +1,6 @@
+category_id,name,quantity,position,author,publisher,description
+672c168da27cec16e362d4a6,Book A,10,Shelf A,Author A,Publisher A,This is the first book.
+672c168da27cec16e362d4a6,Book B,5,Shelf B,Author B,Publisher B,This is the second book.
+672c168da27cec16e362d4a6,Book C,20,Shelf C,Author C,Publisher C,This is the third book.
+672c168da27cec16e362d4a6,Book D,15,Shelf D,Author D,Publisher D,This is the fourth book.
+672c168da27cec16e362d4a6,Book E,8,Shelf E,Author E,Publisher E,This is the fifth book.
