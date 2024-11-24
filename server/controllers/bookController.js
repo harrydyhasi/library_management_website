@@ -2,8 +2,11 @@ const Books = require("../models/books");
 const Category = require("../models/category");
 const generateBookId = require("../middlewares/bookMiddleware");
 const Book = require("../models/books");
-const csv = require("csv-parser");
 const fs = require("fs");
+
+const path = require("path");
+const csv = require("fast-csv");
+
 
 const addBook = async (req, res) => {
   const {
