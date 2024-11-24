@@ -2,11 +2,9 @@ const Books = require("../models/books");
 const Category = require("../models/category");
 const generateBookId = require("../middlewares/bookMiddleware");
 const Book = require("../models/books");
-const fs = require("fs");
-
-const path = require("path");
-const csv = require("fast-csv");
-
+const fs = require('fs');
+const iconv = require('iconv-lite');
+const { parse } = require('fast-csv');
 
 const addBook = async (req, res) => {
   const {
@@ -206,94 +204,75 @@ const getBookById = async (req, res) => {
 };
 
 const importBooks = async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({ message: "CSV file is required" });
-      }
-  
-      const books = [];
-      const filePath = req.file.path;
-  
-      fs.createReadStream(filePath)
-        .pipe(csv())
-        .on("data", (row) => {
-          // Extract and format data from each row
-          const {
-            category_id,
-            name,
-            quantity,
-            position,
-            author,
-            publisher,
-            description,
-          } = row;
-  
-          // Push the book object into the books array
-          books.push({
-            category_id,
-            name,
-            quantity,
-            position,
-            author,
-            publisher,
-            description,
-          });
-        })
-        .on("end", async () => {
-          try {
-            // Validate and insert books into the database
-            const insertedBooks = [];
-            for (const bookData of books) {
-              const category = await Category.findOne({ id: bookData.category_id });
-              if (!category) {
-                console.error(`Category not found for ID: ${bookData.category_id}`);
-                continue; // Skip this book if category is invalid
-              }
-  
-              const newBook = new Books({
-                category_id: category._id,
-                name: bookData.name,
-                quantity: bookData.quantity,
-                position: bookData.position,
-                author: bookData.author,
-                publisher: bookData.publisher,
-                description: bookData.description,
-              });
-  
-              const savedBook = await newBook.save();
-              insertedBooks.push(savedBook);
-            }
-  
-            // Return success response
-            return res.status(200).json({
-              message: "Books imported successfully",
-              data: insertedBooks,
-            });
-          } catch (error) {
-            console.error("Error saving books:", error);
-            return res.status(500).json({
-              message: "Error importing books",
-              error: error.message,
-            });
-          }
-        })
-        .on("error", (error) => {
-          console.error("Error reading CSV file:", error);
-          return res.status(500).json({
-            message: "Error reading CSV file",
-            error: error.message,
-          });
-        });
-    } catch (error) {
-      console.error("Error importing books:", error);
-      return res.status(500).json({
-        message: "Server error",
-        error: error.message,
-      });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "CSV file is required" });
     }
-  };
 
-  
+    const books = [];
+    let encoding = 'latin1'; // Đặt mặc định là latin1
+
+    // Đọc file CSV và xử lý mã hóa
+    fs.createReadStream(req.file.path)
+      .pipe(iconv.decodeStream(encoding))
+      .on('error', (err) => {
+        console.error(`Error decoding with ${encoding}, trying utf-8:`, err);
+        encoding = 'utf-8';
+        fs.createReadStream(req.file.path)
+          .pipe(iconv.decodeStream(encoding)) // Thử lại với UTF-8 nếu latin1 không thành công
+          .pipe(parse({ headers: true }))
+          .on("data", (row) => books.push(row)) // Đọc từng dòng và lưu vào mảng books
+          .on("end", async () => { processBooks(req, books, res) });
+      })
+      .pipe(parse({ headers: true })) // Nếu mã hóa thành công ngay lập tức
+      .on("data", (row) => books.push(row)) // Đọc từng dòng và lưu vào mảng books
+      .on("end", async () => { processBooks(req, books, res) });
+  } catch (error) {
+    console.error("Error importing books:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const processBooks = async (req, books, res) => {
+  try {
+    const insertedBooks = [];
+    for (const book of books) {
+      const category = await Category.findOne({ id: book.category_id });
+      if (!category) {
+        console.error(`Category not found for ID: ${book.category_id}`);
+        continue;
+      }
+
+      // Tạo sách mới nếu tìm thấy danh mục
+      const newBook = new Books({
+        category_id: category._id,
+        name: book.name,
+        quantity: parseInt(book.quantity),  // Chuyển đổi quantity thành số
+        position: book.position,
+        author: book.author,
+        publisher: book.publisher,
+        description: book.description,
+      });
+
+      // Lưu sách vào database
+      const savedBook = await newBook.save();
+      insertedBooks.push(savedBook);
+    }
+
+    // Xóa file CSV sau khi nhập xong
+    fs.unlinkSync(req.file.path);
+
+    // Trả về kết quả
+    res.status(200).json({
+      message: "Books imported successfully",
+      data: insertedBooks,
+    });
+  } catch (error) {
+    console.error("Error saving books:", error);
+    res.status(500).json({ message: "Error saving books", error: error.message });
+  }
+};
+
 module.exports = {
   addBook,
   updateBook,
@@ -301,5 +280,5 @@ module.exports = {
   getAllBooks,
   getBookById,
   updateQuantityBook,
-  importBooks
+  importBooks,
 };
