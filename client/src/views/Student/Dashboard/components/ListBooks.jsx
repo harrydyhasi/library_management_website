@@ -70,16 +70,16 @@ const ListBook = ({ title }) => {
         setCurrentPage(1); 
     };
 
-    const handleBorrow = () => {
+    const handleBorrow = async () => {
         const now = new Date().toISOString().split("T")[0];
         //alert("Mượn sách" + student.id)
         const bookIds = booksInCart.map(book => book.bookId);
         try {
-            dispatch(addBorrowSlip({books: bookIds, status: "registered", user_id: student.id, borrowed_date: now }))
+            await dispatch(addBorrowSlip({books: bookIds, status: "registered", user_id: student.id, borrowed_date: now })).unwrap();
             showToast({ title: "Đăng ký mượn sách thành công!", status: "success" });
             dispatch(clearCart());
         } catch (error) {
-            showToast({ title: "Đăng ký mượn sách thất bại!", status: "error" });
+            showToast({ title: error, status: "error" });
         }
     }
 

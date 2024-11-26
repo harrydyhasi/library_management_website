@@ -1,5 +1,6 @@
 const borrowSlipService = require("../services/borrowSlipService");
 const Books = require("../models/books");
+const BorrowSlip = require("../models/borrowSlip");
 
 const borrowSlipController = {
   getAllBorrowSlips: async (req, res) => {
@@ -41,7 +42,7 @@ const borrowSlipController = {
       const existingBooks = await Books.find({ id: { $in: books } }).select(
         "id"
       );
-      const existingBookIds = existingBooks.map((book) => book._id.toString());
+      const existingBookIds = existingBooks.map((book) => book.id.toString());
       const missingBooks = books.filter(
         (bookId) => !existingBookIds.includes(bookId)
       );
@@ -51,6 +52,19 @@ const borrowSlipController = {
           success: false,
           message: "Một số sách không tìm thấy",
           missingBooks,
+        });
+      }
+
+      const existingBorrowSlips = await BorrowSlip.find({
+        user_id: user_id,
+        books: { $in: books },
+        status: { $ne: "returned" },
+      });
+
+      if (existingBorrowSlips.length > 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Người dùng đã mượn những quyển sách này trước đó.",
         });
       }
       const data = await borrowSlipService.create(
@@ -89,7 +103,7 @@ const borrowSlipController = {
       const existingBooks = await Books.find({
         id: { $in: updates.books },
       }).select("id");
-      const existingBookIds = existingBooks.map((book) => book._id.toString());
+      const existingBookIds = existingBooks.map((book) => book.id.toString());
       const missingBooks = updates.books.filter(
         (bookId) => !existingBookIds.includes(bookId)
       );
