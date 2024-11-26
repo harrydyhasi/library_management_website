@@ -8,6 +8,7 @@ import {
   Tr,
   useColorModeValue,
   useDisclosure,
+  useToast,
   Icon,
   AlertDialogOverlay,
   AlertDialogContent,
@@ -35,8 +36,11 @@ function BorrowSlipRow(props) {
   const colorStatus = useColorModeValue("white", "gray.400");
   const iconColor = useColorModeValue("gray", "white");
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const {user: loggedInUser } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.borrowSlips);
+
   const [manager, setManager] = useState(loggedInUser);
 
   // Modal state
@@ -46,8 +50,30 @@ function BorrowSlipRow(props) {
   const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
 
   
-  const handleEdit = (data) => {
-    dispatch(updateBorrowSlip({id: _id, updatedData: data }));
+  const handleEdit = async (data) => {
+    // dispatch(updateBorrowSlip({id: _id, updatedData: data }));
+
+    try {
+      // Wait for the dispatched action to resolve
+      await dispatch(updateBorrowSlip({id: _id, updatedData: data })).unwrap();
+  
+      // Success Toast
+      toast({
+        title: "Cập nhật thành công",
+        position: "bottom-right",
+        isClosable: true,
+        status: "success",
+      });
+    } catch (error) {
+      // Failure Toast
+      toast({
+        title: "Thất bại",
+        description: error || "Có lỗi xảy ra",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   const handleDeleteConfirm = () => {

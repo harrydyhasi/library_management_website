@@ -183,16 +183,20 @@ const BorrowSlipModal = ({
     if (dateError){
       return
     }
-    else {
-      onSubmit(formData);
-      const title = mode === 'add' ? 'Thêm thành công' : 'Cập nhật thành công';
+    try {
+      // Await the async onSubmit (handleAdd)
+      await onSubmit(formData);
+      // Close the modal
+      onClose();
+    } catch (error) {
+      // Optionally handle errors here (e.g., show an error toast)
       toast({
-        title: title,
+        title: "Có lỗi xảy ra",
+        description: error.message || "Không thể thực hiện yêu cầu",
         position: "bottom-right",
         isClosable: true,
-        status: "success"
+        status: "error",
       });
-      onClose(); // Close modal
     }
     
   };

@@ -1,12 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import borrowSlipService from '../../services/borrow_slip_service';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import borrowSlipService from "../../services/borrow_slip_service";
 
 export const fetchBorrowSlips = createAsyncThunk(
-  'borrowSlips/fetchBorrowSlips',
+  "borrowSlips/fetchBorrowSlips",
   async (_, { rejectWithValue }) => {
     try {
       const response = await borrowSlipService.getAll();
-      return response.data.data; 
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
@@ -14,34 +14,36 @@ export const fetchBorrowSlips = createAsyncThunk(
 );
 
 export const fetchBorrowSlipsByUserId = createAsyncThunk(
-  'borrowSlips/fetchBorrowSlipsByUserId',
+  "borrowSlips/fetchBorrowSlipsByUserId",
   async (id, { rejectWithValue }) => {
     try {
       const response = await borrowSlipService.getByUserId(id);
-      console.log("DATA", response.data.data)
-      return response.data.data; 
+      console.log("DATA", response.data.data);
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
 
-
 export const addBorrowSlip = createAsyncThunk(
-  'borrowSlips/addBorrowSlip',
-  async (newSlip, {rejectWithValue }) => {
+  "borrowSlips/addBorrowSlip",
+  async (newSlip, { rejectWithValue }) => {
     try {
-      const response = await borrowSlipService.add(newSlip); 
-      return response.data; 
+      const response = await borrowSlipService.add(newSlip);
+
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "Something went wrong"
+      );
     }
   }
 );
 
 export const updateBorrowSlip = createAsyncThunk(
-  'borrowSlips/updateBorrowSlip',
-  async ({ id, updatedData }, {rejectWithValue }) => {
+  "borrowSlips/updateBorrowSlip",
+  async ({ id, updatedData }, { rejectWithValue }) => {
     try {
       const response = await borrowSlipService.update(id, updatedData);
       // dispatch(fetchBorrowSlips())
@@ -53,11 +55,11 @@ export const updateBorrowSlip = createAsyncThunk(
 );
 
 export const deleteBorrowSlip = createAsyncThunk(
-  'borrowSlips/deleteBorrowSlip',
+  "borrowSlips/deleteBorrowSlip",
   async (id, { rejectWithValue }) => {
     try {
-      await borrowSlipService.delete(id); 
-      return id; 
+      await borrowSlipService.delete(id);
+      return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
@@ -65,9 +67,9 @@ export const deleteBorrowSlip = createAsyncThunk(
 );
 
 const borrowSlipSlice = createSlice({
-  name: 'borrowSlips',
+  name: "borrowSlips",
   initialState: {
-    list: [], 
+    list: [],
     loading: false,
     error: null,
   },
@@ -84,29 +86,38 @@ const borrowSlipSlice = createSlice({
       })
       .addCase(fetchBorrowSlips.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload; 
+        state.list = action.payload;
       })
       .addCase(fetchBorrowSlips.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-       // Get by user ID cases
+      // Get by user ID cases
       .addCase(fetchBorrowSlipsByUserId.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchBorrowSlipsByUserId.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload; 
+        state.list = action.payload;
       })
       .addCase(fetchBorrowSlipsByUserId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      
+
+      .addCase(addBorrowSlip.pending, (state) => {
+        state.loading = true;
+        state.error = null; // Reset error
+      })
+
       .addCase(addBorrowSlip.fulfilled, (state, action) => {
         const newBorrowSlip = action.payload.data;
-        state.list.push(newBorrowSlip); 
+        state.list.push(newBorrowSlip);
+      })
+      .addCase(addBorrowSlip.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; // Capture error message
       })
       .addCase(updateBorrowSlip.pending, (state) => {
         state.loading = true;
@@ -115,10 +126,11 @@ const borrowSlipSlice = createSlice({
       .addCase(updateBorrowSlip.fulfilled, (state, action) => {
         state.loading = false;
         const updatedBorrowSlip = action.payload.data;
-        const index = state.list.findIndex(borrowSlip => borrowSlip._id === updatedBorrowSlip._id);
+        const index = state.list.findIndex(
+          (borrowSlip) => borrowSlip._id === updatedBorrowSlip._id
+        );
         if (index !== -1) {
-          state.list[index] = updatedBorrowSlip; 
-          
+          state.list[index] = updatedBorrowSlip;
         }
       })
       .addCase(updateBorrowSlip.rejected, (state, action) => {
@@ -126,7 +138,9 @@ const borrowSlipSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(deleteBorrowSlip.fulfilled, (state, action) => {
-        state.list = state.list.filter(borrowSlip => borrowSlip._id !== action.payload); // Remove deleted slip
+        state.list = state.list.filter(
+          (borrowSlip) => borrowSlip._id !== action.payload
+        ); // Remove deleted slip
       });
   },
 });

@@ -48,6 +48,7 @@ const BorrowSlipList = ({ title, captions, data }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.borrowSlips);
 
   const {user: loggedInUser } = useSelector((state) => state.auth);
   const [manager, setManager] = useState(loggedInUser);
@@ -59,12 +60,30 @@ const BorrowSlipList = ({ title, captions, data }) => {
   });
   const toast = useToast();
 
+  const handleAdd = async (data) => {
+    try {
+      // Wait for the dispatched action to resolve
+      await dispatch(addBorrowSlip(data)).unwrap();
   
-  // Handler to be called on form submission
-  const handleAdd = (data) => {
-    dispatch(addBorrowSlip(data));
+      // Success Toast
+      toast({
+        title: "Thêm thành công",
+        position: "bottom-right",
+        isClosable: true,
+        status: "success",
+      });
+    } catch (error) {
+      // Failure Toast
+      toast({
+        title: "Thất bại",
+        description: error || "Có lỗi xảy ra",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
-
+  
   const handleClickReset = () => {
     setSearchQuery("")
     setFilter("all")
