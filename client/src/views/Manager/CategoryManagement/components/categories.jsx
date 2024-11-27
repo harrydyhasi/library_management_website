@@ -285,9 +285,11 @@ const Categories = () => {
       </CardBody>
       <AddCategoryDialog
         isOpen={isOpen}
-        onClose={onClose}
-        category={currentCategory}
-        reloadCategories={() => dispatch(fetchCategories())}
+        onClose={() => {
+          setCurrentCategory(null); 
+          onClose();
+        }}
+        currentCategory={currentCategory}
       />
     </Card>
   );
